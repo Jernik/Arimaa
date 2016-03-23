@@ -11,3 +11,7 @@ docs/~WRL0005.tmp
 *.name
 .idea/*
 Arimaa.iml
+.idea/*
+Arimaa.iml
+.project
+.metadata/*
