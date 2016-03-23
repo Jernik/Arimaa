@@ -8,7 +8,10 @@ docs/~$oblem Statement.docx
 /codecover/
 docs/~$nal Report.docx
 docs/~WRL0005.tmp
+*.name
+.idea/*
+Arimaa.iml
 .idea/*
 Arimaa.iml
 .project
-.metadata
+.metadata/*
