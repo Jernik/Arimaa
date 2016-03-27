@@ -2,6 +2,7 @@ package game;
 
 import listeners.LoadGameListener;
 import listeners.NewGameListener;
+import networking.ConnectionHandler;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -36,6 +37,7 @@ public class GUI {
 	public JLabel turnIndicatorLabel;
 	public JLabel timerLabel;
 	public TimePanel timer;
+	private ConnectionHandler connectionHandler;
 
 	public GUI() {
 		this.p1Name = "Player 1";
@@ -255,6 +257,10 @@ public class GUI {
 					+ "'s turn" + "</b></html>");
 		}
 		renderInitialBoard();
+	}
+
+	public void addConnectionHandler(ConnectionHandler connectionHandler) {
+		this.connectionHandler = connectionHandler;
 	}
 
 	// ACTION LISTENERS
