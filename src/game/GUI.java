@@ -60,46 +60,6 @@ public class GUI {
 		mainMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
-	public static void main(String[] args) {
-		GUI g = new GUI();
-
-		// Add MAIN MENU panel with appropriate background image
-		ImagePanel panel = new ImagePanel(new ImageIcon(
-				"resources/BoardStoneBig.jpg").getImage());
-		g.activeFrames.get(0).getContentPane().add(panel);
-		g.activeFrames.get(0).pack();
-		panel.setVisible(true);
-
-		// Add the NEW GAME button to the Main Menu
-		JButton newGameButton = new JButton();
-		newGameButton.setSize(150, 75);
-		newGameButton.setText("New Game");
-		Font newGameFont = newGameButton.getFont();
-		newGameButton.setFont(new Font(newGameFont.getName(), 4, 20));
-		newGameButton.setLocation((panel.getWidth() / 4) - 35,
-				(panel.getHeight() / 2) - 37);
-		panel.add(newGameButton);
-		newGameButton.setVisible(true);
-
-		// Setup ActionListener for NEW GAME button
-		newGameButton.addActionListener(new NewGameListener(g));
-
-		// Add the LOAD GAME button to the Main Menu
-		JButton loadGameButton = new JButton();
-		loadGameButton.setSize(150, 75);
-		loadGameButton.setText("Load Game");
-		Font loadGameFont = loadGameButton.getFont();
-		loadGameButton.setFont(new Font(loadGameFont.getName(), 4, 20));
-		loadGameButton.setLocation((panel.getWidth() / 4) * 3 - 110,
-				(panel.getHeight() / 2) - 37);
-		panel.add(loadGameButton);
-		loadGameButton.setVisible(true);
-
-		// Setup ActionListener for the LOAD GAME button
-		loadGameButton.addActionListener(new LoadGameListener(g));
-
-		g.activeFrames.get(0).setVisible(true);
-	}
 
 	public String getP1name() {
 		return p1Name;

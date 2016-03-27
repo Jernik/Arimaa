@@ -4,12 +4,14 @@ import game.Piece.Owner;
 import game.Piece.PieceType;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Game {
+public class Game implements Serializable{
+	private static final long serialVersionUID = 0L;
 	// fields
-	ArrayList<BoardState> boards = new ArrayList<BoardState>();
+	ArrayList<BoardState> boards = new ArrayList<>();
 	public BoardState currentBoard = null;
 
 	public int getMoveTimer() {

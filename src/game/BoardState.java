@@ -10,6 +10,8 @@ import java.util.Arrays;
  */
 public class BoardState {
 	// Fields
+
+	private static final long serialVersionUID = 0L;
 	private char[][] boardArray = new char[8][8]; // Represents the current state of the board
 	private int turnNumber;
 
