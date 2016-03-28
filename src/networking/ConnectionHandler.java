@@ -19,7 +19,8 @@ public class ConnectionHandler implements Runnable {
     /**
      * To use this class, create a Connection Handler on each instance,
      * create a thread for the handler,
-     * then call connectTo on both instances to set up the sockets
+     * then call connectTo on both instances to set up the sockets, we don't care about the sockets, just the ones 
+     * created by the serversockets
      */
     public ConnectionHandler(int port){
         try {
