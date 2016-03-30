@@ -10,11 +10,11 @@ import java.io.ObjectInputStream;
  */
 public class ConnectionTest {
     public static void main(String[] args) {
-        boolean branch1 = true;
+        boolean branch1 = false;
         boolean branch2 = false;
         if (branch1) {
-            ConnectionHandler c = new ConnectionHandler(6574);
-            c.connectTo("137.112.151.161");
+            ConnectionHandler c = new ConnectionHandler(6774);
+            c.connectTo("137.112.223.145");
             String x = "Hello World " + c.hashCode();
             try {
                 Thread.sleep(1000);
@@ -22,7 +22,9 @@ public class ConnectionTest {
                 e.printStackTrace();
             }
             c.sendObject(x);
-            System.out.println((String) c.getObjectFromInput());
+            Object o = c.getObjectFromInput();
+            String s = (String) o;
+            System.out.println(s);
         }
         else if(branch2){
             FileInputStream fin;

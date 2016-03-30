@@ -1,8 +1,10 @@
 package networking;
 
 import java.io.*;
+import java.net.Inet4Address;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.nio.Buffer;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -43,11 +45,18 @@ public class ConnectionHandler implements Runnable {
         System.out.println("Added object to sending queue: queue size is now: " + this.outputBuffer.size());
     }
 
-    public void connectTo(String serverIP) {
+    public void connectTo(String remote) {
         try {
-            Socket s = new Socket(serverIP, port);
+            Socket s = new Socket(remote, port);
             while (!s.isConnected()) {
-            }//blocks til s is connected
+            }
+            String local = Inet4Address.getLocalHost().getHostAddress();
+            int check = remote.compareTo(local);
+            if (check == 0) {
+                throw new UnknownHostException("Cannot connect to myself");
+            } else if (check > 0){//throw away our serversocket.accept
+                this.socket = s;
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -55,6 +64,8 @@ public class ConnectionHandler implements Runnable {
 
     public Object getObjectFromInput() {
         System.out.println("Reading: " + this.inputBuffer.peek());
+        while (inputBuffer.isEmpty()) {
+        }//blocks until we can return something
         return this.inputBuffer.poll();
     }
 
@@ -75,7 +86,7 @@ public class ConnectionHandler implements Runnable {
                 ObjectOutputStream out = null;
                 ObjectInputStream in = null;
                 InputStream inStream = null;
-                boolean inputObjectAvailible=false;
+                boolean inputObjectAvailible = false;
                 System.out.println("Setting up streams");
                 try {
                     OutputStream outStream = this.socket.getOutputStream();
@@ -92,10 +103,10 @@ public class ConnectionHandler implements Runnable {
                 }
                 System.out.println("Set up streams");
                 while (running) {
-                    //System.out.println("Running Loop");
+                    System.out.println("Running Loop");
                     try {
-                        //System.out.println("Checking underlying stream: availible = " + inStream.available());
-                        if (inStream.available() > 0) {
+                        if (!inputObjectAvailible && inStream.available() > 0) {
+                            System.out.println("Checking underlying stream: availible = " + inStream.available());
                             in = new ObjectInputStream(inStream);
                             inputObjectAvailible = true;
                             System.out.println("Created objectInputStream");
@@ -107,7 +118,7 @@ public class ConnectionHandler implements Runnable {
                     if (!this.outputBuffer.isEmpty()) {
                         try {
                             System.out.println("writing object...");
-                            Object o =this.outputBuffer.poll();
+                            Object o = this.outputBuffer.poll();
                             out.writeObject(o);
                             new ObjectOutputStream(new FileOutputStream("Test.txt")).writeObject(o);
                             System.out.println("Size of queue is now " + this.outputBuffer.size());
@@ -117,7 +128,7 @@ public class ConnectionHandler implements Runnable {
                         }
                     }
                     try {
-                       if (inputObjectAvailible && in.available() > 0) {
+                        if (inputObjectAvailible && in.available() > 0) {
                             System.out.println("reading...");
                             this.inputBuffer.add(in.readObject());
                         }
@@ -126,8 +137,15 @@ public class ConnectionHandler implements Runnable {
                     } catch (ClassNotFoundException e) {
                         e.printStackTrace();
                     }
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
+
         }
+
     }
 }
