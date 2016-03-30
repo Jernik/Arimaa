@@ -8,12 +8,12 @@ public class ConnectionTest {
         ConnectionHandler c = new ConnectionHandler(6574);
         c.connectTo("137.112.239.225");
         String x = "Hello World " + c.hashCode();
-        c.sendObject(x);
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        c.sendObject(x);
         System.out.println((String)c.getObjectFromInput());
     }
 }

@@ -45,6 +45,7 @@ public class ConnectionHandler implements Runnable {
     public void connectTo(String serverIP) {
         try {
             Socket s = new Socket(serverIP, port);
+            while(!s.isConnected()){}//blocks til s is connected
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -62,6 +63,7 @@ public class ConnectionHandler implements Runnable {
                 try {
                     this.socket = serverSocket.accept();
                     System.out.println("Connected");
+                    this.connected=true;
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
