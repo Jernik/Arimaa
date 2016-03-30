@@ -45,7 +45,8 @@ public class ConnectionHandler implements Runnable {
     public void connectTo(String serverIP) {
         try {
             Socket s = new Socket(serverIP, port);
-            while(!s.isConnected()){}//blocks til s is connected
+            while (!s.isConnected()) {
+            }//blocks til s is connected
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -59,11 +60,12 @@ public class ConnectionHandler implements Runnable {
     @Override
     public void run() {
         while (true) {
+            System.out.println("Outer Loop");
             if (!connected) {
                 try {
                     this.socket = serverSocket.accept();
                     System.out.println("Connected");
-                    this.connected=true;
+                    this.connected = true;
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -71,14 +73,33 @@ public class ConnectionHandler implements Runnable {
                 boolean running = true;
                 ObjectOutputStream out = null;
                 ObjectInputStream in = null;
+                InputStream inStream = null;
+                System.out.println("Setting up streams");
                 try {
-                    out = new ObjectOutputStream(this.socket.getOutputStream());
-                    in = new ObjectInputStream(this.socket.getInputStream());
+                    OutputStream outStream = this.socket.getOutputStream();
+                    System.out.println("Got output Stream");
+                    out = new ObjectOutputStream(outStream);
+                    out.flush();
+                    inStream = this.socket.getInputStream();
+                    System.out.println("Got input Stream");
+
+
+                    System.out.println("Created ObjectInputStream");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                System.out.println("Set up streams");
                 while (running) {
                     System.out.println("Running Loop");
+                    try {
+                        System.out.println("Checking underlying stream: availible = " + inStream.available());
+                        if (inStream.available() > 0) {
+                            in = new ObjectInputStream(inStream);
+                            System.out.println("Created objectInputStream");
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     if (!this.outputBuffer.isEmpty()) {
                         try {
                             out.writeObject(this.outputBuffer.poll());
