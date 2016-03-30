@@ -74,6 +74,7 @@ public class ConnectionHandler implements Runnable {
                 ObjectOutputStream out = null;
                 ObjectInputStream in = null;
                 InputStream inStream = null;
+                boolean inputObjectAvailible=false;
                 System.out.println("Setting up streams");
                 try {
                     OutputStream outStream = this.socket.getOutputStream();
@@ -95,6 +96,7 @@ public class ConnectionHandler implements Runnable {
                         System.out.println("Checking underlying stream: availible = " + inStream.available());
                         if (inStream.available() > 0) {
                             in = new ObjectInputStream(inStream);
+                            inputObjectAvailible = true;
                             System.out.println("Created objectInputStream");
                         }
                     } catch (IOException e) {
@@ -109,8 +111,7 @@ public class ConnectionHandler implements Runnable {
                         }
                     }
                     try {
-                        System.out.println(in.available());
-                        if (in.available() > 0) {
+                       if (inputObjectAvailible && in.available() > 0) {
                             System.out.println("reading...");
                             this.inputBuffer.add(in.readObject());
                         }
