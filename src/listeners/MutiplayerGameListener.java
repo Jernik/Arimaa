@@ -21,7 +21,7 @@ public class MutiplayerGameListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
 
-        g.addConnectionHandler(new ConnectionHandler("127.0.0.1",6543));
+        g.addConnectionHandler(new ConnectionHandler(6543));
 
         JFrame settingsFrame = new JFrame();
         g.activeFrames.add(settingsFrame);

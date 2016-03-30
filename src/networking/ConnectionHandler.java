@@ -25,6 +25,7 @@ public class ConnectionHandler implements Runnable {
     public ConnectionHandler(int port){
         try {
             this.serverSocket = new ServerSocket(port);
+            new Thread(this).start();
         } catch (IOException e) {
             e.printStackTrace();
         }
