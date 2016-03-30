@@ -4,6 +4,8 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.Buffer;
+import java.util.LinkedList;
+import java.util.Queue;
 
 /**
  * Created by millerlj on 3/26/2016.
@@ -16,6 +18,8 @@ public class ConnectionHandler implements Runnable {
     private Socket socket;
     private boolean waiting = true;
     private boolean connected = false;
+    private Queue<Object> outputBuffer = new LinkedList<>();
+    private Queue<Object> inputBuffer = new LinkedList<>();
 
     /**
      * To use this class, create a Connection Handler on each instance,
@@ -34,6 +38,10 @@ public class ConnectionHandler implements Runnable {
 
     }
 
+    public void sendObject(Object o){
+        this.outputBuffer.add(o);
+    }
+
     public void connectTo(String serverIP) {
         try {
             Socket s = new Socket(serverIP, port);
@@ -42,27 +50,42 @@ public class ConnectionHandler implements Runnable {
         }
     }
 
+    public Object getObjectFromInput(){
+        return this.inputBuffer.poll();
+    }
+
     @Override
     public void run() {
         if (!connected) {
             try {
                 this.socket = serverSocket.accept();
+                System.out.println("Connected");
             } catch (IOException e) {
                 e.printStackTrace();
             }
         } else {
             boolean running = true;
-            PrintWriter out;
-            BufferedReader in;
+            ObjectOutputStream out=null;
+            ObjectInputStream in=null;
             try {
-                out = new PrintWriter(this.socket.getOutputStream(), true);
-                InputStreamReader isr = new InputStreamReader(this.socket.getInputStream());
-                in = new BufferedReader(isr);
+                out =new ObjectOutputStream(this.socket.getOutputStream());
+                in = new ObjectInputStream(this.socket.getInputStream());
             } catch (IOException e) {
                 e.printStackTrace();
             }
             while (running) {
-                //do stuff
+                if(!this.outputBuffer.isEmpty()){
+                    try {
+                        out.writeObject(this.outputBuffer.poll());
+                        if(in.available()>0){
+                            this.inputBuffer.add(in.readObject());
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         }
 
