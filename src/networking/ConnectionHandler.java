@@ -40,6 +40,7 @@ public class ConnectionHandler implements Runnable {
 
     public void sendObject(Object o) {
         this.outputBuffer.add(o);
+        System.out.println("Added object to sending queue: queue size is now: " + this.outputBuffer.size());
     }
 
     public void connectTo(String serverIP) {
@@ -91,9 +92,9 @@ public class ConnectionHandler implements Runnable {
                 }
                 System.out.println("Set up streams");
                 while (running) {
-                    System.out.println("Running Loop");
+                    //System.out.println("Running Loop");
                     try {
-                        System.out.println("Checking underlying stream: availible = " + inStream.available());
+                        //System.out.println("Checking underlying stream: availible = " + inStream.available());
                         if (inStream.available() > 0) {
                             in = new ObjectInputStream(inStream);
                             inputObjectAvailible = true;
@@ -102,9 +103,14 @@ public class ConnectionHandler implements Runnable {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+                    //System.out.println("Size of queue is: " + this.outputBuffer.size());
                     if (!this.outputBuffer.isEmpty()) {
                         try {
-                            out.writeObject(this.outputBuffer.poll());
+                            System.out.println("writing object...");
+                            Object o =this.outputBuffer.poll();
+                            out.writeObject(o);
+                            new ObjectOutputStream(new FileOutputStream("Test.txt")).writeObject(o);
+                            System.out.println("Size of queue is now " + this.outputBuffer.size());
 
                         } catch (IOException e) {
                             e.printStackTrace();
