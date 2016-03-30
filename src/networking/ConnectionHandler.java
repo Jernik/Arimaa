@@ -38,7 +38,7 @@ public class ConnectionHandler implements Runnable {
 
     }
 
-    public void sendObject(Object o){
+    public void sendObject(Object o) {
         this.outputBuffer.add(o);
     }
 
@@ -50,49 +50,54 @@ public class ConnectionHandler implements Runnable {
         }
     }
 
-    public Object getObjectFromInput(){
+    public Object getObjectFromInput() {
+        System.out.println("Reading: " + this.inputBuffer.peek());
         return this.inputBuffer.poll();
     }
 
     @Override
     public void run() {
-        if (!connected) {
-            try {
-                this.socket = serverSocket.accept();
-                System.out.println("Connected");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
-            boolean running = true;
-            ObjectOutputStream out=null;
-            ObjectInputStream in=null;
-            try {
-                out =new ObjectOutputStream(this.socket.getOutputStream());
-                in = new ObjectInputStream(this.socket.getInputStream());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            while (running) {
-                if(!this.outputBuffer.isEmpty()){
-                    try {
-                        out.writeObject(this.outputBuffer.poll());
+        while (true) {
+            if (!connected) {
+                try {
+                    this.socket = serverSocket.accept();
+                    System.out.println("Connected");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                boolean running = true;
+                ObjectOutputStream out = null;
+                ObjectInputStream in = null;
+                try {
+                    out = new ObjectOutputStream(this.socket.getOutputStream());
+                    in = new ObjectInputStream(this.socket.getInputStream());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                while (running) {
+                    System.out.println("Running Loop");
+                    if (!this.outputBuffer.isEmpty()) {
+                        try {
+                            out.writeObject(this.outputBuffer.poll());
 
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    try {
+                        System.out.println(in.available());
+                        if (in.available() > 0) {
+                            System.out.println("reading...");
+                            this.inputBuffer.add(in.readObject());
+                        }
                     } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (ClassNotFoundException e) {
                         e.printStackTrace();
                     }
                 }
-                try {
-                    if(in.available()>0){
-                        this.inputBuffer.add(in.readObject());
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
             }
         }
-
     }
 }
