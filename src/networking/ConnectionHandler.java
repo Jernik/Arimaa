@@ -77,14 +77,19 @@ public class ConnectionHandler implements Runnable {
                 if(!this.outputBuffer.isEmpty()){
                     try {
                         out.writeObject(this.outputBuffer.poll());
-                        if(in.available()>0){
-                            this.inputBuffer.add(in.readObject());
-                        }
+
                     } catch (IOException e) {
                         e.printStackTrace();
-                    } catch (ClassNotFoundException e) {
-                        e.printStackTrace();
                     }
+                }
+                try {
+                    if(in.available()>0){
+                        this.inputBuffer.add(in.readObject());
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
                 }
             }
         }
