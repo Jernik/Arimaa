@@ -96,8 +96,6 @@ public class ConnectionHandler implements Runnable {
                     inStream = this.socket.getInputStream();
                     System.out.println("Got input Stream");
 
-
-                    System.out.println("Created ObjectInputStream");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -110,6 +108,10 @@ public class ConnectionHandler implements Runnable {
                             in = new ObjectInputStream(inStream);
                             inputObjectAvailible = true;
                             System.out.println("Created objectInputStream");
+                        } else if(!inputObjectAvailible && this.socket.getInputStream().available() > 0){
+                            inStream = this.socket.getInputStream();
+                            System.out.println("Got input Stream");
+                            continue;
                         }
                     } catch (IOException e) {
                         e.printStackTrace();

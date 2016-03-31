@@ -10,7 +10,7 @@ import java.io.ObjectInputStream;
  */
 public class ConnectionTest {
     public static void main(String[] args) {
-        boolean branch1 = false;
+        boolean branch1 = true;
         boolean branch2 = false;
         if (branch1) {
             ConnectionHandler c = new ConnectionHandler(6774);
