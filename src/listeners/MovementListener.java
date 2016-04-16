@@ -173,7 +173,7 @@ public class MovementListener implements MouseListener {
 	}
 
 	private boolean noPieceSelectedAndPieceClicked(int rowClicked, int columnClicked) {
-		return gui.boardPieces[rowClicked][columnClicked] != null && this.selectedPiece == null
+		return gui.boardPieces[rowClicked][7 - columnClicked] != null && this.selectedPiece == null
 				&& this.secondSelectedPiece == null;
 	}
 
