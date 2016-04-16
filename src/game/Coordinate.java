@@ -39,9 +39,14 @@ public class Coordinate {
 		return this.valid;
 	}
 	
-	public int calculateDirection(Coordinate other) { 
-		//TODO: add functionality to this for push/pull
-		return 0;
+	public Coordinate clone() {
+		return new Coordinate(this.x, this.y);
+	}
+	
+	public boolean isOrthogonallyAdjacentTo(Coordinate other) { 
+		return !this.equals(other) && 
+				((this.getX() == other.getX() && Math.abs(this.getY() - other.getY()) <= 1) || 
+				(Math.abs(this.getX() - other.getX()) <= 1 && this.getY() == other.getY()));
 	}
 
 	public boolean equals(Object obj) {

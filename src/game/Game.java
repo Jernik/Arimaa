@@ -131,26 +131,6 @@ public class Game {
 		//for testing, going to assume all moves are valid... >.>
 		if (!isValidMoveFromSquare(moveToMake.getOriginalPlace().getX(), moveToMake.getOriginalPlace().getY()))
 			return false;
-//		switch (dir) {
-//		case 0:
-//			// Moving UP
-//			moveToMake = new MoveUp(this.currentBoard);
-//			return makeMove(moveToMake, row, column);
-//		case 1:
-//			// Moving RIGHT
-//			moveToMake = new MoveRight(this.currentBoard);
-//			return makeMove(moveToMake, row, column);
-//		case 2:
-//			// Moving DOWN
-//			moveToMake = new MoveDown(this.currentBoard);
-//			return makeMove(moveToMake, row, column);
-//		case 3:
-//			// Moving LEFT
-//			moveToMake = new MoveLeft(this.currentBoard);
-//			return makeMove(moveToMake, row, column);
-//		default:
-//			return false;
-//		}
 		if (moveToMake.isValidMove()) {
 			this.currentBoard = moveToMake.execute();
 			this.moves.add(moveToMake);

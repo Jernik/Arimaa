@@ -14,6 +14,7 @@ public class MovementListener implements MouseListener {
 	ImagePanel selectedPiece;
 	Coordinate selectedPieceCoord;
 	ImagePanel secondSelectedPiece;
+	Coordinate secondSelectedPieceCoord;
 	private GUI gui;
 
 	public MovementListener(GUI gui) {
@@ -50,19 +51,19 @@ public class MovementListener implements MouseListener {
 		int sourceX = (int) e.getPoint().getX();
 		int sourceY = (int) e.getPoint().getY();
 
-		Coordinate coor = new Coordinate((sourceX - 10) / 80, 7 - (sourceY - 10) / 80);
+		Coordinate coor = new Coordinate((sourceX - 10) / 80, (sourceY - 10) / 80);
 		// Beginning movement, nothing yet selected
 		// Selecting piece to interact with
-		if (clickOnBoard(coor.getX(), coor.getY())) {
+		if (clickOnBoard(coor)) {
 			// No piece has been selected yet
-			if (noPieceSelectedAndPieceClicked(coor.getX(), coor.getY())) {
+			if (noPieceSelectedAndPieceClicked(coor)) {
 				this.selectedPiece = gui.boardPieces[coor.getX()][coor.getY()];
-				this.selectedPieceCoord = new Coordinate(coor.getX(), coor.getY());
+				this.selectedPieceCoord = coor.clone();
 			}
 
 			// If a piece is selected and an empty space is clicked
 			// AKA move
-			else if (isSelectedPieceAndEmptySpaceClicked(coor.getX(), coor.getY())) {
+			else if (isSelectedPieceAndEmptySpaceClicked(coor)) {
 				// Using move to check for valid move
 				if (game.move(new RegularMove(this.game.getBoardState(), this.selectedPieceCoord, coor))) {
 					gui.renderBoard();
@@ -73,14 +74,15 @@ public class MovementListener implements MouseListener {
 			}
 
 			// Piece already selected, clicked a second piece
-			else if (pieceSelectedAndSecondPieceClicked(coor.getX(), coor.getY())) {
+			else if (pieceSelectedAndSecondPieceClicked(coor)) {
 				this.secondSelectedPiece = gui.boardPieces[coor.getX()][coor.getY()];
+				this.secondSelectedPieceCoord = coor.clone();
 
 				// Piece selected, Second piece selected, empty square
 				// selected
-			} else if (twoPieceSelectedAndEmptySpaceClicked(coor.getX(), coor.getY())) {
+			} else if (twoPieceSelectedAndEmptySpaceClicked(coor)) {
 
-				if (checkForPull(coor.getX(), coor.getY())) {
+				if (checkForPull(coor)) {
 					int calculatedDirection = moveDirection(selectedPiece, coor.getX(), coor.getY());
 
 					if (game.pull(this.selectedPiece.getRow(), this.selectedPiece.getColumn(),
@@ -92,7 +94,7 @@ public class MovementListener implements MouseListener {
 					this.selectedPiece = null;
 					this.secondSelectedPiece = null;
 
-				} else if (checkForPush(coor.getX(), coor.getY())) {
+				} else if (checkForPush(coor)) {
 					int calculatedDirection1 = moveDirectionOnePush(selectedPiece, secondSelectedPiece);
 
 					int calculatedDirection2 = moveDirectionTwoPush(secondSelectedPiece, coor.getX(), coor.getY());
@@ -144,15 +146,15 @@ public class MovementListener implements MouseListener {
 		return -1; // Shouldn't ever happen
 	}
 
-	private boolean twoPieceSelectedAndEmptySpaceClicked(int rowClicked, int columnClicked) {
+	private boolean twoPieceSelectedAndEmptySpaceClicked(Coordinate coor) {
 		return this.selectedPiece != null && this.secondSelectedPiece != null
-				&& gui.boardPieces[rowClicked][columnClicked] == null;
+				&& gui.boardPieces[coor.getX()][coor.getY()] == null;
 	}
 
-	private boolean pieceSelectedAndSecondPieceClicked(int rowClicked, int columnClicked) {
+	private boolean pieceSelectedAndSecondPieceClicked(Coordinate coor) {
 		return this.selectedPiece != null && this.secondSelectedPiece == null
-				&& gui.boardPieces[rowClicked][columnClicked] != null
-				&& this.selectedPiece != gui.boardPieces[rowClicked][columnClicked];
+				&& gui.boardPieces[coor.getX()][coor.getY()] != null
+				&& this.selectedPiece != gui.boardPieces[coor.getX()][coor.getY()];
 	}
 
 	private int moveDirection(ImagePanel selectedPiece2, int rowClicked, int columnClicked) {
@@ -167,57 +169,57 @@ public class MovementListener implements MouseListener {
 		return -1; // Please never happen...
 	}
 
-	private boolean isSelectedPieceAndEmptySpaceClicked(int rowClicked, int columnClicked) {
+	private boolean isSelectedPieceAndEmptySpaceClicked(Coordinate coor) {
 		return this.selectedPiece != null && this.secondSelectedPiece == null
-				&& gui.boardPieces[rowClicked][columnClicked] == null;
+				&& gui.boardPieces[coor.getX()][coor.getY()] == null;
 	}
 
-	private boolean noPieceSelectedAndPieceClicked(int rowClicked, int columnClicked) {
-		return gui.boardPieces[rowClicked][7 - columnClicked] != null && this.selectedPiece == null
+	private boolean noPieceSelectedAndPieceClicked(Coordinate coor) {
+		return gui.boardPieces[coor.getX()][coor.getY()] != null && this.selectedPiece == null
 				&& this.secondSelectedPiece == null;
 	}
 
-	private boolean clickOnBoard(int rowClicked, int columnClicked) {
-		return rowClicked <= 7 && rowClicked >= 0 && columnClicked <= 7 && columnClicked >= 0;
+	private boolean clickOnBoard(Coordinate coor) {
+		return coor.getX() <= 7 && coor.getX() >= 0 && coor.getY() <= 7 && coor.getY() >= 0;
 	}
 
-	private boolean checkForPush(int rowClicked, int columnClicked) {
-		if (this.secondSelectedPiece.getRow() + 1 == rowClicked
-				&& this.secondSelectedPiece.getColumn() == columnClicked) {
+	private boolean checkForPush(Coordinate coor) {
+		if (this.secondSelectedPiece.getRow() + 1 == coor.getX()
+				&& this.secondSelectedPiece.getColumn() == coor.getY()) {
 			return true;
 		}
-		if (this.secondSelectedPiece.getRow() - 1 == rowClicked
-				&& this.secondSelectedPiece.getColumn() == columnClicked) {
+		if (this.secondSelectedPiece.getRow() - 1 == coor.getX()
+				&& this.secondSelectedPiece.getColumn() == coor.getY()) {
 			// numMoves-=2;
 			return true;
 		}
-		if (this.secondSelectedPiece.getRow() == rowClicked
-				&& this.secondSelectedPiece.getColumn() + 1 == columnClicked) {
+		if (this.secondSelectedPiece.getRow() == coor.getX()
+				&& this.secondSelectedPiece.getColumn() + 1 == coor.getY()) {
 			// numMoves-=2;
 			return true;
 		}
-		if (this.secondSelectedPiece.getRow() == rowClicked
-				&& this.secondSelectedPiece.getColumn() - 1 == columnClicked) {
+		if (this.secondSelectedPiece.getRow() == coor.getX()
+				&& this.secondSelectedPiece.getColumn() - 1 == coor.getY()) {
 			// numMoves-=2;
 			return true;
 		}
 		return false;
 	}
 
-	private boolean checkForPull(int rowClicked, int columnClicked) {
-		if (this.selectedPiece.getRow() + 1 == rowClicked && this.selectedPiece.getColumn() == columnClicked) {
+	private boolean checkForPull(Coordinate coor) {
+		if (this.selectedPiece.getRow() + 1 == coor.getX() && this.selectedPiece.getColumn() == coor.getY()) {
 			// numMoves-=2;
 			return true;
 		}
-		if (this.selectedPiece.getRow() - 1 == rowClicked && this.selectedPiece.getColumn() == columnClicked) {
+		if (this.selectedPiece.getRow() - 1 == coor.getX() && this.selectedPiece.getColumn() == coor.getY()) {
 			// numMoves-=2;
 			return true;
 		}
-		if (this.selectedPiece.getRow() == rowClicked && this.selectedPiece.getColumn() + 1 == columnClicked) {
+		if (this.selectedPiece.getRow() == coor.getX() && this.selectedPiece.getColumn() + 1 == coor.getY()) {
 			// numMoves--;
 			return true;
 		}
-		if (this.selectedPiece.getRow() == rowClicked && this.selectedPiece.getColumn() - 1 == columnClicked) {
+		if (this.selectedPiece.getRow() == coor.getX() && this.selectedPiece.getColumn() - 1 == coor.getY()) {
 			// numMoves--;
 			return true;
 		}
