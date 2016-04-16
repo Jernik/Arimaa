@@ -24,7 +24,7 @@ public class BoardState {
 	public static final int MAX_BOARD_SIZE = 8;
 	@Deprecated
 	private char[][] boardArray = new char[8][8]; // Represents the current state of the board
-	private HashMap<Coordinate, AbstractPiece> pieces;
+	public HashMap<Coordinate, AbstractPiece> pieces;
 
 	public BoardState() {
 		this.pieces = new HashMap<Coordinate, AbstractPiece>();

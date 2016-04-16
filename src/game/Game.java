@@ -6,10 +6,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import move_commands.MoveCommand;
-import move_commands.MoveDown;
-import move_commands.MoveLeft;
-import move_commands.MoveRight;
-import move_commands.MoveUp;
+import move_commands.RegularMove;
 import piece.AbstractPiece;
 import piece.Owner;
 import piece.Rabbit;
@@ -125,38 +122,42 @@ public class Game {
 		return this.currentBoard.pieceAt(coor);
 	}
 
-	/**
-	 * 
-	 * @param row
-	 * @param column
-	 * @param dir
-	 *            0: up, 1: right, 2: down, 3: left
-	 * @return returns true if the move made successfully, otherwise returns false
-	 */
-	public boolean move(int row, int column, int dir) {
-		MoveCommand moveToMake;
-		if (!isValidMoveFromSquare(row, column))
+/**
+ * 
+ * @param moveToMake
+ * @return
+ */
+	public boolean move(RegularMove moveToMake) {
+		//for testing, going to assume all moves are valid... >.>
+		if (!isValidMoveFromSquare(moveToMake.getOriginalPlace().getX(), moveToMake.getOriginalPlace().getY()))
 			return false;
-		switch (dir) {
-		case 0:
-			// Moving UP
-			moveToMake = new MoveUp(this.currentBoard);
-			return makeMove(moveToMake, row, column);
-		case 1:
-			// Moving RIGHT
-			moveToMake = new MoveRight(this.currentBoard);
-			return makeMove(moveToMake, row, column);
-		case 2:
-			// Moving DOWN
-			moveToMake = new MoveDown(this.currentBoard);
-			return makeMove(moveToMake, row, column);
-		case 3:
-			// Moving LEFT
-			moveToMake = new MoveLeft(this.currentBoard);
-			return makeMove(moveToMake, row, column);
-		default:
-			return false;
+//		switch (dir) {
+//		case 0:
+//			// Moving UP
+//			moveToMake = new MoveUp(this.currentBoard);
+//			return makeMove(moveToMake, row, column);
+//		case 1:
+//			// Moving RIGHT
+//			moveToMake = new MoveRight(this.currentBoard);
+//			return makeMove(moveToMake, row, column);
+//		case 2:
+//			// Moving DOWN
+//			moveToMake = new MoveDown(this.currentBoard);
+//			return makeMove(moveToMake, row, column);
+//		case 3:
+//			// Moving LEFT
+//			moveToMake = new MoveLeft(this.currentBoard);
+//			return makeMove(moveToMake, row, column);
+//		default:
+//			return false;
+//		}
+		if (moveToMake.isValidMove()) {
+			this.currentBoard = moveToMake.execute();
+			this.moves.add(moveToMake);
+			endMove();
+			return true;
 		}
+		return false;
 	}
 
 	/**
@@ -167,9 +168,10 @@ public class Game {
 	 * @return returns true if the move made successfully, otherwise returns false
 	 */
 
+	@Deprecated
 	private boolean makeMove(MoveCommand moveToMake, int row, int column) {
-		if (moveToMake.isValidMove(row, column)) {
-			this.currentBoard = moveToMake.execute(row, column);
+		if (moveToMake.isValidMove()) {
+			this.currentBoard = moveToMake.execute();
 			this.moves.add(moveToMake);
 			endMove();
 			return true;
@@ -199,7 +201,7 @@ public class Game {
 		checkDeaths(2, 5);
 		checkDeaths(5, 2);
 		checkDeaths(5, 5);
-		checkWin();
+//		checkWin();
 		numMoves--;
 		if (numMoves <= 0) {
 			if (getPlayerTurn() == 1) {

@@ -38,6 +38,11 @@ public class Coordinate {
 	public boolean isValid() {
 		return this.valid;
 	}
+	
+	public int calculateDirection(Coordinate other) { 
+		//TODO: add functionality to this for push/pull
+		return 0;
+	}
 
 	public boolean equals(Object obj) {
 		if (obj instanceof Coordinate) {

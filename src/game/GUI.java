@@ -126,8 +126,10 @@ public class GUI {
 			imgPanel.setColumn(coor.getX());
 			imgPanel.setLocation(imgPanel.getPixelX(), imgPanel.getPixelY());
 			imgPanel.setVisible(true);
-			this.boardPieces[7 - coor.getY()][coor.getX()] = imgPanel;
-			
+			// God damn it, Phil.	
+			// this.boardPieces[7 - coor.getY()][coor.getX()] = imgPanel;
+			this.boardPieces[coor.getX()][7 - coor.getY()] = imgPanel;
+
 		}
 	}
 
