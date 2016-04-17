@@ -39,7 +39,7 @@ public class Game {
 	public Game(BoardState b) {
 		currentBoard = b;
 	}
-	
+
 	public BoardState getBoardState() {
 		return this.currentBoard;
 	}
@@ -104,34 +104,48 @@ public class Game {
 		return playerTurn;
 	}
 
+	public Owner getOwner() {
+		return Owner.values()[(getPlayerTurn() - 1)];
+	}
+
 	public void setPlayerTurn(int playerTurn) {
 		this.playerTurn = playerTurn;
 	}
 
-	@Deprecated
-	public AbstractPiece getSpace(int row, int column) {
-		return this.currentBoard.getPieceAt(new Coordinate(row, column));
+	public AbstractPiece getSpace(Coordinate coor) {
+		return this.currentBoard.getPieceAt(coor);
 	}
-	
+
 	// refactor for future pull request
 	public boolean checkCoor(int row, int column) {
 		return this.checkCoor(new Coordinate(row, column));
 	}
-	
+
 	public boolean checkCoor(Coordinate coor) {
 		return this.currentBoard.pieceAt(coor);
 	}
 
-/**
- * 
- * @param moveToMake
- * @return
- */
-	public boolean move(RegularMove moveToMake) {
-		//for testing, going to assume all moves are valid... >.>
-		if (!isValidMoveFromSquare(moveToMake.getOriginalPlace().getX(), moveToMake.getOriginalPlace().getY()))
-			return false;
-		if (moveToMake.isValidMove()) {
+	/**
+	 * 
+	 * @param moveToMake
+	 * @return
+	 */
+	public boolean move(BoardState boardState, Coordinate start, Coordinate dest) {
+		//FIXME: for testing, going to assume all moves are valid.
+//		if (!isValidMoveFromSquare(moveToMake.getOriginalPlace().getX(), moveToMake.getOriginalPlace().getY()))
+//			return false;
+		AbstractPiece piece = this.currentBoard.getPieceAt(start);
+		if ((piece instanceof Rabbit)) {
+			if (((piece.getOwner() == Owner.values()[0]) &&
+				(dest.equals(start.up()))) ||
+				((piece.getOwner() == Owner.values()[1]) &&
+				(dest.equals(start.down())))) {
+				//Cannot move a Rabbit backwards unless it has been dragged
+				return false;
+			}
+		}
+		if (start.isOrthogonallyAdjacentTo(dest)) {
+			RegularMove moveToMake = new RegularMove(boardState, start, dest);
 			this.currentBoard = moveToMake.execute();
 			this.moves.add(moveToMake);
 			endMove();
@@ -142,46 +156,68 @@ public class Game {
 
 	/**
 	 * 
-	 * @param moveToMake
-	 * @param row
-	 * @param column
-	 * @return returns true if the move made successfully, otherwise returns false
+	 * @param ownerPiece
+	 *            Coordinate of the owner's piece
+	 * @param opponentPiece
+	 *            Coordinate of the opponent's piece
+	 * @param destination
+	 *            Coordinate of the position that either the opponent's piece
+	 *            will be pushed into or the position the owner's piece will be
+	 *            moved into.
+	 * @return Returns true when a push or pull with the given 3 Coordinate
+	 *         objects would result in a valid move.
 	 */
 
-	@Deprecated
-	private boolean makeMove(MoveCommand moveToMake, int row, int column) {
-		if (moveToMake.isValidMove()) {
-			this.currentBoard = moveToMake.execute();
-			this.moves.add(moveToMake);
-			endMove();
-			return true;
+	public boolean pushOrPull(Coordinate ownerPiece, Coordinate opponentPiece, Coordinate destination) {
+		// TODO: Duplicate code in 3rd nested if-statement. Fix it.
+		// Do you have enough moves?
+		if (this.numMoves >= 2) {
+			// Is the first piece yours, the second theirs, are they
+			// orthonally adjacent, and is your piece higher precedence than theirs?
+			if ((this.currentBoard.getPieceAt(ownerPiece)).getOwner() == this.getOwner()
+					&& (this.currentBoard.getPieceAt(opponentPiece).getOwner() != this.getOwner())
+					&& (ownerPiece.isOrthogonallyAdjacentTo(opponentPiece))
+					&& (this.checkStrongerAdjacent(ownerPiece, opponentPiece))) {
+				// Is the destination next to your piece?
+				if (ownerPiece.isOrthogonallyAdjacentTo(destination)) {
+					RegularMove yourPiece = new RegularMove(this.currentBoard, ownerPiece, destination);
+					RegularMove theirPiece = new RegularMove(this.currentBoard, opponentPiece, ownerPiece);
+					this.currentBoard = yourPiece.execute();
+					this.currentBoard = theirPiece.execute();
+					this.moves.add(yourPiece);
+					this.moves.add(theirPiece);
+					this.numMoves--;
+					endMove();
+					return true;
+					// Or is it next to their piece?
+				} else if (opponentPiece.isOrthogonallyAdjacentTo(destination)) {
+					RegularMove theirPiece = new RegularMove(this.currentBoard, opponentPiece, destination);
+					RegularMove yourPiece = new RegularMove(this.currentBoard, ownerPiece, opponentPiece);
+					this.currentBoard = theirPiece.execute();
+					this.currentBoard = yourPiece.execute();
+					this.moves.add(theirPiece);
+					this.moves.add(yourPiece);
+					this.numMoves--;
+					endMove();
+					return true;
+				} else
+					// Neither, so that isn't a legal move
+					return false;
+			}
 		}
+		// Not enough moves remaining
 		return false;
-	}
-
-	private boolean isValidMoveFromSquare(int row, int column) {
-		if (getSpace(row, column) == null)
-			return false;
-		// This may cause issues when we implement undo/redo if we try invalid
-		// moves before we undo
-		if (getSpace(row, column).getOwner() != Owner.values()[(getPlayerTurn() - 1)] && !isPushPull) {
-			return false;// not your turn
-		}
-		if ((checkStrongerAdjacent(row, column) && !checkFriendlyAdjacent(row, column)) && !isPushPull) {
-			return false;// can't move
-		}
-		return true;
 	}
 
 	/**
 	 * This methods checks piece death and victory conditions
 	 */
 	private void endMove() {
-		checkDeaths(2, 2);
-		checkDeaths(2, 5);
-		checkDeaths(5, 2);
-		checkDeaths(5, 5);
-//		checkWin();
+		checkDeaths(new Coordinate(2, 2));
+		checkDeaths(new Coordinate(2, 5));
+		checkDeaths(new Coordinate(5, 2));
+		checkDeaths(new Coordinate(5, 5));
+		// checkWin();
 		numMoves--;
 		if (numMoves <= 0) {
 			if (getPlayerTurn() == 1) {
@@ -195,19 +231,23 @@ public class Game {
 	}
 
 	/**
-	 * checks both rows for rabbits of the opposite side, top row first followed by the bottom row
+	 * checks both rows for rabbits of the opposite side, top row first followed
+	 * by the bottom row
 	 */
 	private void checkWin() {
+		Coordinate coor;
 		for (int i = 0; i < 8; i++) {
-			if (getSpace(0, i) != null) {
-				if (getSpace(0, i).equals(new Rabbit(Owner.Player2))) {
+			coor = new Coordinate(0, i);
+			if (getSpace(coor) != null) {
+				if (getSpace(coor).equals(new Rabbit(Owner.Player2))) {
 					winner = 2;
 				}
 			}
 		}
 		for (int i = 0; i < 8; i++) {
-			if (getSpace(7, i) != null) {
-				if (getSpace(7, i).equals(new Rabbit(Owner.Player1))) {
+			coor = new Coordinate(7, i);
+			if (getSpace(coor) != null) {
+				if (getSpace(coor).equals(new Rabbit(Owner.Player1))) {
 					winner = 1;
 				}
 			}
@@ -217,7 +257,8 @@ public class Game {
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
 				// and short circuits if null preventing nullpointerexception
-				if (getSpace(i, j) != null && getSpace(i, j).equals(new Rabbit(Owner.Player1))) {
+				coor = new Coordinate(i, j);
+				if (getSpace(coor) != null && getSpace(coor).equals(new Rabbit(Owner.Player1))) {
 					p1RabbitExists = true;
 				}
 			}
@@ -230,7 +271,8 @@ public class Game {
 		boolean p2RabbitExists = false;
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
-				if (getSpace(i, j) != null && getSpace(i, j).equals(new Rabbit(Owner.Player2))) {
+				coor = new Coordinate(i, j);
+				if (getSpace(coor) != null && getSpace(coor).equals(new Rabbit(Owner.Player2))) {
 					p2RabbitExists = true;
 				}
 			}
@@ -242,30 +284,30 @@ public class Game {
 	}
 
 	/**
-	 * Piece death occurs when pieces are on the squares (2,2), (2,5), (5,2), (5,5), and has no friendly adjacent pieces
-	 * to it
+	 * Piece death occurs when pieces are on the squares (2,2), (2,5), (5,2),
+	 * (5,5), and has no friendly adjacent pieces to it
 	 * 
 	 */
-	private void checkDeaths(int row, int col) {
-		if (this.getSpace(row, col) == (null))
+	private void checkDeaths(Coordinate coor) {
+		if (this.getSpace(coor) == (null))
 			return;// an empty piece doesn't need to be checked
 
-		if (checkFriendlyAdjacent(row, col)) {
+		if (checkFriendlyAdjacent(coor)) {
 			return;
 		}
 		// no adjacent friendly pieces, remove this one
-		this.currentBoard.removePiece(new Coordinate(row, col));
+		this.currentBoard.removePiece(coor);
 		// char[][] temp = this.currentBoard.getBoardArray();
 		// temp[row][col] = ' ';
 		// this.currentBoard.setBoardArray(temp);
 	}
 
-	public boolean checkFriendlyAdjacent(int row, int col) {
-		AbstractPiece cen = this.getSpace(row, col);
-		AbstractPiece up = this.getSpace(row - 1, col);
-		AbstractPiece down = this.getSpace(row + 1, col);
-		AbstractPiece left = this.getSpace(row, col - 1);
-		AbstractPiece right = this.getSpace(row, col + 1);
+	public boolean checkFriendlyAdjacent(Coordinate coor) {
+		AbstractPiece cen = this.getSpace(coor);
+		AbstractPiece up = this.getSpace(coor.up());
+		AbstractPiece down = this.getSpace(coor.down());
+		AbstractPiece left = this.getSpace(coor.left());
+		AbstractPiece right = this.getSpace(coor.right());
 		Owner own = cen.getOwner();
 		if (up != null) {
 			if (up.getOwner() == own)
@@ -286,222 +328,43 @@ public class Game {
 		return false;
 	}
 
-	public boolean checkStrongerAdjacent(int row, int col) {
-		AbstractPiece cen = this.getSpace(row, col);
-		AbstractPiece up = this.getSpace(row - 1, col);
-		AbstractPiece down = this.getSpace(row + 1, col);
-		AbstractPiece left = this.getSpace(row, col - 1);
-		AbstractPiece right = this.getSpace(row, col + 1);
-		@SuppressWarnings("unused")
-		Owner own = cen.getOwner();
-		boolean foo = false;
-		if (up != null) {
-			foo = checkStrong(up, cen);
-		}
-		if (down != null) {
-			foo = checkStrong(down, cen);
-		}
-		if (right != null) {
-			foo = checkStrong(right, cen);
-		}
-		if (left != null) {
-			foo = checkStrong(left, cen);
-		}
-		return foo;
+	public boolean checkStrongerAdjacent(Coordinate first, Coordinate second) {
+		AbstractPiece firstPiece = this.currentBoard.getPieceAt(first);
+		AbstractPiece secondPiece = this.currentBoard.getPieceAt(second);
+		return (firstPiece.getRank() > secondPiece.getRank())
+				&& (this.currentBoard.getPieceAt(first) != this.currentBoard.getPieceAt(second));
 	}
 
+	// @Deprecated
+	// public boolean checkStrongerAdjacent(int row, int col) {
+	// AbstractPiece cen = this.getSpace(row, col);
+	// AbstractPiece up = this.getSpace(row - 1, col);
+	// AbstractPiece down = this.getSpace(row + 1, col);
+	// AbstractPiece left = this.getSpace(row, col - 1);
+	// AbstractPiece right = this.getSpace(row, col + 1);
+	// @SuppressWarnings("unused")
+	// Owner own = cen.getOwner();
+	// boolean foo = false;
+	// if (up != null) {
+	// foo = checkStrong(up, cen);
+	// }
+	// if (down != null) {
+	// foo = checkStrong(down, cen);
+	// }
+	// if (right != null) {
+	// foo = checkStrong(right, cen);
+	// }
+	// if (left != null) {
+	// foo = checkStrong(left, cen);
+	// }
+	// return foo;
+	// }
+
+	@Deprecated
 	private boolean checkStrong(AbstractPiece one, AbstractPiece two) {
 		if (one.getOwner() != two.getOwner() && one.isStrongerThan(two))
 			return true;
 		return false;
-	}
-
-	/**
-	 * 0: up, 1: right, 2: down, 3: left
-	 * 
-	 * @param row
-	 * @param column
-	 * @param dir1
-	 *            the direction the pushing piece will move
-	 * @param dir2
-	 *            the direction the pushed piece will move
-	 * @return
-	 */
-	public boolean push(int row, int column, int dir1, int dir2) {
-		if (!isValidSquareToPushFrom(row, column))
-			return false;
-		isPushPull = true;
-		switch (dir1) {
-		case 0:
-			if (row - 1 >= 0) {
-				AbstractPiece pushingPiece = getSpace(row, column);
-				AbstractPiece pushedPiece = getSpace(row - 1, column);
-				if (pieceCanPush(pushingPiece, pushedPiece) && move(row - 1, column, dir2)) {
-					isPushPull = false;
-					return move(row, column, dir1);
-				}
-			}
-
-			break;
-		case 1:
-			if (column + 1 <= 7) {
-				AbstractPiece pushingPiece2 = getSpace(row, column);
-				AbstractPiece pushedPiece2 = getSpace(row, column + 1);
-				if (pieceCanPush(pushingPiece2, pushedPiece2) && move(row, column + 1, dir2)) {
-					isPushPull = false;
-					return move(row, column, dir1);
-				}
-			}
-			break;
-		case 2:
-			if (row + 1 <= 7) {
-				AbstractPiece pushingPiece3 = getSpace(row, column);
-				AbstractPiece pushedPiece3 = getSpace(row + 1, column);
-				if (pushingPiece3.isStrongerThan(pushedPiece3)) {
-					if (pieceCanPush(pushingPiece3, pushedPiece3) && move(row + 1, column, dir2)) {
-						isPushPull = false;
-						return move(row, column, dir1);
-
-					}
-				}
-			}
-			break;
-		case 3:
-			if (column - 1 >= 0) {
-				AbstractPiece pushingPiece4 = getSpace(row, column);
-				AbstractPiece pushedPiece4 = getSpace(row, column - 1);
-				if (pieceCanPush(pushingPiece4, pushedPiece4) && move(row, column - 1, dir2)) {
-					isPushPull = false;
-					return move(row, column, dir1);
-				}
-			}
-
-			break;
-		}
-		isPushPull = false;
-		return false;
-	}
-
-	private boolean pieceCanPush(AbstractPiece pushingPiece, AbstractPiece pushedPiece) {
-		return pushedPiece != null && pushingPiece.isStrongerThan(pushedPiece)
-				&& pushingPiece.getOwner() != pushedPiece.getOwner();
-	}
-
-	private boolean isValidSquareToPushFrom(int row, int column) {
-		if (numMoves <= 1)
-			return false; // can't push/pull with only one move
-		if (getSpace(row, column) == null) {
-			return false; // trying to push with an empty square
-		}
-		if (getSpace(row, column).getOwner() != Owner.values()[(getPlayerTurn() - 1)])
-			return false;// not your turn
-		return true;
-	}
-
-	/**
-	 * 0: up, 1: right, 2: down, 3: left
-	 * 
-	 * @param row
-	 *            : row that contains the pulling piece
-	 * @param column
-	 *            : column that contains the pulling piece
-	 * @param direction1
-	 *            : direction the pulling piece will move
-	 * @param direction2
-	 *            : direction the piece being pulled will move
-	 * @return True if pull succeeds, False if it fails
-	 */
-	public boolean pull(int row1, int column1, int row2, int column2, int direction1) {
-		if (!isValidSquaretoPullFrom(row1, column1, row2, column2))
-			return false;
-		// Get direction that pulled piece will move
-		int direction2 = getDirection(row2, column2, row1, column1);
-
-		// Check that getDirection didn't fail
-		isPushPull = true;
-		// Attempt to perform move operations on both pieces
-		switch (direction1) {
-		case 0:
-			if (tryPull(getSpace(row1, column1), getSpace(row2, column2), row1, column1, direction1)) {
-				move(row2, column2, direction2);
-				isPushPull = false;
-				return true;
-			}
-			break;
-		case 1:
-			if (tryPull(getSpace(row1, column1), getSpace(row2, column2), row1, column1, direction1)) {
-				move(row2, column2, direction2);
-				isPushPull = false;
-				return true;
-			}
-			break;
-		case 2:
-			if (tryPull(getSpace(row1, column1), getSpace(row2, column2), row1, column1, direction1)) {
-				move(row2, column2, direction2);
-				isPushPull = false;
-				return true;
-			}
-			break;
-		case 3:
-			if (tryPull(getSpace(row1, column1), getSpace(row2, column2), row1, column1, direction1)) {
-				move(row2, column2, direction2);
-				isPushPull = false;
-				return true;
-			}
-			break;
-		}
-		return false;
-	}
-
-	private boolean tryPull(AbstractPiece space, AbstractPiece space2, int row1, int column1, int direction1) {
-		return pieceCanPush(space, space2) && move(row1, column1, direction1);
-	}
-
-	private boolean isValidSquaretoPullFrom(int row1, int column1, int row2, int column2) {
-		if (numMoves <= 1)
-			return false; // can't push/pull with only one move
-		// Check that both pieces exist
-		if (getSpace(row1, column1) == null || getSpace(row2, column2) == null) {
-			return false;
-		}
-
-		// Check that pulling piece is strong than other piece
-		if (!getSpace(row1, column1).isStrongerThan(getSpace(row2, column2))) {
-			return false;
-		}
-
-		if (getSpace(row1, column1).getOwner() != Owner.values()[(getPlayerTurn() - 1)])
-			return false;// not your turn
-		return true;
-	}
-
-	/**
-	 * 0: up, 1: right, 2: down, 3: left
-	 * 
-	 * @param row1
-	 *            : row of space1
-	 * @param column1
-	 *            : column of space1
-	 * @param row2
-	 *            : row of space2
-	 * @param column2
-	 *            : column of space2
-	 * @return integer representing the direction required to move from space1 to space2
-	 */
-	public int getDirection(int row1, int column1, int row2, int column2) {
-		if (row1 == row2) {
-			if (column1 - 1 == column2)
-				return 3;
-			else if (column1 + 1 == column2)
-				return 1;
-		}
-		if (column1 == column2) {
-			if (row1 - 1 == row2)
-				return 0;
-			else if (row1 + 1 == row2)
-				return 2;
-		}
-		return -1;
 	}
 
 	public void undoMove() {
@@ -517,12 +380,6 @@ public class Game {
 	// doesn't work now, leave for another pull request
 	public boolean loadFile(Scanner scanner) {
 		scanner.useDelimiter(",");
-		// BoardState boardToSet = new BoardState(
-		// new char[][] { { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' }, { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
-		// { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' }, { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
-		// { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' }, { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
-		// { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' }, { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' }, },
-		// 0);
 		BoardState boardToSet = new BoardState(); // so it compiles
 		String[] validBoardCharactersArray = { " ", "E", "C", "H", "D", "K", "R", "e", "c", "h", "d", "k", "r" };
 		ArrayList<String> vbc = new ArrayList<String>();

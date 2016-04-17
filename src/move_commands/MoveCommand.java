@@ -8,7 +8,7 @@ public interface MoveCommand {
 	
 	public BoardState getOriginalBoard();
 	
-	public boolean isValidMove();
+//	public boolean isValidMove();
 	
 	public static boolean validMove(BoardState originalBoard, int row, int column) {
 		if (row >= 0 && row < 8 && column >= 0 && column < 8

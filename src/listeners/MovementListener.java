@@ -46,8 +46,8 @@ public class MovementListener implements MouseListener {
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO: Refactor all uses of rowClicked/columnClicked to use coor
-		// instead.
+		// CHECKME: Make sure all references to X and Y are based on a
+		// Coordinate object
 		int sourceX = (int) e.getPoint().getX();
 		int sourceY = (int) e.getPoint().getY();
 
@@ -65,11 +65,13 @@ public class MovementListener implements MouseListener {
 			// AKA move
 			else if (isSelectedPieceAndEmptySpaceClicked(coor)) {
 				// Using move to check for valid move
-				if (game.move(new RegularMove(this.game.getBoardState(), this.selectedPieceCoord, coor))) {
+				if (game.move(this.game.getBoardState(), this.selectedPieceCoord, coor)) {
 					gui.renderBoard();
 				}
 				this.selectedPiece = null;
+				this.secondSelectedPieceCoord = null;
 				this.secondSelectedPiece = null;
+				this.secondSelectedPieceCoord = null;
 
 			}
 
@@ -82,40 +84,55 @@ public class MovementListener implements MouseListener {
 				// selected
 			} else if (twoPieceSelectedAndEmptySpaceClicked(coor)) {
 
-				if (checkForPull(coor)) {
-					int calculatedDirection = moveDirection(selectedPiece, coor.getX(), coor.getY());
+				// if (checkForPull(coor)) {
+				// int calculatedDirection = moveDirection(selectedPiece,
+				// coor.getX(), coor.getY());
+				//
+				// if (game.pull(this.selectedPiece.getRow(),
+				// this.selectedPiece.getColumn(),
+				// this.secondSelectedPiece.getRow(),
+				// this.secondSelectedPiece.getColumn(),
+				// calculatedDirection)) {
+				// gui.renderBoard();
+				//
+				// }
+				// this.selectedPiece = null;
+				// this.secondSelectedPiece = null;
 
-					if (game.pull(this.selectedPiece.getRow(), this.selectedPiece.getColumn(),
-							this.secondSelectedPiece.getRow(), this.secondSelectedPiece.getColumn(),
-							calculatedDirection)) {
-						gui.renderBoard();
-
-					}
-					this.selectedPiece = null;
-					this.secondSelectedPiece = null;
-
-				} else if (checkForPush(coor)) {
-					int calculatedDirection1 = moveDirectionOnePush(selectedPiece, secondSelectedPiece);
-
-					int calculatedDirection2 = moveDirectionTwoPush(secondSelectedPiece, coor.getX(), coor.getY());
-
-					if (game.push(this.selectedPiece.getRow(), this.selectedPiece.getColumn(), calculatedDirection1,
-							calculatedDirection2)) {
-						gui.renderBoard();
-
-					}
-					this.selectedPiece = null;
-					this.secondSelectedPiece = null;
+				// } else if (checkForPush(coor)) {
+				// int calculatedDirection1 =
+				// moveDirectionOnePush(selectedPiece, secondSelectedPiece);
+				//
+				// int calculatedDirection2 =
+				// moveDirectionTwoPush(secondSelectedPiece, coor.getX(),
+				// coor.getY());
+				//
+				// if (game.push(this.selectedPiece.getRow(),
+				// this.selectedPiece.getColumn(), calculatedDirection1,
+				// calculatedDirection2)) {
+				// gui.renderBoard();
+				//
+				// }
+				// this.selectedPiece = null;
+				// this.secondSelectedPiece = null;
+				// }
+				if (game.pushOrPull(this.selectedPieceCoord, this.secondSelectedPieceCoord, coor)) {
+					gui.renderBoard();
 				}
+				this.selectedPiece = null;
+				this.selectedPieceCoord = null;
+				this.secondSelectedPiece = null;
+				this.secondSelectedPieceCoord = null;
 			}
 
 			// Invalid selection, clear data
 			else {
 				this.selectedPiece = null;
+				this.selectedPieceCoord = null;
 				this.secondSelectedPiece = null;
+				this.secondSelectedPieceCoord = null;
 			}
 		}
-
 	}
 
 	private int moveDirectionTwoPush(ImagePanel secondSelectedPiece2, int rowClicked, int columnClicked) {
