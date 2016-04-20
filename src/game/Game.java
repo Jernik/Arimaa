@@ -7,10 +7,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import move_commands.MoveCommand;
-import move_commands.MoveDown;
-import move_commands.MoveLeft;
-import move_commands.MoveRight;
-import move_commands.MoveUp;
+import move_commands.RegularMove;
 import piece.AbstractPiece;
 import piece.Owner;
 import piece.Rabbit;
@@ -31,7 +28,6 @@ public class Game implements Serializable {
 	private int winner = 0;
 	private int numMoves = 4;
 	private int playerTurn = 1;
-	private boolean isPushPull;
 
 	/**
 	 * Creates a board with a default starting layout
@@ -43,7 +39,7 @@ public class Game implements Serializable {
 	public Game(BoardState b) {
 		currentBoard = b;
 	}
-	
+
 	public BoardState getBoardState() {
 		return this.currentBoard;
 	}
@@ -108,69 +104,56 @@ public class Game implements Serializable {
 		return playerTurn;
 	}
 
+	public Owner getOwner() {
+		return Owner.values()[(getPlayerTurn() - 1)];
+	}
+
+	public Owner getOtherOwner() {
+		if (getPlayerTurn() == 1) {
+			return Owner.values()[1];
+		} else {
+			return Owner.values()[0];
+		}
+	}
+
 	public void setPlayerTurn(int playerTurn) {
 		this.playerTurn = playerTurn;
 	}
 
-	@Deprecated
-	public AbstractPiece getSpace(int row, int column) {
-		return this.currentBoard.getPieceAt(new Coordinate(row, column));
+	public AbstractPiece getPieceAt(Coordinate coor) {
+		return this.currentBoard.getPieceAt(coor);
 	}
-	
+
 	// refactor for future pull request
 	public boolean checkCoor(int row, int column) {
 		return this.checkCoor(new Coordinate(row, column));
 	}
-	
+
 	public boolean checkCoor(Coordinate coor) {
 		return this.currentBoard.pieceAt(coor);
 	}
 
 	/**
 	 * 
-	 * @param row
-	 * @param column
-	 * @param dir
-	 *            0: up, 1: right, 2: down, 3: left
-	 * @return returns true if the move made successfully, otherwise returns false
+	 * @param moveToMake
+	 * @return
 	 */
-	public boolean move(int row, int column, int dir) {
-		MoveCommand moveToMake;
-		if (!isValidMoveFromSquare(row, column))
-			return false;
-		switch (dir) {
-		case 0:
-			// Moving UP
-			moveToMake = new MoveUp(this.currentBoard);
-			return makeMove(moveToMake, row, column);
-		case 1:
-			// Moving RIGHT
-			moveToMake = new MoveRight(this.currentBoard);
-			return makeMove(moveToMake, row, column);
-		case 2:
-			// Moving DOWN
-			moveToMake = new MoveDown(this.currentBoard);
-			return makeMove(moveToMake, row, column);
-		case 3:
-			// Moving LEFT
-			moveToMake = new MoveLeft(this.currentBoard);
-			return makeMove(moveToMake, row, column);
-		default:
+	public boolean move(BoardState boardState, Coordinate start, Coordinate dest) {
+		AbstractPiece piece = this.currentBoard.getPieceAt(start);
+		if (isFrozen(start)) {
 			return false;
 		}
-	}
-
-	/**
-	 * 
-	 * @param moveToMake
-	 * @param row
-	 * @param column
-	 * @return returns true if the move made successfully, otherwise returns false
-	 */
-
-	private boolean makeMove(MoveCommand moveToMake, int row, int column) {
-		if (moveToMake.isValidMove(row, column)) {
-			this.currentBoard = moveToMake.execute(row, column);
+		if ((piece instanceof Rabbit)) {
+			if (((piece.getOwner() == Owner.values()[0]) && (dest.equals(start.up())))
+					|| ((piece.getOwner() == Owner.values()[1]) && (dest.equals(start.down())))) {
+				// Cannot move a Rabbit backwards unless it has been dragged
+				return false;
+			}
+		}
+		if (start.isOrthogonallyAdjacentTo(dest)
+				&& this.getBoardState().getPieceAt(start).getOwner() == this.getOwner()) {
+			RegularMove moveToMake = new RegularMove(boardState, start, dest);
+			this.currentBoard = moveToMake.execute();
 			this.moves.add(moveToMake);
 			endMove();
 			return true;
@@ -178,28 +161,107 @@ public class Game implements Serializable {
 		return false;
 	}
 
-	private boolean isValidMoveFromSquare(int row, int column) {
-		if (getSpace(row, column) == null)
-			return false;
-		// This may cause issues when we implement undo/redo if we try invalid
-		// moves before we undo
-		if (getSpace(row, column).getOwner() != Owner.values()[(getPlayerTurn() - 1)] && !isPushPull) {
-			return false;// not your turn
+	private boolean isFrozen(Coordinate pieceToMove) {
+		if (!isNextToFriendlyPiece(pieceToMove, this.getOwner())
+				&& isNextToEnemyPiece(pieceToMove, this.getOtherOwner())) {
+			return true;
 		}
-		if ((checkStrongerAdjacent(row, column) && !checkFriendlyAdjacent(row, column)) && !isPushPull) {
-			return false;// can't move
+		return false;
+	}
+
+	private boolean isNextToEnemyPiece(Coordinate pieceToMove, Owner player) {
+		for (int i = -1; i < 2; i++) {
+			for (int j = -1; j < 2; j++) {
+				Coordinate coor = new Coordinate(i + pieceToMove.getX(), j + pieceToMove.getY());
+				if (this.getPieceAt(coor) != null) {
+					if (coor.isValid() && !coor.equals(pieceToMove)
+							&& this.getPieceAt(coor).getOwner() == player
+							&& this.getPieceAt(coor).isStrongerThan(this.getPieceAt(pieceToMove))) {
+						return true;
+					}
+				}
+			}
 		}
-		return true;
+		return false;
+	}
+	
+	private boolean isNextToFriendlyPiece(Coordinate pieceToMove, Owner player) {
+		for (int i = -1; i < 2; i++) {
+			for (int j = -1; j < 2; j++) {
+				Coordinate coor = new Coordinate(i + pieceToMove.getX(), j + pieceToMove.getY());
+				if (this.getPieceAt(coor) != null) {
+					if (coor.isValid() && !coor.equals(pieceToMove)
+							&& this.getPieceAt(coor).getOwner() == player) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * 
+	 * @param ownerPiece
+	 *            Coordinate of the owner's piece
+	 * @param opponentPiece
+	 *            Coordinate of the opponent's piece
+	 * @param destination
+	 *            Coordinate of the position that either the opponent's piece
+	 *            will be pushed into or the position the owner's piece will be
+	 *            moved into.
+	 * @return Returns true when a push or pull with the given 3 Coordinate
+	 *         objects would result in a valid move.
+	 */
+
+	public boolean pushOrPull(Coordinate ownerPiece, Coordinate opponentPiece, Coordinate destination) {
+		// Do you have enough moves?
+		if (this.numMoves >= 2) {
+			// Is the first piece yours, the second theirs, are they
+			// orthonally adjacent, and is your piece higher precedence than
+			// theirs?
+			if ((this.currentBoard.getPieceAt(ownerPiece)).getOwner() == this.getOwner()
+					&& (this.currentBoard.getPieceAt(opponentPiece).getOwner() != this.getOwner())
+					&& (ownerPiece.isOrthogonallyAdjacentTo(opponentPiece))
+					&& (this.checkStrongerAdjacent(ownerPiece, opponentPiece))) {
+				// Is the destination next to your piece?
+				if (ownerPiece.isOrthogonallyAdjacentTo(destination)) {
+					RegularMove yourPiece = new RegularMove(this.currentBoard, ownerPiece, destination);
+					RegularMove theirPiece = new RegularMove(this.currentBoard, opponentPiece, ownerPiece);
+					pushOrPullMove(yourPiece, theirPiece);
+					return true;
+					// Or is it next to their piece?
+				} else if (opponentPiece.isOrthogonallyAdjacentTo(destination)) {
+					RegularMove theirPiece = new RegularMove(this.currentBoard, opponentPiece, destination);
+					RegularMove yourPiece = new RegularMove(this.currentBoard, ownerPiece, opponentPiece);
+					pushOrPullMove(theirPiece, yourPiece);
+					return true;
+				} else
+					// Neither, so that isn't a legal move
+					return false;
+			}
+		}
+		// Not enough moves remaining
+		return false;
+	}
+
+	private void pushOrPullMove(MoveCommand m1, MoveCommand m2) {
+		this.currentBoard = m1.execute();
+		this.currentBoard = m2.execute();
+		this.moves.add(m1);
+		this.moves.add(m2);
+		this.numMoves--;
+		endMove();
 	}
 
 	/**
 	 * This methods checks piece death and victory conditions
 	 */
 	private void endMove() {
-		checkDeaths(2, 2);
-		checkDeaths(2, 5);
-		checkDeaths(5, 2);
-		checkDeaths(5, 5);
+		checkDeaths(new Coordinate(2, 2));
+		checkDeaths(new Coordinate(2, 5));
+		checkDeaths(new Coordinate(5, 2));
+		checkDeaths(new Coordinate(5, 5));
 		checkWin();
 		numMoves--;
 		if (numMoves <= 0) {
@@ -214,19 +276,23 @@ public class Game implements Serializable {
 	}
 
 	/**
-	 * checks both rows for rabbits of the opposite side, top row first followed by the bottom row
+	 * checks both rows for rabbits of the opposite side, top row first followed
+	 * by the bottom row
 	 */
 	private void checkWin() {
+		Coordinate coor;
 		for (int i = 0; i < 8; i++) {
-			if (getSpace(0, i) != null) {
-				if (getSpace(0, i).equals(new Rabbit(Owner.Player2))) {
+			coor = new Coordinate(i, 7);
+			if (getPieceAt(coor) != null) {
+				if (getPieceAt(coor).equals(new Rabbit(Owner.Player2))) {
 					winner = 2;
 				}
 			}
 		}
 		for (int i = 0; i < 8; i++) {
-			if (getSpace(7, i) != null) {
-				if (getSpace(7, i).equals(new Rabbit(Owner.Player1))) {
+			coor = new Coordinate(i, 7);
+			if (getPieceAt(coor) != null) {
+				if (getPieceAt(coor).equals(new Rabbit(Owner.Player1))) {
 					winner = 1;
 				}
 			}
@@ -236,7 +302,8 @@ public class Game implements Serializable {
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
 				// and short circuits if null preventing nullpointerexception
-				if (getSpace(i, j) != null && getSpace(i, j).equals(new Rabbit(Owner.Player1))) {
+				coor = new Coordinate(i, j);
+				if (getPieceAt(coor) != null && getPieceAt(coor).equals(new Rabbit(Owner.Player1))) {
 					p1RabbitExists = true;
 				}
 			}
@@ -249,7 +316,8 @@ public class Game implements Serializable {
 		boolean p2RabbitExists = false;
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
-				if (getSpace(i, j) != null && getSpace(i, j).equals(new Rabbit(Owner.Player2))) {
+				coor = new Coordinate(i, j);
+				if (getPieceAt(coor) != null && getPieceAt(coor).equals(new Rabbit(Owner.Player2))) {
 					p2RabbitExists = true;
 				}
 			}
@@ -261,30 +329,30 @@ public class Game implements Serializable {
 	}
 
 	/**
-	 * Piece death occurs when pieces are on the squares (2,2), (2,5), (5,2), (5,5), and has no friendly adjacent pieces
-	 * to it
+	 * Piece death occurs when pieces are on the squares (2,2), (2,5), (5,2),
+	 * (5,5), and has no friendly adjacent pieces to it
 	 * 
 	 */
-	private void checkDeaths(int row, int col) {
-		if (this.getSpace(row, col) == (null))
+	private void checkDeaths(Coordinate coor) {
+		if (this.getPieceAt(coor) == (null))
 			return;// an empty piece doesn't need to be checked
 
-		if (checkFriendlyAdjacent(row, col)) {
+		if (checkFriendlyAdjacent(coor)) {
 			return;
 		}
 		// no adjacent friendly pieces, remove this one
-		this.currentBoard.removePiece(new Coordinate(row, col));
+		this.currentBoard.removePiece(coor);
 		// char[][] temp = this.currentBoard.getBoardArray();
 		// temp[row][col] = ' ';
 		// this.currentBoard.setBoardArray(temp);
 	}
 
-	public boolean checkFriendlyAdjacent(int row, int col) {
-		AbstractPiece cen = this.getSpace(row, col);
-		AbstractPiece up = this.getSpace(row - 1, col);
-		AbstractPiece down = this.getSpace(row + 1, col);
-		AbstractPiece left = this.getSpace(row, col - 1);
-		AbstractPiece right = this.getSpace(row, col + 1);
+	public boolean checkFriendlyAdjacent(Coordinate coor) {
+		AbstractPiece cen = this.getPieceAt(coor);
+		AbstractPiece up = this.getPieceAt(coor.up());
+		AbstractPiece down = this.getPieceAt(coor.down());
+		AbstractPiece left = this.getPieceAt(coor.left());
+		AbstractPiece right = this.getPieceAt(coor.right());
 		Owner own = cen.getOwner();
 		if (up != null) {
 			if (up.getOwner() == own)
@@ -305,222 +373,11 @@ public class Game implements Serializable {
 		return false;
 	}
 
-	public boolean checkStrongerAdjacent(int row, int col) {
-		AbstractPiece cen = this.getSpace(row, col);
-		AbstractPiece up = this.getSpace(row - 1, col);
-		AbstractPiece down = this.getSpace(row + 1, col);
-		AbstractPiece left = this.getSpace(row, col - 1);
-		AbstractPiece right = this.getSpace(row, col + 1);
-		@SuppressWarnings("unused")
-		Owner own = cen.getOwner();
-		boolean foo = false;
-		if (up != null) {
-			foo = checkStrong(up, cen);
-		}
-		if (down != null) {
-			foo = checkStrong(down, cen);
-		}
-		if (right != null) {
-			foo = checkStrong(right, cen);
-		}
-		if (left != null) {
-			foo = checkStrong(left, cen);
-		}
-		return foo;
-	}
-
-	private boolean checkStrong(AbstractPiece one, AbstractPiece two) {
-		if (one.getOwner() != two.getOwner() && one.isStrongerThan(two))
-			return true;
-		return false;
-	}
-
-	/**
-	 * 0: up, 1: right, 2: down, 3: left
-	 * 
-	 * @param row
-	 * @param column
-	 * @param dir1
-	 *            the direction the pushing piece will move
-	 * @param dir2
-	 *            the direction the pushed piece will move
-	 * @return
-	 */
-	public boolean push(int row, int column, int dir1, int dir2) {
-		if (!isValidSquareToPushFrom(row, column))
-			return false;
-		isPushPull = true;
-		switch (dir1) {
-		case 0:
-			if (row - 1 >= 0) {
-				AbstractPiece pushingPiece = getSpace(row, column);
-				AbstractPiece pushedPiece = getSpace(row - 1, column);
-				if (pieceCanPush(pushingPiece, pushedPiece) && move(row - 1, column, dir2)) {
-					isPushPull = false;
-					return move(row, column, dir1);
-				}
-			}
-
-			break;
-		case 1:
-			if (column + 1 <= 7) {
-				AbstractPiece pushingPiece2 = getSpace(row, column);
-				AbstractPiece pushedPiece2 = getSpace(row, column + 1);
-				if (pieceCanPush(pushingPiece2, pushedPiece2) && move(row, column + 1, dir2)) {
-					isPushPull = false;
-					return move(row, column, dir1);
-				}
-			}
-			break;
-		case 2:
-			if (row + 1 <= 7) {
-				AbstractPiece pushingPiece3 = getSpace(row, column);
-				AbstractPiece pushedPiece3 = getSpace(row + 1, column);
-				if (pushingPiece3.isStrongerThan(pushedPiece3)) {
-					if (pieceCanPush(pushingPiece3, pushedPiece3) && move(row + 1, column, dir2)) {
-						isPushPull = false;
-						return move(row, column, dir1);
-
-					}
-				}
-			}
-			break;
-		case 3:
-			if (column - 1 >= 0) {
-				AbstractPiece pushingPiece4 = getSpace(row, column);
-				AbstractPiece pushedPiece4 = getSpace(row, column - 1);
-				if (pieceCanPush(pushingPiece4, pushedPiece4) && move(row, column - 1, dir2)) {
-					isPushPull = false;
-					return move(row, column, dir1);
-				}
-			}
-
-			break;
-		}
-		isPushPull = false;
-		return false;
-	}
-
-	private boolean pieceCanPush(AbstractPiece pushingPiece, AbstractPiece pushedPiece) {
-		return pushedPiece != null && pushingPiece.isStrongerThan(pushedPiece)
-				&& pushingPiece.getOwner() != pushedPiece.getOwner();
-	}
-
-	private boolean isValidSquareToPushFrom(int row, int column) {
-		if (numMoves <= 1)
-			return false; // can't push/pull with only one move
-		if (getSpace(row, column) == null) {
-			return false; // trying to push with an empty square
-		}
-		if (getSpace(row, column).getOwner() != Owner.values()[(getPlayerTurn() - 1)])
-			return false;// not your turn
-		return true;
-	}
-
-	/**
-	 * 0: up, 1: right, 2: down, 3: left
-	 * 
-	 * @param row
-	 *            : row that contains the pulling piece
-	 * @param column
-	 *            : column that contains the pulling piece
-	 * @param direction1
-	 *            : direction the pulling piece will move
-	 * @param direction2
-	 *            : direction the piece being pulled will move
-	 * @return True if pull succeeds, False if it fails
-	 */
-	public boolean pull(int row1, int column1, int row2, int column2, int direction1) {
-		if (!isValidSquaretoPullFrom(row1, column1, row2, column2))
-			return false;
-		// Get direction that pulled piece will move
-		int direction2 = getDirection(row2, column2, row1, column1);
-
-		// Check that getDirection didn't fail
-		isPushPull = true;
-		// Attempt to perform move operations on both pieces
-		switch (direction1) {
-		case 0:
-			if (tryPull(getSpace(row1, column1), getSpace(row2, column2), row1, column1, direction1)) {
-				move(row2, column2, direction2);
-				isPushPull = false;
-				return true;
-			}
-			break;
-		case 1:
-			if (tryPull(getSpace(row1, column1), getSpace(row2, column2), row1, column1, direction1)) {
-				move(row2, column2, direction2);
-				isPushPull = false;
-				return true;
-			}
-			break;
-		case 2:
-			if (tryPull(getSpace(row1, column1), getSpace(row2, column2), row1, column1, direction1)) {
-				move(row2, column2, direction2);
-				isPushPull = false;
-				return true;
-			}
-			break;
-		case 3:
-			if (tryPull(getSpace(row1, column1), getSpace(row2, column2), row1, column1, direction1)) {
-				move(row2, column2, direction2);
-				isPushPull = false;
-				return true;
-			}
-			break;
-		}
-		return false;
-	}
-
-	private boolean tryPull(AbstractPiece space, AbstractPiece space2, int row1, int column1, int direction1) {
-		return pieceCanPush(space, space2) && move(row1, column1, direction1);
-	}
-
-	private boolean isValidSquaretoPullFrom(int row1, int column1, int row2, int column2) {
-		if (numMoves <= 1)
-			return false; // can't push/pull with only one move
-		// Check that both pieces exist
-		if (getSpace(row1, column1) == null || getSpace(row2, column2) == null) {
-			return false;
-		}
-
-		// Check that pulling piece is strong than other piece
-		if (!getSpace(row1, column1).isStrongerThan(getSpace(row2, column2))) {
-			return false;
-		}
-
-		if (getSpace(row1, column1).getOwner() != Owner.values()[(getPlayerTurn() - 1)])
-			return false;// not your turn
-		return true;
-	}
-
-	/**
-	 * 0: up, 1: right, 2: down, 3: left
-	 * 
-	 * @param row1
-	 *            : row of space1
-	 * @param column1
-	 *            : column of space1
-	 * @param row2
-	 *            : row of space2
-	 * @param column2
-	 *            : column of space2
-	 * @return integer representing the direction required to move from space1 to space2
-	 */
-	public int getDirection(int row1, int column1, int row2, int column2) {
-		if (row1 == row2) {
-			if (column1 - 1 == column2)
-				return 3;
-			else if (column1 + 1 == column2)
-				return 1;
-		}
-		if (column1 == column2) {
-			if (row1 - 1 == row2)
-				return 0;
-			else if (row1 + 1 == row2)
-				return 2;
-		}
-		return -1;
+	public boolean checkStrongerAdjacent(Coordinate first, Coordinate second) {
+		AbstractPiece firstPiece = this.currentBoard.getPieceAt(first);
+		AbstractPiece secondPiece = this.currentBoard.getPieceAt(second);
+		return (firstPiece.getRank() > secondPiece.getRank())
+				&& (this.currentBoard.getPieceAt(first) != this.currentBoard.getPieceAt(second));
 	}
 
 	public void undoMove() {
@@ -586,12 +443,6 @@ public class Game implements Serializable {
 	@Deprecated
 	public boolean loadFile(Scanner scanner) {
 		scanner.useDelimiter(",");
-		// BoardState boardToSet = new BoardState(
-		// new char[][] { { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' }, { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
-		// { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' }, { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
-		// { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' }, { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
-		// { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' }, { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' }, },
-		// 0);
 		BoardState boardToSet = new BoardState(); // so it compiles
 		String[] validBoardCharactersArray = { " ", "E", "C", "H", "D", "K", "R", "e", "c", "h", "d", "k", "r" };
 		ArrayList<String> vbc = new ArrayList<String>();
@@ -656,6 +507,7 @@ public class Game implements Serializable {
 	}
 	@Deprecated
 	public boolean saveFile(FileWriter fw) {
+		// TODO: Update to use serializable game states instead of char arrays
 		if (fw == null)
 			return false;
 		for (int i = 0; i < 8; i++) {
