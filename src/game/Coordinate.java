@@ -1,6 +1,8 @@
 package game;
 
-public class Coordinate {
+import java.io.Serializable;
+
+public class Coordinate implements Serializable {
 	private int x;
 	private int y;
 	private boolean valid;

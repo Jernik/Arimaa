@@ -1,5 +1,6 @@
 package game;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.Set;
@@ -19,7 +20,7 @@ import piece.Rabbit;
  * @author shellajt
  *
  */
-public class BoardState {
+public class BoardState implements Serializable {
 	// Fields
 	public static final int MAX_BOARD_SIZE = 8;
 	@Deprecated
@@ -163,5 +164,14 @@ public class BoardState {
 			copiedPieces.put(new Coordinate(key), this.pieces.get(key));
 		}
 		return new BoardState(copiedPieces);
+	}
+	
+	public boolean equals(BoardState boardToCheck) {
+		for (Coordinate key : this.pieces.keySet()) {
+			if(!this.pieces.get(key).equals(boardToCheck.pieces.get(key))) {
+				return false;
+			}
+		}
+		return true;
 	}
 }

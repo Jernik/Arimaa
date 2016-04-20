@@ -5,9 +5,17 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -220,5 +228,74 @@ public class GUI {
 		panel.add(winnerLabel);
 		winnerLabel.setLocation(winnerFrame.getWidth() / 2 - 75, winnerFrame.getHeight() / 2 - 87);
 		winnerLabel.setVisible(true);
+	}
+	
+	public boolean loadFile() throws IOException {
+		FileInputStream fileIn = new FileInputStream("/save/Game.ser");
+		ObjectInputStream in = null;
+		try {
+			in = new ObjectInputStream(fileIn);
+			this.game = (Game) in.readObject();
+		} catch (IOException e) {
+			in.close();
+			e.printStackTrace();
+			return false;
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		in.close();
+		fileIn.close();
+		return true;
+	}
+
+	public boolean saveFile() throws IOException {
+		File d = new File("/save/");
+		File f = new File("/save/Game.ser");
+		if(!d.exists()) {
+			Files.createDirectory(d.toPath());
+		}
+		if(!f.exists()) {
+			f.createNewFile();
+		}
+		
+		FileOutputStream fileOut = new FileOutputStream("/save/Game.ser");
+		ObjectOutputStream out = new ObjectOutputStream(fileOut);
+		try {
+			out.writeObject(this.game);
+		} catch (IOException e) {
+			e.printStackTrace();
+			out.close();
+			return false;
+		}
+		out.close();
+		fileOut.close();
+		return true;
+	}
+	
+	public boolean saveFile(boolean fail) throws IOException {
+		File d = new File("/save/");
+		File f = new File("/save/Game.ser");
+		if(!d.exists()) {
+			Files.createDirectory(d.toPath());
+		}
+		if(!f.exists()) {
+			f.createNewFile();
+		}
+		
+		FileOutputStream fileOut = new FileOutputStream("/save/Game.ser");
+		ObjectOutputStream out = new ObjectOutputStream(fileOut);
+		try {
+			if(fail) {
+				out.close();
+			}
+			out.writeObject(this.game);
+		} catch (IOException e) {
+			e.printStackTrace();
+			out.close();
+			return false;
+		}
+		out.close();
+		fileOut.close();
+		return true;
 	}
 }

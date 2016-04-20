@@ -1,9 +1,10 @@
 package piece;
 
 import java.awt.Image;
+import java.io.Serializable;
 
-public abstract class AbstractPiece {
-	private Image image;
+public abstract class AbstractPiece implements Serializable {
+	private transient Image image;
 	private Owner owner;
 	private int rank;
 

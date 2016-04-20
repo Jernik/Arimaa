@@ -2,6 +2,7 @@ package game;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -14,7 +15,7 @@ import piece.AbstractPiece;
 import piece.Owner;
 import piece.Rabbit;
 
-public class Game {
+public class Game implements Serializable {
 	private ArrayList<MoveCommand> moves = new ArrayList<MoveCommand>();
 	public BoardState currentBoard = null;
 	private int turnNumber;
@@ -531,8 +532,58 @@ public class Game {
 
 		this.numMoves = 4;
 	}
+	
+	public boolean equals(Game compGame) {
+		for(int i = 0; i < this.moves.size(); i++) {
+			if(!this.moves.get(i).equals(compGame.moves.get(i))) {
+				return false;
+			}
+		}
+		
+		if(!this.currentBoard.equals(compGame.currentBoard)) {
+			return false;
+		}
+		
+		if(this.turnNumber != compGame.turnNumber) {
+			return false;
+		}
+		if(this.moveTimer != compGame.moveTimer) {
+			return false;
+		}
+		if (this.p1TimeBank != compGame.p1TimeBank) {
+			return false;
+		}
+		if(this.p2TimeBank != compGame.p2TimeBank) {
+			return false;
+		}
+		if(this.turnCounter != compGame.turnCounter) {
+			return false;
+		}
+		if(!this.p1Name.equals(compGame.p1Name)) {
+			return false;
+		}
+		if(!this.p2Name.equals(compGame.p2Name)) {
+			return false;
+		}
+		if(this.winner != compGame.winner) {
+			return false;
+		}
+		if(this.numMoves != compGame.numMoves) { 
+			return false;
+		}
+		if(this.playerTurn != compGame.playerTurn) {
+			return false;
+		}
+		if(this.isPushPull != compGame.isPushPull) {
+			return false;
+		}
+		
+		return true;
+	}
+//}
 
-	// doesn't work now, leave for another pull request
+	 //doesn't work now, leave for another pull request
+	@Deprecated
 	public boolean loadFile(Scanner scanner) {
 		scanner.useDelimiter(",");
 		// BoardState boardToSet = new BoardState(
@@ -603,7 +654,7 @@ public class Game {
 		}
 		return true;
 	}
-
+	@Deprecated
 	public boolean saveFile(FileWriter fw) {
 		if (fw == null)
 			return false;
