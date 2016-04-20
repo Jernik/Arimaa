@@ -52,7 +52,7 @@ public class TestEndGame {
 		winP2.put(new Coordinate(5, 1), new Dog(Owner.Player1));
 		game2 = new Game(new BoardState(winP2));
 	}
-	
+	//move(int, int, int) used to be row,col,dir. dir enum: 0 = up, 1 = right, 2 = down, 3 = left
 	@Test
 	public void testPlayer2Win() {
 		game.setPlayerTurn(2);

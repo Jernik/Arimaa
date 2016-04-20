@@ -128,4 +128,27 @@ public class TestCoordinate {
 		assertEquals(b, a);
 	}
 
+	@Test 
+	public void testOrthogonallyAdjecentTo() {
+		Coordinate a = new Coordinate(0, 0);
+		Coordinate b = new Coordinate(0, 0);
+		Coordinate c = new Coordinate(0, 1);
+		Coordinate d = new Coordinate(7, 7);
+		
+		assertFalse(a.isOrthogonallyAdjacentTo(b));
+		assertTrue(a.isOrthogonallyAdjacentTo(c));
+		assertFalse(a.isOrthogonallyAdjacentTo(d));
+	}
+	
+	@Test
+	public void testClone() {
+		Coordinate a = new Coordinate(0, 0);
+		Coordinate b = a.clone();
+		Coordinate c = new Coordinate(0, 1);
+		
+		assertTrue(a.equals(b));
+		assertFalse(a.equals(c));
+		assertFalse(b.equals(c));
+	}
+	
 }
