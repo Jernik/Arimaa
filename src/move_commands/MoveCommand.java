@@ -10,11 +10,11 @@ public interface MoveCommand {
 	
 //	public boolean isValidMove();
 	
-	public static boolean validMove(BoardState originalBoard, int row, int column) {
-		if (row >= 0 && row < 8 && column >= 0 && column < 8
-				&& originalBoard.getBoardArray()[row][column] == ' ')
-			return true;
-		return false;
-	}
+//	public static boolean validMove(BoardState originalBoard, int row, int column) {
+//		if (row >= 0 && row < 8 && column >= 0 && column < 8
+//				&& originalBoard.getBoardArray()[row][column] == ' ')
+//			return true;
+//		return false;
+//	}
 	
 }

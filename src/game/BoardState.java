@@ -22,13 +22,20 @@ import piece.Rabbit;
 public class BoardState {
 	// Fields
 	public static final int MAX_BOARD_SIZE = 8;
-	@Deprecated
-	private char[][] boardArray = new char[8][8]; // Represents the current state of the board
-	public HashMap<Coordinate, AbstractPiece> pieces;
+	private HashMap<Coordinate, AbstractPiece> pieces;
 
 	public BoardState() {
 		this.pieces = new HashMap<Coordinate, AbstractPiece>();
+		this.setUpDefaultBoardConfiguration();
+		
+	}
 
+	// maybe make this private?
+	public BoardState(HashMap<Coordinate, AbstractPiece> pieces) {
+		this.pieces = pieces;
+	}
+
+	private void setUpDefaultBoardConfiguration() {
 		this.pieces.put(new Coordinate(0, 0), new Cat(Owner.Player1));
 		this.pieces.put(new Coordinate(1, 0), new Dog(Owner.Player1));
 		this.pieces.put(new Coordinate(2, 0), new Horse(Owner.Player1));
@@ -65,12 +72,7 @@ public class BoardState {
 		this.pieces.put(new Coordinate(6, 6), new Rabbit(Owner.Player2));
 		this.pieces.put(new Coordinate(7, 6), new Rabbit(Owner.Player2));
 	}
-
-	// maybe make this private?
-	public BoardState(HashMap<Coordinate, AbstractPiece> pieces) {
-		this.pieces = pieces;
-	}
-
+	
 	// converter
 	@Deprecated
 	public BoardState(char[][] chars, int turns) {
@@ -119,11 +121,6 @@ public class BoardState {
 		return this.pieces.keySet();
 	}
 
-	@Deprecated
-	public char[][] getBoardArray() {
-		return boardArray;
-	}
-
 	// this method will only move the piece if there is a piece at the old coor, and no piece at the new coor
 	// it will return true if it made a move and false if it did not
 	public boolean movePiece(Coordinate oldCoor, Coordinate newCoor) {
@@ -155,7 +152,7 @@ public class BoardState {
 		}
 		return false;
 	}
-
+	
 	@Override
 	public BoardState clone() {
 		HashMap<Coordinate, AbstractPiece> copiedPieces = new HashMap<Coordinate, AbstractPiece>();

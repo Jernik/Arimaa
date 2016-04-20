@@ -27,7 +27,6 @@ public class Game {
 	private int winner = 0;
 	private int numMoves = 4;
 	private int playerTurn = 1;
-	private boolean isPushPull;
 
 	/**
 	 * Creates a board with a default starting layout
@@ -108,11 +107,19 @@ public class Game {
 		return Owner.values()[(getPlayerTurn() - 1)];
 	}
 
+	public Owner getOtherOwner() {
+		if (getPlayerTurn() == 1) {
+			return Owner.values()[1];
+		} else {
+			return Owner.values()[0];
+		}
+	}
+
 	public void setPlayerTurn(int playerTurn) {
 		this.playerTurn = playerTurn;
 	}
 
-	public AbstractPiece getSpace(Coordinate coor) {
+	public AbstractPiece getPieceAt(Coordinate coor) {
 		return this.currentBoard.getPieceAt(coor);
 	}
 
@@ -131,20 +138,19 @@ public class Game {
 	 * @return
 	 */
 	public boolean move(BoardState boardState, Coordinate start, Coordinate dest) {
-		//FIXME: for testing, going to assume all moves are valid.
-//		if (!isValidMoveFromSquare(moveToMake.getOriginalPlace().getX(), moveToMake.getOriginalPlace().getY()))
-//			return false;
 		AbstractPiece piece = this.currentBoard.getPieceAt(start);
+		if (isFrozen(start)) {
+			return false;
+		}
 		if ((piece instanceof Rabbit)) {
-			if (((piece.getOwner() == Owner.values()[0]) &&
-				(dest.equals(start.up()))) ||
-				((piece.getOwner() == Owner.values()[1]) &&
-				(dest.equals(start.down())))) {
-				//Cannot move a Rabbit backwards unless it has been dragged
+			if (((piece.getOwner() == Owner.values()[0]) && (dest.equals(start.up())))
+					|| ((piece.getOwner() == Owner.values()[1]) && (dest.equals(start.down())))) {
+				// Cannot move a Rabbit backwards unless it has been dragged
 				return false;
 			}
 		}
-		if (start.isOrthogonallyAdjacentTo(dest)) {
+		if (start.isOrthogonallyAdjacentTo(dest)
+				&& this.getBoardState().getPieceAt(start).getOwner() == this.getOwner()) {
 			RegularMove moveToMake = new RegularMove(boardState, start, dest);
 			this.currentBoard = moveToMake.execute();
 			this.moves.add(moveToMake);
@@ -154,6 +160,45 @@ public class Game {
 		return false;
 	}
 
+	private boolean isFrozen(Coordinate pieceToMove) {
+		if (!isNextToFriendlyPiece(pieceToMove, this.getOwner())
+				&& isNextToEnemyPiece(pieceToMove, this.getOtherOwner())) {
+			return true;
+		}
+		return false;
+	}
+
+	private boolean isNextToEnemyPiece(Coordinate pieceToMove, Owner player) {
+		for (int i = -1; i < 2; i++) {
+			for (int j = -1; j < 2; j++) {
+				Coordinate coor = new Coordinate(i + pieceToMove.getX(), j + pieceToMove.getY());
+				if (this.getPieceAt(coor) != null) {
+					if (coor.isValid() && !coor.equals(pieceToMove)
+							&& this.getPieceAt(coor).getOwner() == player
+							&& this.getPieceAt(coor).isStrongerThan(this.getPieceAt(pieceToMove))) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
+	private boolean isNextToFriendlyPiece(Coordinate pieceToMove, Owner player) {
+		for (int i = -1; i < 2; i++) {
+			for (int j = -1; j < 2; j++) {
+				Coordinate coor = new Coordinate(i + pieceToMove.getX(), j + pieceToMove.getY());
+				if (this.getPieceAt(coor) != null) {
+					if (coor.isValid() && !coor.equals(pieceToMove)
+							&& this.getPieceAt(coor).getOwner() == player) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
 	/**
 	 * 
 	 * @param ownerPiece
@@ -169,11 +214,11 @@ public class Game {
 	 */
 
 	public boolean pushOrPull(Coordinate ownerPiece, Coordinate opponentPiece, Coordinate destination) {
-		// TODO: Duplicate code in 3rd nested if-statement. Fix it.
 		// Do you have enough moves?
 		if (this.numMoves >= 2) {
 			// Is the first piece yours, the second theirs, are they
-			// orthonally adjacent, and is your piece higher precedence than theirs?
+			// orthonally adjacent, and is your piece higher precedence than
+			// theirs?
 			if ((this.currentBoard.getPieceAt(ownerPiece)).getOwner() == this.getOwner()
 					&& (this.currentBoard.getPieceAt(opponentPiece).getOwner() != this.getOwner())
 					&& (ownerPiece.isOrthogonallyAdjacentTo(opponentPiece))
@@ -182,23 +227,13 @@ public class Game {
 				if (ownerPiece.isOrthogonallyAdjacentTo(destination)) {
 					RegularMove yourPiece = new RegularMove(this.currentBoard, ownerPiece, destination);
 					RegularMove theirPiece = new RegularMove(this.currentBoard, opponentPiece, ownerPiece);
-					this.currentBoard = yourPiece.execute();
-					this.currentBoard = theirPiece.execute();
-					this.moves.add(yourPiece);
-					this.moves.add(theirPiece);
-					this.numMoves--;
-					endMove();
+					pushOrPullMove(yourPiece, theirPiece);
 					return true;
 					// Or is it next to their piece?
 				} else if (opponentPiece.isOrthogonallyAdjacentTo(destination)) {
 					RegularMove theirPiece = new RegularMove(this.currentBoard, opponentPiece, destination);
 					RegularMove yourPiece = new RegularMove(this.currentBoard, ownerPiece, opponentPiece);
-					this.currentBoard = theirPiece.execute();
-					this.currentBoard = yourPiece.execute();
-					this.moves.add(theirPiece);
-					this.moves.add(yourPiece);
-					this.numMoves--;
-					endMove();
+					pushOrPullMove(theirPiece, yourPiece);
 					return true;
 				} else
 					// Neither, so that isn't a legal move
@@ -209,6 +244,15 @@ public class Game {
 		return false;
 	}
 
+	private void pushOrPullMove(MoveCommand m1, MoveCommand m2) {
+		this.currentBoard = m1.execute();
+		this.currentBoard = m2.execute();
+		this.moves.add(m1);
+		this.moves.add(m2);
+		this.numMoves--;
+		endMove();
+	}
+
 	/**
 	 * This methods checks piece death and victory conditions
 	 */
@@ -217,7 +261,7 @@ public class Game {
 		checkDeaths(new Coordinate(2, 5));
 		checkDeaths(new Coordinate(5, 2));
 		checkDeaths(new Coordinate(5, 5));
-		// checkWin();
+		checkWin();
 		numMoves--;
 		if (numMoves <= 0) {
 			if (getPlayerTurn() == 1) {
@@ -237,17 +281,17 @@ public class Game {
 	private void checkWin() {
 		Coordinate coor;
 		for (int i = 0; i < 8; i++) {
-			coor = new Coordinate(0, i);
-			if (getSpace(coor) != null) {
-				if (getSpace(coor).equals(new Rabbit(Owner.Player2))) {
+			coor = new Coordinate(i, 7);
+			if (getPieceAt(coor) != null) {
+				if (getPieceAt(coor).equals(new Rabbit(Owner.Player2))) {
 					winner = 2;
 				}
 			}
 		}
 		for (int i = 0; i < 8; i++) {
-			coor = new Coordinate(7, i);
-			if (getSpace(coor) != null) {
-				if (getSpace(coor).equals(new Rabbit(Owner.Player1))) {
+			coor = new Coordinate(i, 7);
+			if (getPieceAt(coor) != null) {
+				if (getPieceAt(coor).equals(new Rabbit(Owner.Player1))) {
 					winner = 1;
 				}
 			}
@@ -258,7 +302,7 @@ public class Game {
 			for (int j = 0; j < 8; j++) {
 				// and short circuits if null preventing nullpointerexception
 				coor = new Coordinate(i, j);
-				if (getSpace(coor) != null && getSpace(coor).equals(new Rabbit(Owner.Player1))) {
+				if (getPieceAt(coor) != null && getPieceAt(coor).equals(new Rabbit(Owner.Player1))) {
 					p1RabbitExists = true;
 				}
 			}
@@ -272,7 +316,7 @@ public class Game {
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
 				coor = new Coordinate(i, j);
-				if (getSpace(coor) != null && getSpace(coor).equals(new Rabbit(Owner.Player2))) {
+				if (getPieceAt(coor) != null && getPieceAt(coor).equals(new Rabbit(Owner.Player2))) {
 					p2RabbitExists = true;
 				}
 			}
@@ -289,7 +333,7 @@ public class Game {
 	 * 
 	 */
 	private void checkDeaths(Coordinate coor) {
-		if (this.getSpace(coor) == (null))
+		if (this.getPieceAt(coor) == (null))
 			return;// an empty piece doesn't need to be checked
 
 		if (checkFriendlyAdjacent(coor)) {
@@ -303,11 +347,11 @@ public class Game {
 	}
 
 	public boolean checkFriendlyAdjacent(Coordinate coor) {
-		AbstractPiece cen = this.getSpace(coor);
-		AbstractPiece up = this.getSpace(coor.up());
-		AbstractPiece down = this.getSpace(coor.down());
-		AbstractPiece left = this.getSpace(coor.left());
-		AbstractPiece right = this.getSpace(coor.right());
+		AbstractPiece cen = this.getPieceAt(coor);
+		AbstractPiece up = this.getPieceAt(coor.up());
+		AbstractPiece down = this.getPieceAt(coor.down());
+		AbstractPiece left = this.getPieceAt(coor.left());
+		AbstractPiece right = this.getPieceAt(coor.right());
 		Owner own = cen.getOwner();
 		if (up != null) {
 			if (up.getOwner() == own)
@@ -333,38 +377,6 @@ public class Game {
 		AbstractPiece secondPiece = this.currentBoard.getPieceAt(second);
 		return (firstPiece.getRank() > secondPiece.getRank())
 				&& (this.currentBoard.getPieceAt(first) != this.currentBoard.getPieceAt(second));
-	}
-
-	// @Deprecated
-	// public boolean checkStrongerAdjacent(int row, int col) {
-	// AbstractPiece cen = this.getSpace(row, col);
-	// AbstractPiece up = this.getSpace(row - 1, col);
-	// AbstractPiece down = this.getSpace(row + 1, col);
-	// AbstractPiece left = this.getSpace(row, col - 1);
-	// AbstractPiece right = this.getSpace(row, col + 1);
-	// @SuppressWarnings("unused")
-	// Owner own = cen.getOwner();
-	// boolean foo = false;
-	// if (up != null) {
-	// foo = checkStrong(up, cen);
-	// }
-	// if (down != null) {
-	// foo = checkStrong(down, cen);
-	// }
-	// if (right != null) {
-	// foo = checkStrong(right, cen);
-	// }
-	// if (left != null) {
-	// foo = checkStrong(left, cen);
-	// }
-	// return foo;
-	// }
-
-	@Deprecated
-	private boolean checkStrong(AbstractPiece one, AbstractPiece two) {
-		if (one.getOwner() != two.getOwner() && one.isStrongerThan(two))
-			return true;
-		return false;
 	}
 
 	public void undoMove() {
@@ -444,6 +456,7 @@ public class Game {
 	}
 
 	public boolean saveFile(FileWriter fw) {
+		// TODO: Update to use serializable game states instead of char arrays
 		if (fw == null)
 			return false;
 		for (int i = 0; i < 8; i++) {

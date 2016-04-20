@@ -15,8 +15,7 @@ public class Coordinate {
 			this.x = -1;
 			this.y = -1;
 		}
-	}
-
+	}	
 	public Coordinate(Coordinate coor) {
 		this.x = coor.getX();
 		this.y = coor.getY();
@@ -54,15 +53,9 @@ public class Coordinate {
 	public Coordinate right() {
 		return new Coordinate(x + 1, y);
 	}
-	
-	/**
-	 * @return Returns a new Coordinate object that is equivalent to the caller
-	 *         object.
-	 */
-	public Coordinate clone() {
-		return new Coordinate(this.x, this.y);
-	}
 
+	
+	
 	/**
 	 * 
 	 * @param other
@@ -73,8 +66,15 @@ public class Coordinate {
 	 *         if the two objects are equivalent.
 	 */
 	public boolean isOrthogonallyAdjacentTo(Coordinate other) {
-		return !this.equals(other) && ((this.getX() == other.getX() && Math.abs(this.getY() - other.getY()) <= 1)
-				|| (Math.abs(this.getX() - other.getX()) <= 1 && this.getY() == other.getY()));
+		return !this.equals(other) && (isHorizontal(other) || isVertical(other)) && this.isValid() && other.isValid();
+	}
+	
+	private boolean isHorizontal(Coordinate other) {
+		return (Math.abs(this.getX() - other.getX()) <= 1 && this.getY() == other.getY());
+	}
+	
+	private boolean isVertical(Coordinate other) {
+		return (this.getX() == other.getX() && Math.abs(this.getY() - other.getY()) <= 1);
 	}
 
 	public boolean equals(Object obj) {
