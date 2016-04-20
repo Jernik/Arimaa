@@ -22,12 +22,16 @@ public class ConnectionTest {
                 e.printStackTrace();
             }
             Object o=null;
-            c.sendObject(x);
+            for(int i=0;i<30;i++) {
+                c.sendObject(x);
+            }
             System.out.println("Hanging on getting input...");
-            o = c.getObjectFromInput();
+            for(int i=0;i<30;i++){
+                o = c.getObjectFromInput();
+                String s = (String) o;
+                System.out.println(s);
+            }
 
-            String s = (String) o;
-            System.out.println(s);
         }
         else if(branch2){
             FileInputStream fin;
