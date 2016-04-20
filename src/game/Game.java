@@ -19,7 +19,6 @@ public class Game implements Serializable{
 	private static final long serialVersionUID = 0L;
 	// fields
 	ArrayList<BoardState> boards = new ArrayList<>();
-public class Game {
 	private ArrayList<MoveCommand> moves = new ArrayList<MoveCommand>();
 	public BoardState currentBoard = null;
 
@@ -70,8 +69,8 @@ public class Game {
 
 	/**
 	 * 
-	 * @param x
-	 * @param y
+	 * @param
+	 * @param
 	 * @return
 	 */
 	public Piece getSpace(int row, int column) {
@@ -379,13 +378,13 @@ public class Game {
 	/**
 	 * 0: up, 1: right, 2: down, 3: left
 	 * 
-	 * @param row
+	 * @param
 	 *            : row that contains the pulling piece
-	 * @param column
+	 * @param
 	 *            : column that contains the pulling piece
 	 * @param direction1
 	 *            : direction the pulling piece will move
-	 * @param direction2
+	 * @param
 	 *            : direction the piece being pulled will move
 	 * @return True if pull succeeds, False if it fails
 	 */

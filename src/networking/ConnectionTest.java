@@ -10,19 +10,25 @@ import java.io.ObjectInputStream;
  */
 public class ConnectionTest {
     public static void main(String[] args) {
-        boolean branch1 = false;
+        boolean branch1 = true;
         boolean branch2 = false;
         if (branch1) {
-            ConnectionHandler c = new ConnectionHandler(6774);
-            c.connectTo("137.112.223.145");
+            ConnectionHandler c = new ConnectionHandler(6774);//creates a Thread to handle connections
+            c.connectTo("127.0.0.1");//connects to itself
             String x = "Hello World " + c.hashCode();
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            c.sendObject(x);
-            Object o = c.getObjectFromInput();
+            Object o=null;
+            for(int i=0;i<500;i++) {
+                c.sendObject(x);
+            }
+            for(int i=0;i<500;i++) {
+                System.out.println("Hanging on getting input...");
+                o = c.getObjectFromInput();
+            }
             String s = (String) o;
             System.out.println(s);
         }
