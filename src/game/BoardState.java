@@ -12,6 +12,7 @@ public class BoardState {
 	// Fields
 
 	private static final long serialVersionUID = 0L;
+	public static final int MAX_BOARD_SIZE = 8;
 	private char[][] boardArray = new char[8][8]; // Represents the current state of the board
 	private int turnNumber;
 

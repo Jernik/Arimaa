@@ -44,15 +44,6 @@ public class GUI {
 		this.p2Name = "Player 2";
 		p2TextField = null;
 		p1TextField = null;
-//		BoardState b=new BoardState(new char[][] {
-//				{ ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
-//				{ ' ', ' ', ' ', ' ', 'r', ' ', ' ', ' ' },
-//				{ ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
-//				{ ' ', 'R', ' ', ' ', ' ', ' ', ' ', ' ' },
-//				{ ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
-//				{ ' ', 'R', ' ', 'E', ' ', ' ', 'r', ' ' },
-//				{ ' ', 'e', ' ', ' ', ' ', ' ', 'C', ' ' },
-//				{ ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' }, }, 0);
 		this.game = new Game();
 		this.boardPieces = new ImagePanel[8][8];
 		this.activeFrames = new ArrayList<JFrame>();

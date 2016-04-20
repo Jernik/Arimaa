@@ -30,7 +30,6 @@ public class Game implements Serializable{
 		this.moveTimer = moveTimer;
 	}
 
-	// int numMovesLeft = 0;
 	int moveTimer = 0;
 	int p1TimeBank = 0;
 	int p2TimeBank = 0;
@@ -60,21 +59,18 @@ public class Game implements Serializable{
 	 * Creates a board with a default starting layout
 	 */
 	public Game() {
-		currentBoard = new BoardState(new char[][] {
-				{ 'K', 'D', 'H', 'C', 'E', 'H', 'D', 'K' },
-				{ 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R' },
-				{ ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
-				{ ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
-				{ ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
-				{ ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
-				{ 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r' },
-				{ 'k', 'd', 'h', 'c', 'e', 'h', 'd', 'k' }, }, 0);
+		currentBoard = new BoardState(
+				new char[][] { { 'K', 'D', 'H', 'C', 'E', 'H', 'D', 'K' }, { 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R' },
+						{ ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' }, { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
+						{ ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' }, { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
+						{ 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r' }, { 'k', 'd', 'h', 'c', 'e', 'h', 'd', 'k' }, },
+				0);
 	}
 
 	/**
 	 * 
-	 * @param x
-	 * @param y
+	 * @param
+	 * @param
 	 * @return
 	 */
 	public Piece getSpace(int row, int column) {
@@ -92,14 +88,14 @@ public class Game implements Serializable{
 	 * @param column
 	 * @param dir
 	 *            0: up, 1: right, 2: down, 3: left
-	 * @return returns true if the move made successfully, otherwise returns false
+	 * @return returns true if the move made successfully, otherwise returns
+	 *         false
 	 */
-	
+
 	public boolean move(int row, int column, int dir) {
 		MoveCommand moveToMake;
 		if (!isValidMoveFromSquare(row, column))
 			return false;
-//		currentBoard = currentBoard.clone();
 		switch (dir) {
 		case 0:
 			// Moving UP
@@ -121,15 +117,16 @@ public class Game implements Serializable{
 			return false;
 		}
 	}
-	
+
 	/**
 	 * 
 	 * @param moveToMake
 	 * @param row
 	 * @param column
-	 * @return returns true if the move made successfully, otherwise returns false
+	 * @return returns true if the move made successfully, otherwise returns
+	 *         false
 	 */
-	
+
 	private boolean makeMove(MoveCommand moveToMake, int row, int column) {
 		if (moveToMake.isValidMove(row, column)) {
 			this.currentBoard = moveToMake.execute(row, column);
@@ -145,23 +142,19 @@ public class Game implements Serializable{
 			return false;
 		// This may cause issues when we implement undo/redo if we try invalid
 		// moves before we undo
-		if (getSpace(row, column).getOwner() != Owner.values()[(getPlayerTurn() - 1)]
-				&& !isPushPull){
+		if (getSpace(row, column).getOwner() != Owner.values()[(getPlayerTurn() - 1)] && !isPushPull) {
 			return false;// not your turn
 		}
-		if ((checkStrongerAdjacent(row, column) && !checkFriendlyAdjacent(row,
-				column)) && !isPushPull){
+		if ((checkStrongerAdjacent(row, column) && !checkFriendlyAdjacent(row, column)) && !isPushPull) {
 			return false;// can't move
-			}
+		}
 		return true;
 	}
-
 
 	/**
 	 * This methods checks piece death and victory conditions
 	 */
 	private void endMove() {
-		// check(2,2)
 		checkDeaths(2, 2);
 		checkDeaths(2, 5);
 		checkDeaths(5, 2);
@@ -179,59 +172,51 @@ public class Game implements Serializable{
 		}
 	}
 
-	// This method checks both rows for rabbits of the opposite side
+	/**
+	 * checks both rows for rabbits of the opposite side, top row first followed by the bottom row
+	 */
 	private void checkWin() {
-		// check top row
 		for (int i = 0; i < 8; i++) {
 			if (getSpace(0, i) != null) {
-				if (getSpace(0, i).equals(
-						new Piece(PieceType.Rabbit, null, Owner.Player2))) {
+				if (getSpace(0, i).equals(new Piece(PieceType.Rabbit, null, Owner.Player2))) {
 					winner = 2;
 				}
 			}
 		}
-		// check bottom row
 		for (int i = 0; i < 8; i++) {
 			if (getSpace(7, i) != null) {
-				if (getSpace(7, i).equals(
-						new Piece(PieceType.Rabbit, null, Owner.Player1))) {
+				if (getSpace(7, i).equals(new Piece(PieceType.Rabbit, null, Owner.Player1))) {
 					winner = 1;
 				}
 			}
 		}
-		
-		//check if rabbits exits
-		boolean p1RabbitExists=false;
-		for(int i=0;i<8;i++){
-			for(int j=0;j<8;j++){
-				//and short circuits if null preventing nullpointerexception
-				if(getSpace(i,j)!=null&&getSpace(i, j).equals(new Piece(PieceType.Rabbit, null, Owner.Player1))){
-					p1RabbitExists=true;
+
+		boolean p1RabbitExists = false;
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
+				// and short circuits if null preventing nullpointerexception
+				if (getSpace(i, j) != null && getSpace(i, j).equals(new Piece(PieceType.Rabbit, null, Owner.Player1))) {
+					p1RabbitExists = true;
 				}
 			}
 		}
 
-		if(!p1RabbitExists){
-			winner=2;
+		if (!p1RabbitExists) {
+			winner = 2;
 		}
-		
-		boolean p2RabbitExists=false;
-		for(int i=0;i<8;i++){
-			for(int j=0;j<8;j++){
-				if(getSpace(i,j)!=null&&getSpace(i, j).equals(new Piece(PieceType.Rabbit, null, Owner.Player2))){
-					p2RabbitExists=true;
+
+		boolean p2RabbitExists = false;
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
+				if (getSpace(i, j) != null && getSpace(i, j).equals(new Piece(PieceType.Rabbit, null, Owner.Player2))) {
+					p2RabbitExists = true;
 				}
 			}
 		}
-		
-		if(!p2RabbitExists){
-			winner=1;
-		}
-		// Removed this now that we have a pop up box - Jesse
 
-		// noone has won
-		// if (winner != 0)
-		// System.out.println("Winner: " + winner);
+		if (!p2RabbitExists) {
+			winner = 1;
+		}
 	}
 
 	/**
@@ -328,10 +313,8 @@ public class Game implements Serializable{
 			if (row - 1 >= 0) {
 				Piece pushingPiece = getSpace(row, column);
 				Piece pushedPiece = getSpace(row - 1, column);
-				if (pieceCanPush(pushingPiece, pushedPiece)
-						&& move(row - 1, column, dir2)) {
+				if (pieceCanPush(pushingPiece, pushedPiece) && move(row - 1, column, dir2)) {
 					isPushPull = false;
-					// should always be true
 					return move(row, column, dir1);
 				}
 			}
@@ -341,10 +324,8 @@ public class Game implements Serializable{
 			if (column + 1 <= 7) {
 				Piece pushingPiece2 = getSpace(row, column);
 				Piece pushedPiece2 = getSpace(row, column + 1);
-				if (pieceCanPush(pushingPiece2, pushedPiece2)
-						&& move(row, column + 1, dir2)) {
+				if (pieceCanPush(pushingPiece2, pushedPiece2) && move(row, column + 1, dir2)) {
 					isPushPull = false;
-					// should always be true
 					return move(row, column, dir1);
 				}
 			}
@@ -354,10 +335,8 @@ public class Game implements Serializable{
 				Piece pushingPiece3 = getSpace(row, column);
 				Piece pushedPiece3 = getSpace(row + 1, column);
 				if (pushingPiece3.isStrongerThan(pushedPiece3)) {
-					if (pieceCanPush(pushingPiece3, pushedPiece3)
-							&& move(row + 1, column, dir2)) {
+					if (pieceCanPush(pushingPiece3, pushedPiece3) && move(row + 1, column, dir2)) {
 						isPushPull = false;
-						// should always be true
 						return move(row, column, dir1);
 
 					}
@@ -368,17 +347,15 @@ public class Game implements Serializable{
 			if (column - 1 >= 0) {
 				Piece pushingPiece4 = getSpace(row, column);
 				Piece pushedPiece4 = getSpace(row, column - 1);
-				if (pieceCanPush(pushingPiece4, pushedPiece4)
-						&& move(row, column - 1, dir2)) {
+				if (pieceCanPush(pushingPiece4, pushedPiece4) && move(row, column - 1, dir2)) {
 					isPushPull = false;
-					// should always be true
 					return move(row, column, dir1);
 				}
 			}
 
 			break;
 		}
-		isPushPull=false;
+		isPushPull = false;
 		return false;
 	}
 
@@ -401,18 +378,17 @@ public class Game implements Serializable{
 	/**
 	 * 0: up, 1: right, 2: down, 3: left
 	 * 
-	 * @param row
+	 * @param
 	 *            : row that contains the pulling piece
-	 * @param column
+	 * @param
 	 *            : column that contains the pulling piece
 	 * @param direction1
 	 *            : direction the pulling piece will move
-	 * @param direction2
+	 * @param
 	 *            : direction the piece being pulled will move
 	 * @return True if pull succeeds, False if it fails
 	 */
-	public boolean pull(int row1, int column1, int row2, int column2,
-			int direction1) {
+	public boolean pull(int row1, int column1, int row2, int column2, int direction1) {
 		if (!isValidSquaretoPullFrom(row1, column1, row2, column2))
 			return false;
 		// Get direction that pulled piece will move
@@ -423,35 +399,28 @@ public class Game implements Serializable{
 		// Attempt to perform move operations on both pieces
 		switch (direction1) {
 		case 0:
-			if (tryPull(getSpace(row1, column1), getSpace(row2, column2), row1,
-					column1, direction1)) {// pieceCanPush(getSpace(row1,
-											// column1),getSpace(row2,
-											// column2))&& move(row1, column1,
-											// direction1)
+			if (tryPull(getSpace(row1, column1), getSpace(row2, column2), row1, column1, direction1)) {
 				move(row2, column2, direction2);
 				isPushPull = false;
 				return true;
 			}
 			break;
 		case 1:
-			if (tryPull(getSpace(row1, column1), getSpace(row2, column2), row1,
-					column1, direction1)) {
+			if (tryPull(getSpace(row1, column1), getSpace(row2, column2), row1, column1, direction1)) {
 				move(row2, column2, direction2);
 				isPushPull = false;
 				return true;
 			}
 			break;
 		case 2:
-			if (tryPull(getSpace(row1, column1), getSpace(row2, column2), row1,
-					column1, direction1)) {
+			if (tryPull(getSpace(row1, column1), getSpace(row2, column2), row1, column1, direction1)) {
 				move(row2, column2, direction2);
 				isPushPull = false;
 				return true;
 			}
 			break;
 		case 3:
-			if (tryPull(getSpace(row1, column1), getSpace(row2, column2), row1,
-					column1, direction1)) {
+			if (tryPull(getSpace(row1, column1), getSpace(row2, column2), row1, column1, direction1)) {
 				move(row2, column2, direction2);
 				isPushPull = false;
 				return true;
@@ -461,13 +430,11 @@ public class Game implements Serializable{
 		return false;
 	}
 
-	private boolean tryPull(Piece space, Piece space2, int row1, int column1,
-			int direction1) {
+	private boolean tryPull(Piece space, Piece space2, int row1, int column1, int direction1) {
 		return pieceCanPush(space, space2) && move(row1, column1, direction1);
 	}
 
-	private boolean isValidSquaretoPullFrom(int row1, int column1, int row2,
-			int column2) {
+	private boolean isValidSquaretoPullFrom(int row1, int column1, int row2, int column2) {
 		if (numMoves <= 1)
 			return false; // can't push/pull with only one move
 		// Check that both pieces exist
@@ -514,36 +481,31 @@ public class Game implements Serializable{
 		}
 		return -1;
 	}
-	
-	public void undoMove(){
-		if(this.numMoves == 4) return;
-		
-		this.currentBoard = this.moves.get(this.moves.size()- (4 - this.numMoves)).getOriginalBoard();
-		this.moves.remove(this.moves.size()-(4 - this.numMoves));
-		
+
+	public void undoMove() {
+		if (this.numMoves == 4)
+			return;
+
+		this.currentBoard = this.moves.get(this.moves.size() - (4 - this.numMoves)).getOriginalBoard();
+		this.moves.remove(this.moves.size() - (4 - this.numMoves));
+
 		this.numMoves = 4;
 	}
 
 	public boolean loadFile(Scanner scanner) {
-		// Setup to use Scanner
 		scanner.useDelimiter(",");
-		BoardState boardToSet = new BoardState(new char[][] {
-				{ ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
-				{ ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
-				{ ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
-				{ ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
-				{ ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
-				{ ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
-				{ ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
-				{ ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' }, }, 0);
-		String[] validBoardCharactersArray = { " ", "E", "C", "H", "D", "K",
-				"R", "e", "c", "h", "d", "k", "r" };
+		BoardState boardToSet = new BoardState(
+				new char[][] { { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' }, { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
+						{ ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' }, { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
+						{ ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' }, { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
+						{ ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' }, { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' }, },
+				0);
+		String[] validBoardCharactersArray = { " ", "E", "C", "H", "D", "K", "R", "e", "c", "h", "d", "k", "r" };
 		ArrayList<String> vbc = new ArrayList<String>();
 		for (String s : validBoardCharactersArray) {
 			vbc.add(s);
 		}
 
-		// Parse boardState
 		for (int i = 0; i < 8; i++) {
 			for (int k = 0; k < 8; k++) {
 				if (!scanner.hasNext()) {
@@ -559,7 +521,6 @@ public class Game implements Serializable{
 			}
 		}
 
-		// Parse turnCounter, p1Name, p2Name
 		if (!scanner.hasNext()) {
 			scanner.close();
 			return false;
@@ -595,10 +556,8 @@ public class Game implements Serializable{
 
 		if (this.turnCounter % 2 == 1) {
 			this.playerTurn = 2;
-			// System.out.println("It's player 2's turn");
 		} else {
 			this.playerTurn = 1;
-			// System.out.println("It's player 1's turn");
 		}
 		return true;
 	}
@@ -616,7 +575,7 @@ public class Game implements Serializable{
 				}
 			}
 		}
-		
+
 		String s2 = "" + this.turnCounter + ",";
 
 		try {
@@ -630,8 +589,6 @@ public class Game implements Serializable{
 		}
 		return true;
 	}
-
-	// Getters & Setters
 
 	public int getTurnCounter() {
 		return this.turnCounter;
@@ -656,7 +613,7 @@ public class Game implements Serializable{
 	public int getTurnTimer() {
 		return moveTimer;
 	}
-	
+
 	/**
 	 * @return the winner: 0 is nobody, 1 is player1, 2 is player2
 	 */
