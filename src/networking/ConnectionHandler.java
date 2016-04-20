@@ -133,8 +133,7 @@ public class ConnectionHandler implements Runnable {
                         try {
                             System.out.println("writing object...");
                             Object o = this.outputBuffer.poll();
-                            out.writeUnshared(o);
-                            out.write(7);//writes a byte
+                            out.writeObject(o);
                             out.flush();
                             //writes to a file as well for testing
                             //new ObjectOutputStream(new FileOutputStream("Test.txt")).writeObject(o);
@@ -145,7 +144,7 @@ public class ConnectionHandler implements Runnable {
                         }
                     }
                     try {
-                        if (inputObjectStreamSetUp && in.available() > 0) {
+                        if (inputObjectStreamSetUp && inStream.available() > 0) {
                             System.out.println("reading...");
                             this.inputBuffer.add(in.readObject());
                         }

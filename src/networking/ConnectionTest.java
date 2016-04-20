@@ -14,7 +14,7 @@ public class ConnectionTest {
         boolean branch2 = false;
         if (branch1) {
             ConnectionHandler c = new ConnectionHandler(6774);//creates a Thread to handle connections
-            c.connectTo("127.0.0.1");//connects to itself
+            c.connectTo("137.112.239.63");
             String x = "Hello World " + c.hashCode();
             try {
                 Thread.sleep(1000);
@@ -22,13 +22,10 @@ public class ConnectionTest {
                 e.printStackTrace();
             }
             Object o=null;
-            for(int i=0;i<500;i++) {
-                c.sendObject(x);
-            }
-            for(int i=0;i<500;i++) {
-                System.out.println("Hanging on getting input...");
-                o = c.getObjectFromInput();
-            }
+            c.sendObject(x);
+            System.out.println("Hanging on getting input...");
+            o = c.getObjectFromInput();
+
             String s = (String) o;
             System.out.println(s);
         }
