@@ -16,7 +16,7 @@ public abstract class AbstractPiece {
 	public Image getImage() {
 		return image;
 	}
-	
+
 	public void setImage(Image image) {
 		this.image = image;
 	}
@@ -29,10 +29,21 @@ public abstract class AbstractPiece {
 		return rank;
 	}
 
-	abstract public boolean equals(Object obj);
+	public boolean equals(Object obj) {
+		// this allows for subclassing of individual pieces
+		// can i treat the given object as this type of object != this.class == obj.class
+		if (obj.getClass().isAssignableFrom(this.getClass())) {
+			AbstractPiece other = (AbstractPiece) obj;
+			return this.getOwner().equals(other.getOwner());
+		}
+		return false;
+	}
+
+	public int hashCode() {
+		return this.getClass().hashCode() + this.image.hashCode() + this.owner.hashCode() + Integer.hashCode(this.rank);
+	}
 
 	public boolean isStrongerThan(AbstractPiece p2) {
 		return (this.getRank() > p2.getRank());
 	}
-
 }
