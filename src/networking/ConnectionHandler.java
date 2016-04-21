@@ -66,7 +66,7 @@ public class ConnectionHandler implements Runnable {
 
     public Object getObjectFromInput() {
         System.out.println("Reading: " + this.inputBuffer.peek());
-        while (inputBuffer.isEmpty()) {}//blocks until we can return something
+        while (inputBuffer.isEmpty()) {};//blocks until we can return something
         return this.inputBuffer.poll();
     }
 
@@ -104,26 +104,26 @@ public class ConnectionHandler implements Runnable {
                 System.out.println("Setting up streams");
                 try {
                     OutputStream outStream = this.socket.getOutputStream();
-                    System.out.println("Got output Stream");
+//                    System.out.println("Got output Stream");
                     out = new ObjectOutputStream(outStream);
                     out.flush();
                     inStream = this.socket.getInputStream();
-                    System.out.println("Got input Stream");
+//                    System.out.println("Got input Stream");
 
                     running=true;
-                    System.out.println("Created ObjectInputStream");
+//                    System.out.println("Created ObjectInputStream");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                System.out.println("Set up streams");
+//                System.out.println("Set up streams");
                 while (running) {
                     System.out.println("Running Loop");
                     try {
                         if (!inputObjectStreamSetUp && inStream.available() > 0) {
-                            System.out.println("Checking underlying stream: availible = " + inStream.available());
+//                            System.out.println("Checking underlying stream: availible = " + inStream.available());
                             in = new ObjectInputStream(inStream);
                             inputObjectStreamSetUp = true;
-                            System.out.println("Created objectInputStream");
+//                            System.out.println("Created objectInputStream");
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -131,13 +131,13 @@ public class ConnectionHandler implements Runnable {
                     //System.out.println("Size of queue is: " + this.outputBuffer.size());
                     if (!this.outputBuffer.isEmpty()) {
                         try {
-                            System.out.println("writing object...");
+//                            System.out.println("writing object...");
                             Object o = this.outputBuffer.poll();
                             out.writeObject(o);
                             out.flush();
                             //writes to a file as well for testing
                             //new ObjectOutputStream(new FileOutputStream("Test.txt")).writeObject(o);
-                            System.out.println("Size of queue is now " + this.outputBuffer.size());
+                            System.out.println("Size of output queue is now " + this.outputBuffer.size());
 
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -147,6 +147,7 @@ public class ConnectionHandler implements Runnable {
                         if (inputObjectStreamSetUp && inStream.available() > 0) {
                             System.out.println("reading...");
                             this.inputBuffer.add(in.readObject());
+                            System.out.println("Size of inputBuffer is now: " + this.inputBuffer.size());
                         }
                     } catch (IOException | ClassNotFoundException e) {
                         e.printStackTrace();
