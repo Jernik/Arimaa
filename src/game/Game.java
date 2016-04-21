@@ -162,14 +162,14 @@ public class Game {
 	}
 
 	private boolean isFrozen(Coordinate pieceToMove) {
-		if (!isNextToFriendlyPiece(pieceToMove, this.getOwner())
-				&& isNextToEnemyPiece(pieceToMove, this.getOtherOwner())) {
+		if (!isNextToStrongerPiece(pieceToMove, this.getOwner())
+				&& isNextToStrongerPiece(pieceToMove, this.getOtherOwner())) {
 			return true;
 		}
 		return false;
 	}
 
-	private boolean isNextToEnemyPiece(Coordinate pieceToMove, Owner player) {
+	private boolean isNextToStrongerPiece(Coordinate pieceToMove, Owner player) {
 		for (int i = -1; i < 2; i++) {
 			for (int j = -1; j < 2; j++) {
 				Coordinate coor = new Coordinate(i + pieceToMove.getX(), j + pieceToMove.getY());
@@ -185,20 +185,7 @@ public class Game {
 		return false;
 	}
 	
-	private boolean isNextToFriendlyPiece(Coordinate pieceToMove, Owner player) {
-		for (int i = -1; i < 2; i++) {
-			for (int j = -1; j < 2; j++) {
-				Coordinate coor = new Coordinate(i + pieceToMove.getX(), j + pieceToMove.getY());
-				if (this.getPieceAt(coor) != null) {
-					if (coor.isValid() && !coor.equals(pieceToMove)
-							&& this.getPieceAt(coor).getOwner() == player) {
-						return true;
-					}
-				}
-			}
-		}
-		return false;
-	}
+	
 	
 	/**
 	 * 
