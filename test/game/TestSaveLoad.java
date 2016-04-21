@@ -57,23 +57,23 @@ public class TestSaveLoad {
 	}
 
 	// Testing loadFile
-	@Test
-	public void testLoadFileLoadsBoardState() throws FileNotFoundException {
-		Scanner scanner = new Scanner(new File("resources/LoadTest1.txt"));
-		BoardState board = new BoardState(
-				new char[][] { { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' }, { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
-						{ ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' }, { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
-						{ ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' }, { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
-						{ ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' }, { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' }, },
-				0);
-		assertTrue(g.loadFile(scanner));
-		for (int i = 0; i < 8; i++) {
-			for (int k = 0; k < 8; k++) {
-				assertEquals(board.getBoardArray()[i][k], g.currentBoard.getBoardArray()[i][k]);
-			}
-		}
-		scanner.close();
-	}
+//	@Test
+//	public void testLoadFileLoadsBoardState() throws FileNotFoundException {
+//		Scanner scanner = new Scanner(new File("resources/LoadTest1.txt"));
+//		BoardState board = new BoardState(
+//				new char[][] { { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' }, { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
+//						{ ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' }, { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
+//						{ ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' }, { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
+//						{ ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' }, { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' }, },
+//				0);
+//		assertTrue(g.loadFile(scanner));
+//		for (int i = 0; i < 8; i++) {
+//			for (int k = 0; k < 8; k++) {
+//				assertEquals(board.getBoardArray()[i][k], g.currentBoard.getBoardArray()[i][k]);
+//			}
+//		}
+//		scanner.close();
+//	}
 
 	@Test
 	public void testLoadFileLoadsTurnCounter1() throws FileNotFoundException {
