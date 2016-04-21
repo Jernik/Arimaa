@@ -330,22 +330,18 @@ public class Game {
 	}
 
 	/**
-	 * Piece death occurs when pieces are on the squares (2,2), (2,5), (5,2),
-	 * (5,5), and has no friendly adjacent pieces to it
-	 * 
+	 * Piece death occurs when pieces are on the squares (2,2), (2,5), (5,2), (5,5), and has no friendly adjacent pieces
+	 * to it
 	 */
-	private void checkDeaths(Coordinate coor) {
-		if (this.getPieceAt(coor) == (null))
+	private void checkDeaths(Coordinate toCheck) {
+		if (!this.currentBoard.pieceAt((toCheck)))
 			return;// an empty piece doesn't need to be checked
 
-		if (checkFriendlyAdjacent(coor)) {
+		if (checkFriendlyAdjacent(toCheck)) {
 			return;
 		}
 		// no adjacent friendly pieces, remove this one
-		this.currentBoard.removePiece(coor);
-		// char[][] temp = this.currentBoard.getBoardArray();
-		// temp[row][col] = ' ';
-		// this.currentBoard.setBoardArray(temp);
+		this.currentBoard.removePiece(toCheck);
 	}
 
 	public boolean checkFriendlyAdjacent(Coordinate coor) {
