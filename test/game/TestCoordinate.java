@@ -140,15 +140,4 @@ public class TestCoordinate {
 		assertFalse(a.isOrthogonallyAdjacentTo(d));
 	}
 	
-	@Test
-	public void testClone() {
-		Coordinate a = new Coordinate(0, 0);
-		Coordinate b = a.clone();
-		Coordinate c = new Coordinate(0, 1);
-		
-		assertTrue(a.equals(b));
-		assertFalse(a.equals(c));
-		assertFalse(b.equals(c));
-	}
-	
 }
