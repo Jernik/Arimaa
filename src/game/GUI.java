@@ -250,8 +250,9 @@ public class GUI {
 	}
 
 	public boolean saveFile() throws IOException {
-		File d = new File("/save/");
-		File f = new File("/save/Game.ser");
+//		System.out.println("Working Dir: " + System.getProperty("user.dir"));
+		File d = new File("save");
+		File f = new File("save/Game.ser");
 		if(!d.exists()) {
 			Files.createDirectory(d.toPath());
 		}
@@ -259,7 +260,7 @@ public class GUI {
 			f.createNewFile();
 		}
 		
-		FileOutputStream fileOut = new FileOutputStream("/save/Game.ser");
+		FileOutputStream fileOut = new FileOutputStream("save/Game.ser");
 		ObjectOutputStream out = new ObjectOutputStream(fileOut);
 		try {
 			out.writeObject(this.game);
@@ -273,9 +274,9 @@ public class GUI {
 		return true;
 	}
 	
-	public boolean saveFile(boolean fail) throws IOException {
-		File d = new File("/save/");
-		File f = new File("/save/Game.ser");
+	public boolean failSaveFile() throws IOException {
+		File d = new File("save");
+		File f = new File("save/Game.ser");
 		if(!d.exists()) {
 			Files.createDirectory(d.toPath());
 		}
@@ -283,12 +284,10 @@ public class GUI {
 			f.createNewFile();
 		}
 		
-		FileOutputStream fileOut = new FileOutputStream("/save/Game.ser");
+		FileOutputStream fileOut = new FileOutputStream("save/Game.ser");
 		ObjectOutputStream out = new ObjectOutputStream(fileOut);
 		try {
-			if(fail) {
-				out.close();
-			}
+			out.close();
 			out.writeObject(this.game);
 		} catch (IOException e) {
 			e.printStackTrace();

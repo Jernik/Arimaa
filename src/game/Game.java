@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.Set;
 
 import move_commands.MoveCommand;
 import move_commands.RegularMove;
@@ -13,7 +14,7 @@ import piece.Owner;
 import piece.Rabbit;
 
 public class Game implements Serializable {
-	private ArrayList<MoveCommand> moves = new ArrayList<MoveCommand>();
+	private ArrayList<RegularMove> moves = new ArrayList<RegularMove>();
 	public BoardState currentBoard = null;
 	private int turnNumber;
 
@@ -162,14 +163,14 @@ public class Game implements Serializable {
 	}
 
 	private boolean isFrozen(Coordinate pieceToMove) {
-		if (!isNextToFriendlyPiece(pieceToMove, this.getOwner())
-				&& isNextToEnemyPiece(pieceToMove, this.getOtherOwner())) {
+		if (!isNextToStrongerPiece(pieceToMove, this.getOwner())
+				&& isNextToStrongerPiece(pieceToMove, this.getOtherOwner())) {
 			return true;
 		}
 		return false;
 	}
 
-	private boolean isNextToEnemyPiece(Coordinate pieceToMove, Owner player) {
+	private boolean isNextToStrongerPiece(Coordinate pieceToMove, Owner player) {
 		for (int i = -1; i < 2; i++) {
 			for (int j = -1; j < 2; j++) {
 				Coordinate coor = new Coordinate(i + pieceToMove.getX(), j + pieceToMove.getY());
@@ -185,20 +186,7 @@ public class Game implements Serializable {
 		return false;
 	}
 	
-	private boolean isNextToFriendlyPiece(Coordinate pieceToMove, Owner player) {
-		for (int i = -1; i < 2; i++) {
-			for (int j = -1; j < 2; j++) {
-				Coordinate coor = new Coordinate(i + pieceToMove.getX(), j + pieceToMove.getY());
-				if (this.getPieceAt(coor) != null) {
-					if (coor.isValid() && !coor.equals(pieceToMove)
-							&& this.getPieceAt(coor).getOwner() == player) {
-						return true;
-					}
-				}
-			}
-		}
-		return false;
-	}
+	
 	
 	/**
 	 * 
@@ -245,7 +233,7 @@ public class Game implements Serializable {
 		return false;
 	}
 
-	private void pushOrPullMove(MoveCommand m1, MoveCommand m2) {
+	private void pushOrPullMove(RegularMove m1, RegularMove m2) {
 		this.currentBoard = m1.execute();
 		this.currentBoard = m2.execute();
 		this.moves.add(m1);
@@ -280,71 +268,68 @@ public class Game implements Serializable {
 	 * by the bottom row
 	 */
 	private void checkWin() {
-		Coordinate coor;
+		if(this.getPlayerTurn() == 0){
+			return;
+		}
+		
+		Owner lastPlayer = this.getPlayerTurn() == 1 ? Owner.Player1 : Owner.Player2;
 		for (int i = 0; i < 8; i++) {
-			coor = new Coordinate(i, 7);
-			if (getPieceAt(coor) != null) {
-				if (getPieceAt(coor).equals(new Rabbit(Owner.Player2))) {
-					winner = 2;
+			if (this.currentBoard.pieceAt(new Coordinate(i, 0))) {
+				if (this.currentBoard.getPieceAt(new Coordinate(i, 0)).equals(new Rabbit(lastPlayer))) {
+					winner = this.getPlayerTurn();
+					return;
 				}
 			}
 		}
+		
+		Owner otherPlayer = this.getPlayerTurn() == 1 ? Owner.Player2 : Owner.Player1;
 		for (int i = 0; i < 8; i++) {
-			coor = new Coordinate(i, 7);
-			if (getPieceAt(coor) != null) {
-				if (getPieceAt(coor).equals(new Rabbit(Owner.Player1))) {
-					winner = 1;
+			if (this.currentBoard.pieceAt(new Coordinate(i, 7))) {
+				if (this.currentBoard.getPieceAt(new Coordinate(i, 7)).equals(new Rabbit(otherPlayer))) {
+					//Mapping from 1->2, 2->1
+					winner = 3 - this.getPlayerTurn();
+					return;
 				}
 			}
 		}
-
-		boolean p1RabbitExists = false;
-		for (int i = 0; i < 8; i++) {
-			for (int j = 0; j < 8; j++) {
-				// and short circuits if null preventing nullpointerexception
-				coor = new Coordinate(i, j);
-				if (getPieceAt(coor) != null && getPieceAt(coor).equals(new Rabbit(Owner.Player1))) {
-					p1RabbitExists = true;
+		
+		boolean lastRabbitExists = false;
+		boolean otherRabbitExists = false;
+		Set<Coordinate> coors = this.currentBoard.getAllCoordinates();
+		
+		for(Coordinate coor: coors) {
+			AbstractPiece piece = this.currentBoard.getPieceAt(coor);
+			if(piece instanceof Rabbit) {
+				if(piece.getOwner() == lastPlayer) {
+					lastRabbitExists = true;
+				} else if (piece.getOwner() == otherPlayer) {
+					otherRabbitExists = true;
 				}
 			}
+		}		
+		if (!lastRabbitExists) {
+			winner = this.getPlayerTurn();
+			return;
 		}
-
-		if (!p1RabbitExists) {
-			winner = 2;
-		}
-
-		boolean p2RabbitExists = false;
-		for (int i = 0; i < 8; i++) {
-			for (int j = 0; j < 8; j++) {
-				coor = new Coordinate(i, j);
-				if (getPieceAt(coor) != null && getPieceAt(coor).equals(new Rabbit(Owner.Player2))) {
-					p2RabbitExists = true;
-				}
-			}
-		}
-
-		if (!p2RabbitExists) {
-			winner = 1;
+		if (!otherRabbitExists) {
+			winner = 3 - this.getPlayerTurn();
+			return;
 		}
 	}
 
 	/**
-	 * Piece death occurs when pieces are on the squares (2,2), (2,5), (5,2),
-	 * (5,5), and has no friendly adjacent pieces to it
-	 * 
+	 * Piece death occurs when pieces are on the squares (2,2), (2,5), (5,2), (5,5), and has no friendly adjacent pieces
+	 * to it
 	 */
-	private void checkDeaths(Coordinate coor) {
-		if (this.getPieceAt(coor) == (null))
+	private void checkDeaths(Coordinate toCheck) {
+		if (!this.currentBoard.pieceAt((toCheck)))
 			return;// an empty piece doesn't need to be checked
 
-		if (checkFriendlyAdjacent(coor)) {
+		if (checkFriendlyAdjacent(toCheck)) {
 			return;
 		}
 		// no adjacent friendly pieces, remove this one
-		this.currentBoard.removePiece(coor);
-		// char[][] temp = this.currentBoard.getBoardArray();
-		// temp[row][col] = ' ';
-		// this.currentBoard.setBoardArray(temp);
+		this.currentBoard.removePiece(toCheck);
 	}
 
 	public boolean checkFriendlyAdjacent(Coordinate coor) {
@@ -431,9 +416,6 @@ public class Game implements Serializable {
 		if(this.playerTurn != compGame.playerTurn) {
 			return false;
 		}
-		if(this.isPushPull != compGame.isPushPull) {
-			return false;
-		}
 		
 		return true;
 	}
@@ -512,7 +494,7 @@ public class Game implements Serializable {
 			return false;
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
-				String s = "" + this.currentBoard.getBoardArray()[i][j] + ",";
+				String s = ""; // + this.currentBoard.getBoardArray()[i][j] + ",";
 				try {
 					fw.write(s);
 				} catch (IOException e) {

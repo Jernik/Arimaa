@@ -45,6 +45,8 @@ public abstract class AbstractPiece implements Serializable {
 	}
 
 	public boolean isStrongerThan(AbstractPiece p2) {
+		if(this.owner.equals(p2.owner))
+			return true;
 		return (this.getRank() > p2.getRank());
 	}
 }
