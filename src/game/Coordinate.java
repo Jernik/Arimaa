@@ -94,4 +94,17 @@ public class Coordinate implements Serializable {
 	public String toString() {
 		return "(" + this.getX() + ", " + this.getY() + ")";
 	}
+	
+	public boolean equals(Coordinate compareCoord) {
+		if(this.valid != compareCoord.valid) {
+			return false;
+		}
+		if(this.x != compareCoord.x) {
+			return false;
+		}
+		if(this.y != compareCoord.y) {
+			return false;
+		}
+		return true;
+	}
 }

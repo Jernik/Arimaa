@@ -14,7 +14,7 @@ import piece.Owner;
 import piece.Rabbit;
 
 public class Game implements Serializable {
-	private ArrayList<MoveCommand> moves = new ArrayList<MoveCommand>();
+	private ArrayList<RegularMove> moves = new ArrayList<RegularMove>();
 	public BoardState currentBoard = null;
 	private int turnNumber;
 
@@ -233,7 +233,7 @@ public class Game implements Serializable {
 		return false;
 	}
 
-	private void pushOrPullMove(MoveCommand m1, MoveCommand m2) {
+	private void pushOrPullMove(RegularMove m1, RegularMove m2) {
 		this.currentBoard = m1.execute();
 		this.currentBoard = m2.execute();
 		this.moves.add(m1);
@@ -414,9 +414,6 @@ public class Game implements Serializable {
 			return false;
 		}
 		if(this.playerTurn != compGame.playerTurn) {
-			return false;
-		}
-		if(this.isPushPull != compGame.isPushPull) {
 			return false;
 		}
 		

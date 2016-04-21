@@ -41,25 +41,22 @@ public class TestSaveLoad {
 		BoardState b1 = new BoardState(p1);
 		Game g1 = new Game(b1);
 		GUI myGUI = new GUI();
-		myGUI.game = g1;
-
-		boolean saved = myGUI.saveFile();
+		myGUI.game = null;
+		
+		GUI moveGUI = new GUI();
+		g1.move(g1.currentBoard, new Coordinate(6, 7), new Coordinate(5, 7));
+		moveGUI.game = g1;
+		
+		boolean saved = moveGUI.saveFile();
 		boolean loaded = myGUI.loadFile();
 		assertTrue(saved && loaded);
-		assertTrue(loaded);
-		assertTrue(myGUI.game.equals(g1));
+		assertTrue(myGUI.game.equals(moveGUI.game));
 	}
 
 	@Test(expected=IOException.class)
 	public void testSaveFileFailsOnIOException() throws IOException {
 		GUI myGUI = new GUI();		
-		myGUI.saveFile(true);
-	}
-	
-	@Test
-	public void testSaveFileAppears() throws IOException {
-		GUI myGUI = new GUI();		
-		myGUI.saveFile();
+		myGUI.failSaveFile();
 	}
 }
 //	// Testing loadFile
