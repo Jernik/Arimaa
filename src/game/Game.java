@@ -162,14 +162,14 @@ public class Game {
 	}
 
 	private boolean isFrozen(Coordinate pieceToMove) {
-		if (!isNextToFriendlyPiece(pieceToMove, this.getOwner())
-				&& isNextToEnemyPiece(pieceToMove, this.getOtherOwner())) {
+		if (!isNextToStrongerPiece(pieceToMove, this.getOwner())
+				&& isNextToStrongerPiece(pieceToMove, this.getOtherOwner())) {
 			return true;
 		}
 		return false;
 	}
 
-	private boolean isNextToEnemyPiece(Coordinate pieceToMove, Owner player) {
+	private boolean isNextToStrongerPiece(Coordinate pieceToMove, Owner player) {
 		for (int i = -1; i < 2; i++) {
 			for (int j = -1; j < 2; j++) {
 				Coordinate coor = new Coordinate(i + pieceToMove.getX(), j + pieceToMove.getY());
@@ -185,20 +185,7 @@ public class Game {
 		return false;
 	}
 	
-	private boolean isNextToFriendlyPiece(Coordinate pieceToMove, Owner player) {
-		for (int i = -1; i < 2; i++) {
-			for (int j = -1; j < 2; j++) {
-				Coordinate coor = new Coordinate(i + pieceToMove.getX(), j + pieceToMove.getY());
-				if (this.getPieceAt(coor) != null) {
-					if (coor.isValid() && !coor.equals(pieceToMove)
-							&& this.getPieceAt(coor).getOwner() == player) {
-						return true;
-					}
-				}
-			}
-		}
-		return false;
-	}
+	
 	
 	/**
 	 * 
@@ -296,8 +283,8 @@ public class Game {
 		
 		Owner otherPlayer = this.getPlayerTurn() == 1 ? Owner.Player2 : Owner.Player1;
 		for (int i = 0; i < 8; i++) {
-			if (this.currentBoard.pieceAt(new Coordinate(7, i))) {
-				if (this.currentBoard.getPieceAt(new Coordinate(7, i)).equals(new Rabbit(otherPlayer))) {
+			if (this.currentBoard.pieceAt(new Coordinate(i, 7))) {
+				if (this.currentBoard.getPieceAt(new Coordinate(i, 7)).equals(new Rabbit(otherPlayer))) {
 					//Mapping from 1->2, 2->1
 					winner = 3 - this.getPlayerTurn();
 					return;
