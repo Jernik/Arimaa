@@ -467,7 +467,7 @@ public class Game implements Serializable{
 			return false;
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
-				String s = "" + this.currentBoard.getBoardArray()[i][j] + ",";
+				String s = "";// + this.currentBoard.getBoardArray()[i][j] + ",";
 				try {
 					fw.write(s);
 				} catch (IOException e) {

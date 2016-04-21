@@ -14,7 +14,7 @@ public class ConnectionTest {
         boolean branch2 = false;
         if (branch1) {
             ConnectionHandler c = new ConnectionHandler(6774);//creates a Thread to handle connections
-            c.connectTo("137.112.151.161");
+            c.connectTo("137.112.223.71");
             String x = "Hello World " + c.hashCode();
             try {
                 Thread.sleep(1000);
