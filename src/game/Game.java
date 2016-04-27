@@ -134,57 +134,18 @@ public class Game implements Serializable {
 		return this.currentBoard.pieceAt(coor);
 	}
 
-	/**
-	 * 
-	 * @param moveToMake
-	 * @return
-	 */
-	public boolean move(BoardState boardState, Coordinate start, Coordinate dest) {
-		AbstractPiece piece = this.currentBoard.getPieceAt(start);
-		if (isFrozen(start)) {
-			return false;
-		}
-		if ((piece instanceof Rabbit)) {
-			if (((piece.getOwner() == Owner.values()[0]) && (dest.equals(start.up())))
-					|| ((piece.getOwner() == Owner.values()[1]) && (dest.equals(start.down())))) {
-				// Cannot move a Rabbit backwards unless it has been dragged
-				return false;
-			}
-		}
-		if (start.isOrthogonallyAdjacentTo(dest)
-				&& this.getBoardState().getPieceAt(start).getOwner() == this.getOwner()) {
-			RegularMove moveToMake = new RegularMove(boardState, start, dest);
-			this.currentBoard = moveToMake.execute();
-			this.moves.add(moveToMake);
-			endMove();
-			return true;
-		}
-		return false;
-	}
+    public boolean move(RegularMove m){
+        if(!m.isValidMove()) {
+            return false;
+        }
+        else{
+            this.currentBoard = m.execute();
+            this.moves.add(m);
+            endMove();
+            return true;
+        }
+    }
 
-	private boolean isFrozen(Coordinate pieceToMove) {
-		if (!isNextToStrongerPiece(pieceToMove, this.getOwner())
-				&& isNextToStrongerPiece(pieceToMove, this.getOtherOwner())) {
-			return true;
-		}
-		return false;
-	}
-
-	private boolean isNextToStrongerPiece(Coordinate pieceToMove, Owner player) {
-		for (int i = -1; i < 2; i++) {
-			for (int j = -1; j < 2; j++) {
-				Coordinate coor = new Coordinate(i + pieceToMove.getX(), j + pieceToMove.getY());
-				if (this.getPieceAt(coor) != null) {
-					if (coor.isValid() && !coor.equals(pieceToMove)
-							&& this.getPieceAt(coor).getOwner() == player
-							&& this.getPieceAt(coor).isStrongerThan(this.getPieceAt(pieceToMove))) {
-						return true;
-					}
-				}
-			}
-		}
-		return false;
-	}
 	
 	
 	
@@ -214,14 +175,14 @@ public class Game implements Serializable {
 					&& (this.checkStrongerAdjacent(ownerPiece, opponentPiece))) {
 				// Is the destination next to your piece?
 				if (ownerPiece.isOrthogonallyAdjacentTo(destination)) {
-					RegularMove yourPiece = new RegularMove(this.currentBoard, ownerPiece, destination);
-					RegularMove theirPiece = new RegularMove(this.currentBoard, opponentPiece, ownerPiece);
+					RegularMove yourPiece = new RegularMove(this.currentBoard, ownerPiece, destination, this.getOwner());
+					RegularMove theirPiece = new RegularMove(this.currentBoard, opponentPiece, ownerPiece, this.getOwner());
 					pushOrPullMove(yourPiece, theirPiece);
 					return true;
 					// Or is it next to their piece?
 				} else if (opponentPiece.isOrthogonallyAdjacentTo(destination)) {
-					RegularMove theirPiece = new RegularMove(this.currentBoard, opponentPiece, destination);
-					RegularMove yourPiece = new RegularMove(this.currentBoard, ownerPiece, opponentPiece);
+					RegularMove theirPiece = new RegularMove(this.currentBoard, opponentPiece, destination, this.getOwner());
+					RegularMove yourPiece = new RegularMove(this.currentBoard, ownerPiece, opponentPiece, this.getOwner());
 					pushOrPullMove(theirPiece, yourPiece);
 					return true;
 				} else

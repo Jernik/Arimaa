@@ -14,6 +14,7 @@ import java.util.Scanner;
 import org.junit.Before;
 import org.junit.Test;
 
+import move_commands.RegularMove;
 import piece.AbstractPiece;
 import piece.Camel;
 import piece.Cat;
@@ -44,8 +45,62 @@ public class TestSaveLoad {
 		myGUI.game = null;
 		
 		GUI moveGUI = new GUI();
-		g1.move(g1.currentBoard, new Coordinate(6, 7), new Coordinate(5, 7));
-		moveGUI.game = g1;
+		g1.move(new RegularMove(g1.currentBoard, new Coordinate(6, 7), new Coordinate(5, 7), g1.getOwner()));
+		
+		boolean saved = moveGUI.saveFile();
+		boolean loaded = myGUI.loadFile();
+		assertTrue(saved && loaded);
+		assertTrue(myGUI.game.equals(moveGUI.game));
+	}
+	
+	@Test
+	public void testSaveFileWithSeveralMoves() throws IOException {
+		HashMap<Coordinate, AbstractPiece> p1 = new HashMap<Coordinate, AbstractPiece>();
+		p1.put(new Coordinate(6, 7), new Cat(Owner.Player1));
+		p1.put(new Coordinate(7, 7), new Rabbit(Owner.Player1));
+		p1.put(new Coordinate(3, 6), new Dog(Owner.Player1));
+		p1.put(new Coordinate(3, 4), new Camel(Owner.Player1));
+		p1.put(new Coordinate(4, 4), new Elephant(Owner.Player1));
+		BoardState b1 = new BoardState(p1);
+		Game g1 = new Game(b1);
+		GUI myGUI = new GUI();
+		myGUI.game = null;
+		
+		GUI moveGUI = new GUI();
+		g1.move(new RegularMove(g1.currentBoard, new Coordinate(6, 7), new Coordinate(5, 7), g1.getOwner()));
+		g1.move(new RegularMove(g1.currentBoard, new Coordinate(5, 7), new Coordinate(6, 7), g1.getOwner()));
+		g1.move(new RegularMove(g1.currentBoard, new Coordinate(3, 6), new Coordinate(4, 6), g1.getOwner()));
+		g1.move(new RegularMove(g1.currentBoard, new Coordinate(4, 6), new Coordinate(3, 6), g1.getOwner()));
+		
+		boolean saved = moveGUI.saveFile();
+		boolean loaded = myGUI.loadFile();
+		assertTrue(saved && loaded);
+		assertTrue(myGUI.game.equals(moveGUI.game));
+	}
+	
+	@Test
+	public void testSaveFileWithExtraMovesThatShouldNotHappen() throws IOException {
+		HashMap<Coordinate, AbstractPiece> p1 = new HashMap<Coordinate, AbstractPiece>();
+		p1.put(new Coordinate(6, 7), new Cat(Owner.Player1));
+		p1.put(new Coordinate(7, 7), new Rabbit(Owner.Player1));
+		p1.put(new Coordinate(3, 6), new Dog(Owner.Player1));
+		p1.put(new Coordinate(3, 4), new Camel(Owner.Player1));
+		p1.put(new Coordinate(4, 4), new Elephant(Owner.Player1));
+		BoardState b1 = new BoardState(p1);
+		Game g1 = new Game(b1);
+		GUI myGUI = new GUI();
+		myGUI.game = null;
+		
+		GUI moveGUI = new GUI();
+		g1.move(new RegularMove(g1.currentBoard, new Coordinate(6, 7), new Coordinate(5, 7), g1.getOwner()));
+		g1.move(new RegularMove(g1.currentBoard, new Coordinate(5, 7), new Coordinate(6, 7), g1.getOwner()));
+		// Theses moves should fail, so we should have two moves left
+		g1.move(new RegularMove(g1.currentBoard, new Coordinate(6, 7), new Coordinate(7, 7), g1.getOwner()));
+		g1.move(new RegularMove(g1.currentBoard, new Coordinate(6, 7), new Coordinate(7, 7), g1.getOwner()));
+		g1.move(new RegularMove(g1.currentBoard, new Coordinate(6, 7), new Coordinate(7, 7), g1.getOwner()));
+		//Done failing moves.
+		g1.move(new RegularMove(g1.currentBoard, new Coordinate(4, 4), new Coordinate(4, 3), g1.getOwner()));
+		g1.move(new RegularMove(g1.currentBoard, new Coordinate(7, 7), new Coordinate(7, 6), g1.getOwner()));
 		
 		boolean saved = moveGUI.saveFile();
 		boolean loaded = myGUI.loadFile();
@@ -55,134 +110,29 @@ public class TestSaveLoad {
 
 	@Test(expected=IOException.class)
 	public void testSaveFileFailsOnIOException() throws IOException {
-		GUI myGUI = new GUI();		
+		GUI myGUI = new GUI();
+		System.out.println("Failure caused by testSaveFileFailsOnIOException");
 		myGUI.failSaveFile();
 	}
+	
+	//Not 100% how this test will work yet
+//	@Test(expected=IOException.class)
+//	public void testSaveFileFailsWhenNoSave() throws IOException {
+//		HashMap<Coordinate, AbstractPiece> p1 = new HashMap<Coordinate, AbstractPiece>();
+//		p1.put(new Coordinate(6, 7), new Cat(Owner.Player1));
+//		p1.put(new Coordinate(7, 7), new Rabbit(Owner.Player1));
+//		p1.put(new Coordinate(3, 6), new Dog(Owner.Player1));
+//		p1.put(new Coordinate(3, 4), new Camel(Owner.Player1));
+//		p1.put(new Coordinate(4, 4), new Elephant(Owner.Player1));
+//		BoardState b1 = new BoardState(p1);
+//		Game g1 = new Game(b1);
+//		GUI myGUI = new GUI();
+//		myGUI.game = null;
+//		
+//		GUI moveGUI = new GUI();
+//		boolean saved = moveGUI.deleteButNotSave();
+//		boolean loaded = myGUI.loadFile();
+//		System.out.println(saved + " " + loaded);
+//	}
+	
 }
-//	// Testing loadFile
-//	@Test
-//	public void testLoadFileLoadsBoardState() throws FileNotFoundException {
-//		Scanner scanner = new Scanner(new File("resources/LoadTest1.txt"));
-//		BoardState board = new BoardState(
-//				new char[][] { { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' }, { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
-//						{ ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' }, { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
-//						{ ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' }, { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
-//						{ ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' }, { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' }, },
-//				0);
-//		assertTrue(g.loadFile(scanner));
-//		for (int i = 0; i < 8; i++) {
-//			for (int k = 0; k < 8; k++) {
-//				assertEquals(board.getBoardArray()[i][k], g.currentBoard.getBoardArray()[i][k]);
-//			}
-//		}
-//		scanner.close();
-//	}
-//
-//	@Test
-//	public void testLoadFileLoadsTurnCounter1() throws FileNotFoundException {
-//		Scanner scanner = new Scanner(new File("resources/LoadTest1.txt"));
-//		int turnCounter = 7;
-//		assertTrue(g.loadFile(scanner));
-//		assertEquals(turnCounter, g.getTurnCounter());
-//		scanner.close();
-//	}
-//
-//	@Test
-//	public void testLoadFileLoadsTurnCounter2() throws FileNotFoundException {
-//		Scanner scanner = new Scanner(new File("resources/LoadTest2.txt"));
-//		int turnCounter = 10;
-//		assertTrue(g.loadFile(scanner));
-//		assertEquals(turnCounter, g.getTurnCounter());
-//		scanner.close();
-//	}
-//
-//	@Test
-//	public void testLoadFileLoadsTurnTimer() throws FileNotFoundException {
-//		Scanner scanner = new Scanner(new File("resources/LoadTest1.txt"));
-//		int turnTimer = 120;
-//		assertTrue(g.loadFile(scanner));
-//		assertEquals(turnTimer, g.getTurnTimer());
-//		scanner.close();
-//	}
-//
-//	@Test
-//	public void testLoadFileLoadsPlayer1Name() throws FileNotFoundException {
-//		Scanner scanner = new Scanner(new File("resources/LoadTest1.txt"));
-//		String name = "Jesse";
-//		assertTrue(g.loadFile(scanner));
-//		assertEquals(name, g.getP1Name());
-//		scanner.close();
-//	}
-//
-//	@Test
-//	public void testLoadFileLoadsPlayer2Name() throws FileNotFoundException {
-//		Scanner scanner = new Scanner(new File("resources/LoadTest1.txt"));
-//		String name = "Tayler";
-//		assertTrue(g.loadFile(scanner));
-//		assertEquals(name, g.getP2Name());
-//		scanner.close();
-//	}
-//
-//	@Test
-//	public void testLoadFileReturnsFalseOnFailure1() throws FileNotFoundException {
-//		Scanner scanner = new Scanner(new File("resources/LoadFailure1.txt"));
-//		assertFalse(g.loadFile(scanner));
-//		scanner.close();
-//	}
-//
-//	@Test
-//	public void testLoadFileReturnsFalseOnFailure2() throws FileNotFoundException {
-//		Scanner scanner = new Scanner(new File("resources/LoadFailure2.txt"));
-//		assertFalse(g.loadFile(scanner));
-//		scanner.close();
-//	}
-//
-//	@Test
-//	public void testLoadFileReturnsFalseOnFailure3() throws FileNotFoundException {
-//		Scanner scanner = new Scanner(new File("resources/LoadFailure3.txt"));
-//		assertFalse(g.loadFile(scanner));
-//		scanner.close();
-//	}
-//
-//	@Test
-//	public void testLoadFileReturnsFalseOnFailure4() throws FileNotFoundException {
-//		Scanner scanner = new Scanner(new File("resources/LoadFailure4.txt"));
-//		assertFalse(g.loadFile(scanner));
-//		scanner.close();
-//	}
-//
-//	@Test
-//	public void testLoadFileReturnsFalseOnFailure5() throws FileNotFoundException {
-//		Scanner scanner = new Scanner(new File("resources/LoadFailure5.txt"));
-//		assertFalse(g.loadFile(scanner));
-//		scanner.close();
-//	}
-//
-//	@Test
-//	public void testLoadFileReturnsFalseOnFailure6() throws FileNotFoundException {
-//		Scanner scanner = new Scanner(new File("resources/LoadFailure6.txt"));
-//		assertFalse(g.loadFile(scanner));
-//		scanner.close();
-//	}
-//
-//	@Test
-//	public void testLoadFileReturnsFalseOnFailure7() throws FileNotFoundException {
-//		Scanner scanner = new Scanner(new File("resources/LoadFailure7.txt"));
-//		assertFalse(g.loadFile(scanner));
-//		scanner.close();
-//	}
-//
-//	@Test
-//	public void testLoadFileInvalidBoardCharacters1() throws FileNotFoundException {
-//		Scanner scanner = new Scanner(new File("resources/LoadInvalidBoard1.txt"));
-//		assertFalse(g.loadFile(scanner));
-//		scanner.close();
-//	}
-//
-//	@Test
-//	public void testLoadFileInvalidBoardCharacters2() throws FileNotFoundException {
-//		Scanner scanner = new Scanner(new File("resources/LoadInvalidBoard2.txt"));
-//		assertFalse(g.loadFile(scanner));
-//		scanner.close();
-//	}
-//}

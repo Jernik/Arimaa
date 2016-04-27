@@ -7,6 +7,7 @@ import game.Coordinate;
 import game.GUI;
 import game.Game;
 import game.ImagePanel;
+import move_commands.MoveCommand;
 import move_commands.RegularMove;
 
 public class MovementListener implements MouseListener {
@@ -63,7 +64,8 @@ public class MovementListener implements MouseListener {
 			// AKA move
 			else if (isSelectedPieceAndEmptySpaceClicked(coor)) {
 				// Using move to check for valid move
-				if (game.move(this.game.getBoardState(), this.selectedPieceCoord, coor)) {
+				RegularMove m = new RegularMove(game.currentBoard,this.selectedPieceCoord, coor, this.game.getOwner());
+				if (game.move(m)) {
 					gui.renderBoard();
 				}
 				this.selectedPiece = null;

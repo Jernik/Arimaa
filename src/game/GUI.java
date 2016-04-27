@@ -232,7 +232,7 @@ public class GUI {
 	}
 	
 	public boolean loadFile() throws IOException {
-		FileInputStream fileIn = new FileInputStream("/save/Game.ser");
+		FileInputStream fileIn = new FileInputStream("save/Game.ser");
 		ObjectInputStream in = null;
 		try {
 			in = new ObjectInputStream(fileIn);
@@ -296,6 +296,24 @@ public class GUI {
 		}
 		out.close();
 		fileOut.close();
+		return true;
+	}
+	
+	public boolean deleteButNotSave() throws IOException {		
+		FileInputStream fileIn = new FileInputStream("save/bad.txt");
+		ObjectInputStream in = null;
+		try {
+			in = new ObjectInputStream(fileIn);
+			this.game = (Game) in.readObject();
+		} catch (IOException e) {
+			in.close();
+			e.printStackTrace();
+			return false;
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		in.close();
+		fileIn.close();
 		return true;
 	}
 }
