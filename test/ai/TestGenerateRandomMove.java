@@ -2,16 +2,19 @@ package ai;
 
 import static org.junit.Assert.assertTrue;
 
-import java.lang.reflect.Method;
-import java.text.DecimalFormat;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.HashMap;
 
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 
 import game.BoardState;
 import game.Coordinate;
 import game.Game;
+import move_commands.MoveCommand;
 import piece.AbstractPiece;
 import piece.Camel;
 import piece.Cat;
@@ -21,6 +24,7 @@ import piece.Horse;
 import piece.Owner;
 import piece.Rabbit;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestGenerateRandomMove {
 	private static final double ITERATION_SIZE = 100_000;
 	private static final double RANDOM_MARGIN = 0.005;
@@ -64,69 +68,67 @@ public class TestGenerateRandomMove {
 	}
 
 	public void randomStressTest(HashMap<Object, Double> expectedPercentages, Generater method) {
-		HashMap<Object, Integer> countMap = new HashMap<Object, Integer>();
+		HashMap<Object, Double> countMap = new HashMap<Object, Double>();
 		for (int i = 0; i < ITERATION_SIZE; i++) {
 			Object returnValue = method.generate();
 			if (!countMap.containsKey(returnValue)) {
-				countMap.put(returnValue, 0);
+				countMap.put(returnValue, 0.0);
 			}
 			countMap.put(returnValue, countMap.get(returnValue) + 1);
 		}
 
-		DecimalFormat df = new DecimalFormat("#.00");
+		// convert count to percentages
+		for (Object obj : countMap.keySet()) {
+			countMap.put(obj, round(countMap.get(obj) / ITERATION_SIZE, 2));
+		}
+
 		for (Object obj : countMap.keySet()) {
 			double expectedPercent = expectedPercentages.get(obj);
-			double expectedLow = expectedPercent - RANDOM_MARGIN;
-			double expectedHigh = expectedPercent + RANDOM_MARGIN;
-			int count = countMap.get(obj);
-			double percent = count / ITERATION_SIZE;
-			String errorString = obj.toString() + " was outside of the expected range of "
-					+ df.format(expectedPercent * 100) + "% +- " + df.format(RANDOM_MARGIN * 100)
-					+ "% with a percentage of " + df.format(percent * 100) + "%";
+			double expectedLow = Math.max(expectedPercent - RANDOM_MARGIN, Math.min(Double.MIN_NORMAL, expectedPercent));
+			double expectedHigh = Math.min(expectedPercent + RANDOM_MARGIN, Math.max(100.0 - Double.MIN_NORMAL, expectedPercent));
+			double percent = countMap.get(obj);
+			String errorString = obj.toString() + " was outside of the expected range of " + (expectedPercent * 100)
+					+ "% +- " + (RANDOM_MARGIN * 100) + "% with a percentage of " + (percent * 100) + "%";
+			if (expectedLow > percent || percent > expectedHigh) {
+				StackTraceElement methodName = Thread.currentThread().getStackTrace()[2];
+				System.err.println("FAIL " + methodName);
+				// System.err.println(countMap);
+				System.out.println();System.err.println();
+			}
 			assertTrue(errorString, expectedLow <= percent && percent <= expectedHigh);
 		}
 	}
 
 	public void randomStressTest(double expectedPercentages, Generater method) {
-		HashMap<Object, Integer> countMap = new HashMap<Object, Integer>();
+		HashMap<Object, Double> countMap = new HashMap<Object, Double>();
 		for (int i = 0; i < ITERATION_SIZE; i++) {
 			Object returnValue = method.generate();
 			if (!countMap.containsKey(returnValue)) {
-				countMap.put(returnValue, 0);
+				countMap.put(returnValue, 0.0);
 			}
 			countMap.put(returnValue, countMap.get(returnValue) + 1);
 		}
 
-		DecimalFormat df = new DecimalFormat("#.00");
+		// convert count to percentages
+		for (Object obj : countMap.keySet()) {
+			countMap.put(obj, round(countMap.get(obj) / ITERATION_SIZE, 2));
+		}
+
 		for (Object obj : countMap.keySet()) {
 			double expectedPercent = expectedPercentages;
-			double expectedLow = expectedPercent - RANDOM_MARGIN;
-			double expectedHigh = expectedPercent + RANDOM_MARGIN;
-			int count = countMap.get(obj);
-			double percent = count / ITERATION_SIZE;
-			String errorString = obj.toString() + " was outside of the expected range of "
-					+ df.format(expectedPercent * 100) + "% +- " + df.format(RANDOM_MARGIN * 100)
-					+ "% with a percentage of " + df.format(percent * 100) + "%";
+			double expectedLow = Math.max(expectedPercent - RANDOM_MARGIN, Math.min(Double.MIN_NORMAL, expectedPercent));
+			double expectedHigh = Math.min(expectedPercent + RANDOM_MARGIN, Math.max(100.0 - Double.MIN_NORMAL, expectedPercent));
+			double percent = countMap.get(obj);
+			String errorString = obj.toString() + " was outside of the expected range of " + (expectedPercent * 100)
+					+ "% +- " + (RANDOM_MARGIN * 100) + "% with a percentage of " + (percent * 100) + "%";
+			if (expectedLow > percent || percent > expectedHigh) {
+				StackTraceElement methodName = Thread.currentThread().getStackTrace()[2];
+				System.err.println("FAIL " + methodName);
+				// System.err.println(countMap);
+				System.out.println();System.err.println();
+			}
 			assertTrue(errorString, expectedLow <= percent && percent <= expectedHigh);
 		}
-	}
-
-	@Test
-	public void testGenerateRandomPieceUniform() {
-		randomStressTest(1 / 6.0, () -> this.normalAi.getGame().getPieceAt(this.normalAi.generateRandomPieceCoor()));
-	}
-
-	@Test
-	public void testGenerateRandomPieceCatLover() {
-		HashMap<Object, Double> expectedPercentages = new HashMap<Object, Double>();
-		expectedPercentages.put(new Cat(this.catLoverAi.getOwner()), 1 / 2.0);
-		expectedPercentages.put(new Camel(this.catLoverAi.getOwner()), 1 / 10.0);
-		expectedPercentages.put(new Dog(this.catLoverAi.getOwner()), 0.0);
-		expectedPercentages.put(new Elephant(this.catLoverAi.getOwner()), 1 / 10.0);
-		expectedPercentages.put(new Horse(this.catLoverAi.getOwner()), 1 / 10.0);
-		expectedPercentages.put(new Rabbit(this.catLoverAi.getOwner()), 1 / 5.0);
-		randomStressTest(expectedPercentages,
-				() -> this.catLoverAi.getGame().getPieceAt(this.catLoverAi.generateRandomPieceCoor()));
 	}
 
 	@Test
@@ -147,8 +149,201 @@ public class TestGenerateRandomMove {
 		HashMap<Object, Double> expectedPercentages = new HashMap<Object, Double>();
 		expectedPercentages.put(coor.down(), 0.25);
 		expectedPercentages.put(coor.right(), 0.25);
-		expectedPercentages.put(coor.up(), 0.5);
-		
+		expectedPercentages.put(coor.up(), 0.5); // invalid coordinates are equal
+		expectedPercentages.put(coor.left(), 0.5); // invalid coordinates are equal
+
 		randomStressTest(expectedPercentages, () -> this.normalAi.generateRandomDirection(coor));
+	}
+
+	@Test
+	public void testNormalGenerateRandomPieceIsUniform() {
+		randomStressTest(1 / 6.0, () -> this.normalAi.getGame().getPieceAt(this.normalAi.generateRandomPieceCoor()));
+	}
+
+	@Test
+	public void testNormalEveryGeneratedMoveIsValid() {
+		for (int i = 0; i < ITERATION_SIZE; i++) {
+			MoveCommand move = this.normalAi.generateMove();
+			assertTrue(move.toString(), move.isValidMove());
+		}
+	}
+
+	@Test
+	public void testNormalGeneratedMoveIsUniform() {
+		randomStressTest(1 / 24.0, () -> this.normalAi.generateMove());
+	}
+
+	@Test
+	public void testNormalHardPerformanceLimit() {
+		long maxTime = 0;
+		for (int i = 0; i < ITERATION_SIZE; i++) {
+			long start = System.nanoTime();
+			this.normalAi.generateMove();
+			long time = System.nanoTime() - start;
+			if (time > maxTime) {
+				maxTime = time;
+			}
+			String errorString = "this.normalAi.generateMove() exceeded the HARD_TIME_LIMIT of "
+					+ getTimeUnits(Ai.HARD_TIME_LIMIT, time) + " by taking " + getTimeUnits(time, Ai.HARD_TIME_LIMIT);
+			if (time > Ai.HARD_TIME_LIMIT) {
+				System.err.println(
+						"FAIL longest normal move generation time was " + getTimeUnits(time, Ai.HARD_TIME_LIMIT)
+								+ ", it should be under " + getTimeUnits(Ai.HARD_TIME_LIMIT, time));
+				System.out.println();System.err.println();
+			}
+			assertTrue(errorString, time <= Ai.HARD_TIME_LIMIT);
+		}
+		System.out.println("PASS longest normal move generation time was " + getTimeUnits(maxTime, Ai.HARD_TIME_LIMIT)
+				+ ", it should be under " + getTimeUnits(Ai.HARD_TIME_LIMIT, maxTime));
+		System.out.println();System.err.println();
+	}
+
+	@Test
+	public void testNormalSoftPerformanceLimit() {
+		long start = System.nanoTime();
+		for (int i = 0; i < ITERATION_SIZE; i++) {
+			this.normalAi.generateMove();
+		}
+		long time = System.nanoTime() - start;
+		long avgTime = (long) (time / ITERATION_SIZE);
+		String errorString = "this.normalAi.generateMove() exceeded the AVERAGE_TIME_LIMIT of "
+				+ getTimeUnits(Ai.AVERAGE_TIME_LIMIT, avgTime) + " by taking "
+				+ getTimeUnits(avgTime, Ai.AVERAGE_TIME_LIMIT);
+		if (avgTime > Ai.AVERAGE_TIME_LIMIT) {
+			System.err.println(
+					"FAIL average normal move generation time was " + getTimeUnits(avgTime, Ai.AVERAGE_TIME_LIMIT)
+							+ ", it should be under " + getTimeUnits(Ai.AVERAGE_TIME_LIMIT, avgTime));
+			System.out.println();System.err.println();
+
+		}
+		assertTrue(errorString, avgTime <= Ai.AVERAGE_TIME_LIMIT);
+		System.out.println("PASS average normal generation time was  " + getTimeUnits(avgTime, Ai.AVERAGE_TIME_LIMIT)
+				+ ", it should be under " + getTimeUnits(Ai.AVERAGE_TIME_LIMIT, avgTime));
+		System.out.println();System.err.println();
+
+	}
+
+	@Test
+	public void testKatLoverGenerateRandomPieceIsUniform() {
+		HashMap<Object, Double> expectedPercentages = new HashMap<Object, Double>();
+		expectedPercentages.put(new Cat(this.catLoverAi.getOwner()), 1 / 2.0);
+		expectedPercentages.put(new Camel(this.catLoverAi.getOwner()), 1 / 10.0);
+		expectedPercentages.put(new Dog(this.catLoverAi.getOwner()), 0.0);
+		expectedPercentages.put(new Elephant(this.catLoverAi.getOwner()), 1 / 10.0);
+		expectedPercentages.put(new Horse(this.catLoverAi.getOwner()), 1 / 10.0);
+		expectedPercentages.put(new Rabbit(this.catLoverAi.getOwner()), 1 / 5.0);
+		randomStressTest(expectedPercentages,
+				() -> this.catLoverAi.getGame().getPieceAt(this.catLoverAi.generateRandomPieceCoor()));
+	}
+
+	@Test
+	public void testKatLoverEveryGeneratedMoveIsValid() {
+		for (int i = 0; i < ITERATION_SIZE; i++) {
+			MoveCommand move = this.catLoverAi.generateMove();
+			assertTrue(move.toString(), move.isValidMove());
+		}
+	}
+
+	@Test
+	public void testKatLoverGeneratedMoveIsUniform() {
+		randomStressTest(1 / 24.0, () -> this.catLoverAi.generateMove());
+	}
+
+	@Test
+	public void testKatLoverHardPerformanceLimit() {
+		long maxTime = 0;
+		for (int i = 0; i < ITERATION_SIZE; i++) {
+			long start = System.nanoTime();
+			this.catLoverAi.generateMove();
+			long time = System.nanoTime() - start;
+			if (time > maxTime) {
+				maxTime = time;
+			}
+			String errorString = "this.catLoverAi.generateMove() exceeded the HARD_TIME_LIMIT of "
+					+ getTimeUnits(Ai.HARD_TIME_LIMIT, time) + " by taking " + getTimeUnits(time, Ai.HARD_TIME_LIMIT);
+			if (time > Ai.HARD_TIME_LIMIT) {
+				System.err.println(
+						"FAIL longest catLover move generation time was " + getTimeUnits(time, Ai.HARD_TIME_LIMIT)
+								+ ", it should be under " + getTimeUnits(Ai.HARD_TIME_LIMIT, time));
+				System.out.println();System.err.println();
+
+			}
+			assertTrue(errorString, time <= Ai.HARD_TIME_LIMIT);
+		}
+		System.out.println("PASS longest catLover move generation time was " + getTimeUnits(maxTime, Ai.HARD_TIME_LIMIT)
+				+ ", it should be under " + getTimeUnits(Ai.HARD_TIME_LIMIT, maxTime));
+		System.out.println();System.err.println();
+
+	}
+
+	@Test
+	public void testKatLoverSoftPerformanceLimit() {
+		long start = System.nanoTime();
+		for (int i = 0; i < ITERATION_SIZE; i++) {
+			this.catLoverAi.generateMove();
+		}
+		long time = System.nanoTime() - start;
+		long avgTime = (long) (time / ITERATION_SIZE);
+		String errorString = "this.catLoverAi.generateMove() exceeded the AVERAGE_TIME_LIMIT of "
+				+ getTimeUnits(Ai.AVERAGE_TIME_LIMIT, avgTime) + " by taking "
+				+ getTimeUnits(avgTime, Ai.AVERAGE_TIME_LIMIT);
+		if (avgTime > Ai.AVERAGE_TIME_LIMIT) {
+			System.err.println(
+					"FAIL average catLover move generation time was " + getTimeUnits(avgTime, Ai.AVERAGE_TIME_LIMIT)
+							+ ", it should be under " + getTimeUnits(Ai.AVERAGE_TIME_LIMIT, avgTime));
+			System.out.println();System.err.println();
+
+		}
+		assertTrue(errorString, avgTime <= Ai.AVERAGE_TIME_LIMIT);
+		System.out.println("PASS average catLover generation time was  " + getTimeUnits(avgTime, Ai.AVERAGE_TIME_LIMIT)
+				+ ", it should be under " + getTimeUnits(Ai.AVERAGE_TIME_LIMIT, avgTime));
+		System.out.println();System.err.println();
+
+	}
+
+	/**
+	 * returns a string that gives the given time difference in easily read time units. The second time param is another
+	 * time which should have the same units
+	 * 
+	 * @param time
+	 * @param otherTime
+	 * @return
+	 */
+	public static String getTimeUnits(long time, long otherTime) {
+		double newTime = time;
+		double newOtherTime = otherTime;
+		if (time < 1000 || newOtherTime < 1000) {
+			return String.format("%d NanoSeconds", time);
+		}
+		newTime = time / 1000.0;
+		newOtherTime = otherTime / 1000.0;
+		if (newTime < 1000 || newOtherTime < 1000) {
+			return String.format("%.3f MicroSeconds", newTime);
+		}
+		newTime /= 1000.0;
+		newOtherTime = otherTime / 1000.0;
+		if (newTime < 1000 || newOtherTime < 1000) {
+			return String.format("%.3f MiliSeconds", newTime);
+		}
+		newTime /= 1000.0;
+		newOtherTime = otherTime / 1000.0;
+		if (newTime < 300 || newOtherTime < 300) {
+			return String.format("%.3f Seconds", newTime);
+		}
+		newTime /= 60.0;
+		newOtherTime = otherTime / 1000.0;
+		if (newTime < 180 || newOtherTime < 180) {
+			return String.format("%.3f Minutes", newTime);
+		}
+		return String.format("%.3f Hours", newTime / 60.0);
+	}
+
+	public static double round(double value, int places) {
+		if (places < 0)
+			throw new IllegalArgumentException();
+
+		BigDecimal bd = new BigDecimal(value);
+		bd = bd.setScale(places, RoundingMode.HALF_UP);
+		return bd.doubleValue();
 	}
 }

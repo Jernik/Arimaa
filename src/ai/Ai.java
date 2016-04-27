@@ -1,23 +1,26 @@
 package ai;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.Set;
-import java.util.function.Predicate;
 
 import game.Coordinate;
 import game.Game;
 import move_commands.MoveCommand;
+import move_commands.PullMove;
+import move_commands.PushMove;
 import move_commands.RegularMove;
 import piece.AbstractPiece;
 import piece.Owner;
 
 public class Ai {
+	public static final long HARD_TIME_LIMIT = 25_000_000;// ns, 25 miliseconds
+	public static final long AVERAGE_TIME_LIMIT = 500_000;// ns, 0.5 miliseconds
 	private Owner owner;
 	private Game game;
+	private int times;
 
 	enum MoveType {
 		Regular, Push, Pull;
@@ -47,23 +50,62 @@ public class Ai {
 		return game;
 	}
 
+	/**
+	 * this should uniformally generate a valid move command.
+	 * 
+	 * @return
+	 */
 	public MoveCommand generateMove() {
+		this.times++;
 		Coordinate pieceCoor = this.generateRandomPieceCoor();
 		AbstractPiece piece = this.game.getPieceAt(pieceCoor);
 		Coordinate randomDirection = this.generateRandomDirection(pieceCoor);
-		if (!randomDirection.isValid() || this.game.getPieceAt(randomDirection).getOwner() == this.owner) {
-			// can't move here because its off the board, or there is one of the ai's pieces there, try again
+		if (!randomDirection.isValid()) {
+			// can't move here because its off the board, try again
 			return this.generateMove();
 		}
 		if (this.game.checkCoor(randomDirection)) {
-			// enemy piece is here
-			// do push
-			return null;
+			if (this.game.getPieceAt(randomDirection).getOwner() == this.owner) {
+				// can't dislodge a friendly piece, try again
+				return this.generateMove();
+			}
+			// enemy piece is here, generate a push
+			Coordinate pushPiecePlace = this.generateRandomDirection(randomDirection);
+			while (pieceCoor.equals(pushPiecePlace)) {
+				// you can't swap
+				pushPiecePlace = this.generateRandomDirection(randomDirection);
+			}
+			MoveCommand pushMove = new PushMove(this.game.getBoardState(), pieceCoor, randomDirection, pushPiecePlace,
+					this.owner);
+			if (pushMove.isValidMove()) {
+				return pushMove;
+			}
+			// wasn't a valid push, try again
+			return this.generateMove();
 		}
-		// free space
-		// do move or pull
-		RegularMove regularMove = new RegularMove(this.game.getBoardState(), pieceCoor, randomDirection, this.owner);
+		// free space, generate a pull or regular move
+		if (shouldGeneratePull()) {
+			Coordinate pullPiecePlace = this.generateRandomDirection(randomDirection);
+			while (pieceCoor.equals(pullPiecePlace)) {
+				// you can't swap
+				pullPiecePlace = this.generateRandomDirection(randomDirection);
+			}
+			MoveCommand pullMove = new PullMove(this.game.getBoardState(), pieceCoor, randomDirection, pullPiecePlace,
+					this.owner);
+			if (pullMove.isValidMove()) {
+				return pullMove;
+			}
+			// wasn't a valid pull, try again
+			return this.generateMove();
+		}
+		// use regular method
+		MoveCommand regularMove = new RegularMove(this.game.getBoardState(), pieceCoor, randomDirection, this.owner);
 		return regularMove;
+	}
+
+	// 1 / 4 chance of generating pull, 3 possible pull moves, and 1 regular move
+	private boolean shouldGeneratePull() {
+		return 0 != new Random().nextInt(4);
 	}
 
 	/**
