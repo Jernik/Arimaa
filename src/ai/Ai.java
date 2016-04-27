@@ -11,6 +11,7 @@ import java.util.function.Predicate;
 import game.Coordinate;
 import game.Game;
 import move_commands.MoveCommand;
+import move_commands.RegularMove;
 import piece.AbstractPiece;
 import piece.Owner;
 
@@ -47,7 +48,22 @@ public class Ai {
 	}
 
 	public MoveCommand generateMove() {
-		return this.generateRandomMoveCommand(() -> this.generateRandomPieceCoor());
+		Coordinate pieceCoor = this.generateRandomPieceCoor();
+		AbstractPiece piece = this.game.getPieceAt(pieceCoor);
+		Coordinate randomDirection = this.generateRandomDirection(pieceCoor);
+		if (!randomDirection.isValid() || this.game.getPieceAt(randomDirection).getOwner() == this.owner) {
+			// can't move here because its off the board, or there is one of the ai's pieces there, try again
+			return this.generateMove();
+		}
+		if (this.game.checkCoor(randomDirection)) {
+			// enemy piece is here
+			// do push
+			return null;
+		}
+		// free space
+		// do move or pull
+		RegularMove regularMove = new RegularMove(this.game.getBoardState(), pieceCoor, randomDirection, this.owner);
+		return regularMove;
 	}
 
 	/**
@@ -68,17 +84,6 @@ public class Ai {
 		}
 		Coordinate randomCoor = iter.next();
 		return randomCoor;
-	}
-
-	// default scope
-	MoveCommand generateRandomMoveCommand(returnsCoordinate pieceGenerator) {
-		// given a coordinate, get the piece, pick a direction
-		// if nothing, great -> regular move or pull
-		// if something -> push
-		Coordinate pieceCoor = pieceGenerator.execute();
-		AbstractPiece piece = this.game.getPieceAt(pieceCoor);
-		Coordinate randomDirection = this.generateRandomDirection(pieceCoor);
-		return null;
 	}
 
 	/**
