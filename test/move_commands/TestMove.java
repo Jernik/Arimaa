@@ -50,9 +50,9 @@ public class TestMove {
 		BoardState b1 = new BoardState(p1);
 		Game g1 = new Game(b1);
 
-		assertEquals(new Rabbit(Owner.Player1), g1.getSpace(7, 7));
+		assertEquals(new Rabbit(Owner.Player1), g1.getPieceAt(new Coordinate(7, 7)));
 		assertTrue(g1.move(7, 7, 0));
-		assertEquals(new Rabbit(Owner.Player1), g1.getSpace(6, 7));
+		assertEquals(new Rabbit(Owner.Player1), g1.getPieceAt(new Coordinate(6, 7)));
 		assertFalse(g1.checkCoor(7, 7));
 	}
 
@@ -86,30 +86,30 @@ public class TestMove {
 
 	@Test
 	public void testCannotMoveUpIntoOccupiedSpace() {
-		assertEquals(new Rabbit(Owner.Player1), g.getSpace(1, 0));
+		assertEquals(new Rabbit(Owner.Player1), g.getPieceAt(new Coordinate(1, 0)));
 		assertFalse(g.move(1, 0, 0));
-		assertEquals(new Rabbit(Owner.Player1), g.getSpace(1, 0));
+		assertEquals(new Rabbit(Owner.Player1), g.getPieceAt(new Coordinate(1, 0)));
 	}
 
 	@Test
 	public void testCannotMoveRightIntoOccupiedSpace() {
-		assertEquals(new Dog(Owner.Player1), g.getSpace(0, 1));
+		assertEquals(new Dog(Owner.Player1), g.getPieceAt(new Coordinate(0, 1)));
 		assertFalse(g.move(0, 1, 1));
-		assertEquals(new Dog(Owner.Player1), g.getSpace(0, 1));
+		assertEquals(new Dog(Owner.Player1), g.getPieceAt(new Coordinate(0, 1)));
 	}
 
 	@Test
 	public void testCannotMoveDownIntoOccupiedSpace() {
-		assertEquals(new Dog(Owner.Player1), g.getSpace(0, 1));
+		assertEquals(new Dog(Owner.Player1), g.getPieceAt(new Coordinate(0, 1)));
 		assertFalse(g.move(0, 1, 2));
-		assertEquals(new Dog(Owner.Player1), g.getSpace(0, 1));
+		assertEquals(new Dog(Owner.Player1), g.getPieceAt(new Coordinate(0, 1)));
 	}
 
 	@Test
 	public void testCannotMoveLeftIntoOccupiedSpace() {
-		assertEquals(new Dog(Owner.Player1), g.getSpace(0, 1));
+		assertEquals(new Dog(Owner.Player1), g.getPieceAt(new Coordinate(0, 1)));
 		assertFalse(g.move(0, 1, 3));
-		assertEquals(new Dog(Owner.Player1), g.getSpace(0, 1));
+		assertEquals(new Dog(Owner.Player1), g.getPieceAt(new Coordinate(0, 1)));
 	}
 
 	@Test

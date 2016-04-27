@@ -45,10 +45,10 @@ public class TestGame {
 
 	@Test
 	public void testInitializesWithBoardState() {
-		assertEquals(new Camel(Owner.Player1), g1.getSpace(3, 4));
-		assertEquals(new Elephant(Owner.Player1), g1.getSpace(4, 4));
-		assertNull(g1.getSpace(3, 7));
-		assertEquals(new Rabbit(Owner.Player1), g1.getSpace(7, 7));
+		assertEquals(new Camel(Owner.Player1), g1.getPieceAt(new Coordinate(3, 4)));
+		assertEquals(new Elephant(Owner.Player1), g1.getPieceAt(new Coordinate(4, 4)));
+		assertNull(g1.getPieceAt(new Coordinate(3, 7)));
+		assertEquals(new Rabbit(Owner.Player1), g1.getPieceAt(new Coordinate(7, 7)));
 	}
 
 	@Test
@@ -69,81 +69,13 @@ public class TestGame {
 	@Test
 	public void testGetPieceExists() {
 		assertTrue(g1.checkCoor(3, 4));
-		assertEquals(new Camel(Owner.Player1), g1.getSpace(3, 4));
+		assertEquals(new Camel(Owner.Player1), g1.getPieceAt(new Coordinate(3, 4)));
 	}
 
 	@Test
 	public void testGetPieceNotExists() {
 		assertFalse(g1.checkCoor(0, 0));
-		assertNull(g1.getSpace(0, 0));
-	}
-
-	@Test
-	@Deprecated
-	// what does this even do?
-	public void testGetPieceExistsAgain() {
-		assertEquals(new Rabbit(Owner.Player1), g1.getSpace(7, 7));
-		assertEquals(new Rabbit(Owner.Player1), g1.getSpace(7, 7));
-	}
-
-	@Test
-	@Deprecated
-	public void testGetSpaceInvalidRow1() {
-		assertNull(g.getSpace(-1, 0));
-	}
-
-	@Test
-	@Deprecated
-	public void testGetSpaceInvalidRow2() {
-		assertNull(g.getSpace(8, 0));
-	}
-
-	@Test
-	@Deprecated
-	public void testGetSpaceInvalidColumn1() {
-		assertNull(g.getSpace(0, -1));
-	}
-
-	@Test
-	@Deprecated
-	public void testGetSpaceInvalidColumn2() {
-		assertNull(g.getSpace(0, 8));
-	}
-
-	// Testing getDirection
-	@Test
-	public void testGetDirectionUp() {
-		assertEquals(0, g.getDirection(1, 1, 0, 1));
-	}
-
-	@Test
-	public void testGetDirectionRight() {
-		assertEquals(1, g.getDirection(1, 1, 1, 2));
-	}
-
-	@Test
-	public void testGetDirectionDown() {
-		assertEquals(2, g.getDirection(1, 1, 2, 1));
-	}
-
-	@Test
-	public void testGetDirectionLeft() {
-		assertEquals(3, g.getDirection(1, 1, 1, 0));
-	}
-
-	@Test
-	public void testGetDirectionNonAdjacent1() {
-		assertEquals(-1, g.getDirection(1, 1, 7, 7));
-	}
-
-	@Test
-	public void testGetDirectionNonAdjacent2() {
-		assertEquals(-1, g.getDirection(1, 1, 1, 7));
-	}
-
-	@Test
-	public void testGetDirectionNonAdjacent3() {
-		assertEquals(-1, g.getDirection(1, 1, 7, 1));
+		assertNull(g1.getPieceAt(new Coordinate(0, 0)));
 	}
 
 	// Testing remove piece checks
@@ -185,7 +117,7 @@ public class TestGame {
 		removeP.put(new Coordinate(5, 1), new Dog(Owner.Player1));
 		Game game = new Game(new BoardState(removeP));
 		game.move(2, 2, 0);
-		assertEquals(game.getSpace(2, 5), game.getSpace(2, 5));
+		assertEquals(game.getPieceAt(new Coordinate(2, 5)), game.getPieceAt(new Coordinate(2, 5)));
 		game.move(1, 5, 0);
 		assertFalse(game.checkCoor(2, 5));
 	}
