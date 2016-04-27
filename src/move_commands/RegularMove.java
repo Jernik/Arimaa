@@ -33,8 +33,8 @@ public class RegularMove extends MoveCommand {
 				return this.originalBoard;
 			}
 		}
-		if (originalPlace.isOrthogonallyAdjacentTo(newPlace)
-				&& this.originalBoard.getPieceAt(originalPlace).getOwner() == this.turn) {
+		if (!(originalPlace.isOrthogonallyAdjacentTo(newPlace)
+				&& this.originalBoard.getPieceAt(originalPlace).getOwner() == this.turn)) {
 				return this.originalBoard;
 		}
 		this.newBoard.movePiece(originalPlace, newPlace);
@@ -60,6 +60,10 @@ public class RegularMove extends MoveCommand {
 				// Cannot move a Rabbit backwards unless it has been dragged
 				return false;
 			}
+		}
+		if (!(originalPlace.isOrthogonallyAdjacentTo(newPlace)
+				&& this.originalBoard.getPieceAt(originalPlace).getOwner() == this.turn)) {
+			return false;
 		}
 		return true;
 	}
