@@ -86,17 +86,33 @@ public class TestGenerateRandomMove {
 		}
 	}
 
+	public void randomStressTest(double expectedPercentages, Generater method) {
+		HashMap<Object, Integer> countMap = new HashMap<Object, Integer>();
+		for (int i = 0; i < ITERATION_SIZE; i++) {
+			Object returnValue = method.generate();
+			if (!countMap.containsKey(returnValue)) {
+				countMap.put(returnValue, 0);
+			}
+			countMap.put(returnValue, countMap.get(returnValue) + 1);
+		}
+
+		DecimalFormat df = new DecimalFormat("#.00");
+		for (Object obj : countMap.keySet()) {
+			double expectedPercent = expectedPercentages;
+			double expectedLow = expectedPercent - RANDOM_MARGIN;
+			double expectedHigh = expectedPercent + RANDOM_MARGIN;
+			int count = countMap.get(obj);
+			double percent = count / ITERATION_SIZE;
+			String errorString = obj.toString() + " was outside of the expected range of "
+					+ df.format(expectedPercent * 100) + "% +- " + df.format(RANDOM_MARGIN * 100)
+					+ "% with a percentage of " + df.format(percent * 100) + "%";
+			assertTrue(errorString, expectedLow <= percent && percent <= expectedHigh);
+		}
+	}
+
 	@Test
 	public void testGenerateRandomPieceUniform() {
-		HashMap<Object, Double> expectedPercentages = new HashMap<Object, Double>();
-		expectedPercentages.put(new Cat(this.normalAi.getOwner()), 1 / 6.0);
-		expectedPercentages.put(new Camel(this.normalAi.getOwner()), 1 / 6.0);
-		expectedPercentages.put(new Dog(this.normalAi.getOwner()), 1 / 6.0);
-		expectedPercentages.put(new Elephant(this.normalAi.getOwner()), 1 / 6.0);
-		expectedPercentages.put(new Horse(this.normalAi.getOwner()), 1 / 6.0);
-		expectedPercentages.put(new Rabbit(this.normalAi.getOwner()), 1 / 6.0);
-		randomStressTest(expectedPercentages,
-				() -> this.normalAi.getGame().getPieceAt(this.normalAi.generateRandomPieceCoor()));
+		randomStressTest(1 / 6.0, () -> this.normalAi.getGame().getPieceAt(this.normalAi.generateRandomPieceCoor()));
 	}
 
 	@Test
