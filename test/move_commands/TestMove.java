@@ -131,4 +131,6 @@ public class TestMove {
 	public void testInvalidMoveDirection() {
 		assertFalse(g.move(1, 0, 5));
 	}
+	
+	//Add tests for isFrozen() and 
 }
