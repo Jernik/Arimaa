@@ -33,6 +33,7 @@ public class PullMove extends MoveCommand {
 		return null;
 	}
 
+	// you should assume that you are given 3 random coordinates, that might or might not be valid 
 	@Override
 	public boolean isValidMove() {
 		return false;
