@@ -1,6 +1,6 @@
 package ai;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import java.text.DecimalFormat;
 import java.util.HashMap;
@@ -72,7 +72,7 @@ public class TestGenerateRandomMove {
 		pieceCount.put(Rabbit.class, 0);
 
 		for (int i = 0; i < ITERATION_SIZE; i++) {
-			AbstractPiece piece = ai.generateRandomPiece();
+			AbstractPiece piece = ai.getGame().getPieceAt(ai.generateRandomPieceCoor());
 			pieceCount.put(piece.getClass(), pieceCount.get(piece.getClass()) + 1);
 		}
 
@@ -113,4 +113,21 @@ public class TestGenerateRandomMove {
 		expectedPercentages.put(Rabbit.class, 1 / 5.0);
 		runGenerateRandomPiece(this.catLoverAi, expectedPercentages);
 	}
+
+	@Test
+	public void lambdas() {
+		testRandom(() -> normalAi.generateRandomPieceCoor());
+		testRandom(() -> normalAi.getGame().getPieceAt(normalAi.generateRandomPieceCoor()));
+	}
+
+	// public <T, V> void testRandom(Function<T, V> function) {
+	//
+	// }
+	private void testRandom(Generater method) {
+		System.out.println(method.generate());
+		System.out.println(method.generate());
+		System.out.println(method.generate());
+
+	}
+
 }
