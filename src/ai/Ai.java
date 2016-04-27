@@ -50,8 +50,12 @@ public class Ai {
 		return this.generateRandomMoveCommand(() -> this.generateRandomPieceCoor());
 	}
 
+	/**
+	 * always returns the valid coordinate for one of the ai's pieces
+	 * 
+	 * @return
+	 */
 	// default scope
-	// always returns a valid coor of one of the ai's pieces
 	Coordinate generateRandomPieceCoor() {
 		Set<Coordinate> coors = this.game.currentBoard.getAllCoordinates();
 		// removes all non ai controlled pieces
@@ -76,12 +80,18 @@ public class Ai {
 		Coordinate randomDirection = this.generateRandomDirection(pieceCoor);
 		return null;
 	}
-	
+
+	/**
+	 * uniformally returns a coordinate that is adjacent to the given coordinate. does not check to see if the
+	 * coordinate is valid or if there is a piece there
+	 * 
+	 * @param coor
+	 * @return
+	 */
 	// default scope
 	Coordinate generateRandomDirection(Coordinate coor) {
 		ArrayList<Coordinate> adjecantCoors = new ArrayList<Coordinate>(
 				Arrays.asList(new Coordinate[] { coor.down(), coor.up(), coor.left(), coor.right() }));
-		// adjecantCoors.removeIf((Coordinate coor) -> this.game.getPieceAt(coor).getOwner() == this.owner);
 		return adjecantCoors.get(new Random().nextInt(adjecantCoors.size()));
 	}
 }

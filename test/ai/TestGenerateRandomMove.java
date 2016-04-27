@@ -22,7 +22,7 @@ import piece.Owner;
 import piece.Rabbit;
 
 public class TestGenerateRandomMove {
-	private static final double ITERATION_SIZE = 50_000;
+	private static final double ITERATION_SIZE = 100_000;
 	private static final double RANDOM_MARGIN = 0.005;
 	private Ai normalAi;
 	private Ai catLoverAi;
@@ -130,8 +130,25 @@ public class TestGenerateRandomMove {
 	}
 
 	@Test
-	public void testGenerateRandomDirection() {
+	public void testGenerateRandomDirectionMiddle() {
 		Coordinate coor = new Coordinate(3, 6);
 		randomStressTest(0.25, () -> this.normalAi.generateRandomDirection(coor));
+	}
+
+	@Test
+	public void testGenerateRandomDirectionEdge() {
+		Coordinate coor = new Coordinate(3, 0);
+		randomStressTest(0.25, () -> this.normalAi.generateRandomDirection(coor));
+	}
+
+	@Test
+	public void testGenerateRandomDirectionCorner() {
+		Coordinate coor = new Coordinate(0, 0);
+		HashMap<Object, Double> expectedPercentages = new HashMap<Object, Double>();
+		expectedPercentages.put(coor.down(), 0.25);
+		expectedPercentages.put(coor.right(), 0.25);
+		expectedPercentages.put(coor.up(), 0.5);
+		
+		randomStressTest(expectedPercentages, () -> this.normalAi.generateRandomDirection(coor));
 	}
 }
