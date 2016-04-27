@@ -7,20 +7,20 @@ import piece.Owner;
 /**
  * Created by millerlj on 4/27/2016.
  */
-public class PushMove extends MoveCommand {
+public class PullMove extends MoveCommand {
 	private BoardState newBoard;
 	private Coordinate originalPlace;
 	private Coordinate newPlace;
-	private Coordinate pushPiecePlace;
+	private Coordinate pullPiecePlace;
 
-	public PushMove(BoardState board, Coordinate originalPlace, Coordinate newPlace, Coordinate pushPiecePlace,
+	public PullMove(BoardState board, Coordinate originalPlace, Coordinate newPlace, Coordinate pullPiecePlace,
 			Owner turn) {
 		this.turn = turn;
 		this.originalBoard = board.clone();
 		this.newBoard = board;
 		this.originalPlace = originalPlace;
 		this.newPlace = newPlace;
-		this.pushPiecePlace = pushPiecePlace;
+		this.pullPiecePlace = pullPiecePlace;
 	}
 
 	@Override
