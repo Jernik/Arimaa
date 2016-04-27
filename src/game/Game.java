@@ -134,14 +134,14 @@ public class Game {
 	}
 
     public boolean move(MoveCommand m){
-        if(m.isValidMove()) {
+        if(!m.isValidMove()) {
+            return false;
+        }
+        else{
             this.currentBoard = m.execute();
             this.moves.add(m);
             endMove();
             return true;
-        }
-        else{
-            return false;
         }
     }
 

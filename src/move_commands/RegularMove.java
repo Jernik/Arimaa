@@ -22,20 +22,8 @@ public class RegularMove extends MoveCommand {
 
 	@Override
 	public BoardState execute() {
-		AbstractPiece piece = this.originalBoard.getPieceAt(originalPlace);
-		if (isFrozen(originalPlace)) {
-			return originalBoard;
-		}
-		if ((piece instanceof Rabbit)) {
-			if (((piece.getOwner() == Owner.values()[0]) && (newPlace.equals(originalPlace.up())))
-					|| ((piece.getOwner() == Owner.values()[1]) && (newPlace.equals(originalPlace.down())))) {
-				// Cannot move a Rabbit backwards unless it has been dragged
-				return this.originalBoard;
-			}
-		}
-		if (!(originalPlace.isOrthogonallyAdjacentTo(newPlace)
-				&& this.originalBoard.getPieceAt(originalPlace).getOwner() == this.turn)) {
-				return this.originalBoard;
+		if(!isValidMove()){
+			return this.originalBoard;
 		}
 		this.newBoard.movePiece(originalPlace, newPlace);
 		return newBoard;

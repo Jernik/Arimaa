@@ -4,6 +4,9 @@ import game.BoardState;
 import game.Coordinate;
 import piece.Owner;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public abstract class MoveCommand {
 
 
@@ -26,15 +29,17 @@ public abstract class MoveCommand {
     }
 
     private boolean isNextToStrongerPiece(Coordinate pieceToMove, Owner player) {
-        for (int i = -1; i < 2; i++) {
-            for (int j = -1; j < 2; j++) {
-                Coordinate coor = new Coordinate(i + pieceToMove.getX(), j + pieceToMove.getY());
-                if (this.originalBoard.getPieceAt(coor) != null) {
-                    if (coor.isValid() && !coor.equals(pieceToMove)
-                            && this.originalBoard.getPieceAt(coor).getOwner() == player
-                            && this.originalBoard.getPieceAt(coor).isStrongerThan(this.originalBoard.getPieceAt(pieceToMove))) {
-                        return true;
-                    }
+        List<Coordinate> checkList = new ArrayList<>();
+        checkList.add(pieceToMove.up());
+        checkList.add(pieceToMove.down());
+        checkList.add(pieceToMove.left());
+        checkList.add(pieceToMove.right());
+        for(Coordinate coor:checkList){
+            if (this.originalBoard.getPieceAt(coor) != null) {
+                if (coor.isValid() && !coor.equals(pieceToMove)
+                        && this.originalBoard.getPieceAt(coor).getOwner() == player
+                        && this.originalBoard.getPieceAt(coor).isStrongerThan(this.originalBoard.getPieceAt(pieceToMove))) {
+                    return true;
                 }
             }
         }
