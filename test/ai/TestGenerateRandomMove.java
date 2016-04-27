@@ -2,6 +2,7 @@ package ai;
 
 import static org.junit.Assert.assertTrue;
 
+import java.lang.reflect.Method;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 
@@ -126,5 +127,11 @@ public class TestGenerateRandomMove {
 		expectedPercentages.put(new Rabbit(this.catLoverAi.getOwner()), 1 / 5.0);
 		randomStressTest(expectedPercentages,
 				() -> this.catLoverAi.getGame().getPieceAt(this.catLoverAi.generateRandomPieceCoor()));
+	}
+
+	@Test
+	public void testGenerateRandomDirection() {
+		Coordinate coor = new Coordinate(3, 6);
+		randomStressTest(0.25, () -> this.normalAi.generateRandomDirection(coor));
 	}
 }

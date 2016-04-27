@@ -1,5 +1,6 @@
 package ai;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -24,6 +25,14 @@ public class Ai {
 		}
 	}
 
+	interface returnsCoordinate {
+		public Coordinate execute();
+	}
+
+	interface returnsAbstractPiece {
+		public AbstractPiece execute();
+	}
+
 	public Ai(Owner owner, Game game) {
 		this.owner = owner;
 		this.game = game;
@@ -38,37 +47,41 @@ public class Ai {
 	}
 
 	public MoveCommand generateMove() {
-		return this.generateRandomMoveCommand(this.generateRandomPieceCoor());
+		return this.generateRandomMoveCommand(() -> this.generateRandomPieceCoor());
 	}
 
-	public Coordinate generateRandomPieceCoor() {
+	// default scope
+	// always returns a valid coor of one of the ai's pieces
+	Coordinate generateRandomPieceCoor() {
 		Set<Coordinate> coors = this.game.currentBoard.getAllCoordinates();
+		// removes all non ai controlled pieces
+		coors.removeIf((Coordinate coor) -> this.game.getPieceAt(coor).getOwner() != this.owner);
+
 		int randomIndex = new Random().nextInt(coors.size());
 		Iterator<Coordinate> iter = coors.iterator();
 		for (int i = 0; i < (randomIndex); i++) {
 			iter.next();
 		}
 		Coordinate randomCoor = iter.next();
-		AbstractPiece randomPiece = this.game.getPieceAt(randomCoor);
-		if (randomPiece.getOwner() == this.owner) {
-			return randomCoor;
-		}
-		return this.generateRandomPieceCoor();
+		return randomCoor;
 	}
 
-	private MoveCommand generateRandomMoveCommand(Coordinate pieceCoor) {
+	// default scope
+	MoveCommand generateRandomMoveCommand(returnsCoordinate pieceGenerator) {
 		// given a coordinate, get the piece, pick a direction
 		// if nothing, great -> regular move or pull
 		// if something -> push
+		Coordinate pieceCoor = pieceGenerator.execute();
 		AbstractPiece piece = this.game.getPieceAt(pieceCoor);
 		Coordinate randomDirection = this.generateRandomDirection(pieceCoor);
 		return null;
 	}
-
-	private Coordinate generateRandomDirection(Coordinate pieceCoor) {
-		ArrayList<Coordinate> adjecantCoors = new ArrayList<Coordinate> (Arrays.asList(new Coordinate[] { pieceCoor.down(), pieceCoor.up(), pieceCoor.left(),
-				pieceCoor.right() }));
-		adjecantCoors.removeIf((Coordinate coor) -> this.game.getPieceAt(coor).getOwner() == this.owner);
+	
+	// default scope
+	Coordinate generateRandomDirection(Coordinate coor) {
+		ArrayList<Coordinate> adjecantCoors = new ArrayList<Coordinate>(
+				Arrays.asList(new Coordinate[] { coor.down(), coor.up(), coor.left(), coor.right() }));
+		// adjecantCoors.removeIf((Coordinate coor) -> this.game.getPieceAt(coor).getOwner() == this.owner);
 		return adjecantCoors.get(new Random().nextInt(adjecantCoors.size()));
 	}
 }
