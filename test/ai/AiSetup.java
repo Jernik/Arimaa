@@ -8,6 +8,7 @@ import java.text.DecimalFormat;
 import java.util.HashMap;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.runners.MethodSorters;
 
@@ -25,12 +26,18 @@ import piece.Rabbit;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class AiSetup {
-	public static final double ITERATION_SIZE = 100_000;
-	public static final double RANDOM_MARGIN = 0.005;
+	public static double ITERATION_SIZE;
+	public static double RANDOM_MARGIN;
 	protected Ai normalAi;
 	protected Ai catLoverAi;
 	protected Ai notManyMovesAi;
 	protected Ai startingAi;
+
+	@BeforeClass
+	public static void setStressSettings() {
+		ITERATION_SIZE = 100_000;
+		RANDOM_MARGIN = 0.005;
+	}
 
 	@Before
 	public void setup() {
@@ -127,8 +134,9 @@ public class AiSetup {
 			double expectedHigh = Math.min(expectedPercent + RANDOM_MARGIN,
 					Math.max(100.0 - Double.MIN_NORMAL, expectedPercent));
 			double percent = countMap.get(obj);
-			String errorString = obj.toString() + " was outside of the expected range of " + df.format(expectedPercent * 100)
-					+ "% +- " + (RANDOM_MARGIN * 100) + "% with a percentage of " + (percent * 100) + "%";
+			String errorString = obj.toString() + " was outside of the expected range of "
+					+ df.format(expectedPercent * 100) + "% +- " + (RANDOM_MARGIN * 100) + "% with a percentage of "
+					+ (percent * 100) + "%";
 			if (expectedLow > percent || percent > expectedHigh) {
 				StackTraceElement methodName = Thread.currentThread().getStackTrace()[2];
 				System.err.println("FAIL " + methodName);
@@ -154,7 +162,7 @@ public class AiSetup {
 		for (Object obj : countMap.keySet()) {
 			countMap.put(obj, round(countMap.get(obj) / ITERATION_SIZE, 2));
 		}
-		
+
 		DecimalFormat df = new DecimalFormat("0.00");
 		for (Object obj : countMap.keySet()) {
 			double expectedPercent = expectedPercentages;
@@ -163,8 +171,9 @@ public class AiSetup {
 			double expectedHigh = Math.min(expectedPercent + RANDOM_MARGIN,
 					Math.max(100.0 - Double.MIN_NORMAL, expectedPercent));
 			double percent = countMap.get(obj);
-			String errorString = obj.toString() + " was outside of the expected range of " + df.format(expectedPercent * 100)
-					+ "% +- " + (RANDOM_MARGIN * 100) + "% with a percentage of " + (percent * 100) + "%";
+			String errorString = obj.toString() + " was outside of the expected range of "
+					+ df.format(expectedPercent * 100) + "% +- " + (RANDOM_MARGIN * 100) + "% with a percentage of "
+					+ (percent * 100) + "%";
 			if (expectedLow > percent || percent > expectedHigh) {
 				StackTraceElement methodName = Thread.currentThread().getStackTrace()[2];
 				System.err.println("FAIL " + methodName);
@@ -176,41 +185,29 @@ public class AiSetup {
 		}
 	}
 
+	public String getAiVarString(Ai ai) {
+		if (ai == this.normalAi) {
+			return "normalAi      ";
+		} else if (ai == this.catLoverAi) {
+			return "catLoverAi    ";
+		} else if (ai == this.notManyMovesAi) {
+			return "notManyMovesAi";
+		} else if (ai == this.startingAi) {
+			return "startingAi    ";
+		}
+		return "I don't know this AI, add it to the Ai Var string function";
+	}
+
 	/**
-	 * returns a string that gives the given time difference in easily read time units. The second time param is another
-	 * time which should have the same units
+	 * returns a string that gives the given time difference in miliseconds.
 	 * 
 	 * @param time
-	 * @param otherTime
 	 * @return
 	 */
-	public static String getTimeUnits(long time, long otherTime) {
+	public static String getTimeUnits(long time) {
 		double newTime = time;
-		double newOtherTime = otherTime;
-		if (time < 1000 || newOtherTime < 1000) {
-			return String.format("%d NanoSeconds", time);
-		}
-		newTime = time / 1000.0;
-		newOtherTime = otherTime / 1000.0;
-		if (newTime < 1000 || newOtherTime < 1000) {
-			return String.format("%.3f MicroSeconds", newTime);
-		}
-		newTime /= 1000.0;
-		newOtherTime = otherTime / 1000.0;
-		if (newTime < 1000 || newOtherTime < 1000) {
-			return String.format("%.3f MiliSeconds", newTime);
-		}
-		newTime /= 1000.0;
-		newOtherTime = otherTime / 1000.0;
-		if (newTime < 300 || newOtherTime < 300) {
-			return String.format("%.3f Seconds", newTime);
-		}
-		newTime /= 60.0;
-		newOtherTime = otherTime / 1000.0;
-		if (newTime < 180 || newOtherTime < 180) {
-			return String.format("%.3f Minutes", newTime);
-		}
-		return String.format("%.3f Hours", newTime / 60.0);
+		newTime = time / 1_000_000.0;
+		return String.format("%.3f MiliSeconds", newTime);
 	}
 
 	public static double round(double value, int places) {

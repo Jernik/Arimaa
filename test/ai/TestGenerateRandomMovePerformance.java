@@ -2,11 +2,27 @@ package ai;
 
 import static org.junit.Assert.assertTrue;
 
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestGenerateRandomMovePerformance extends AiSetup {
+	@BeforeClass
+	public static void setupStressSettings() {
+		ITERATION_SIZE = 100_000;
+	}
+
+	@AfterClass
+	public static void print() {
+		System.out.println();
+	}
+
 	private void testHardPerformance(Ai ai) {
 		long maxTime = 0;
+		String aiVarString = getAiVarString(ai);
 		for (int i = 0; i < ITERATION_SIZE; i++) {
 			long start = System.nanoTime();
 			ai.generateMove();
@@ -14,45 +30,35 @@ public class TestGenerateRandomMovePerformance extends AiSetup {
 			if (time > maxTime) {
 				maxTime = time;
 			}
-			String errorString = "this.normalAi.generateMove() exceeded the HARD_TIME_LIMIT of "
-					+ getTimeUnits(Ai.HARD_TIME_LIMIT, time) + " by taking " + getTimeUnits(time, Ai.HARD_TIME_LIMIT);
+			String errorString = "this." + aiVarString + ".generateMove() exceeded the HARD_TIME_LIMIT of "
+					+ getTimeUnits(Ai.HARD_TIME_LIMIT) + " by taking " + getTimeUnits(time);
 			if (time > Ai.HARD_TIME_LIMIT) {
-				System.err.println(
-						"FAIL longest normal move generation time was " + getTimeUnits(time, Ai.HARD_TIME_LIMIT)
-								+ ", it should be under " + getTimeUnits(Ai.HARD_TIME_LIMIT, time));
-				System.out.println();
-				System.err.println();
+				System.err.println("FAIL longest " + aiVarString + " move generation time was " + getTimeUnits(time)
+						+ ", it should be under " + getTimeUnits(Ai.HARD_TIME_LIMIT));
 			}
 			assertTrue(errorString, time <= Ai.HARD_TIME_LIMIT);
 		}
-		System.out.println("PASS longest normal move generation time was " + getTimeUnits(maxTime, Ai.HARD_TIME_LIMIT)
-				+ ", it should be under " + getTimeUnits(Ai.HARD_TIME_LIMIT, maxTime));
-		System.out.println();
-		System.err.println();
+		System.out.println("PASS longest " + aiVarString + " move generation time was " + getTimeUnits(maxTime)
+				+ ", it should be under " + getTimeUnits(Ai.HARD_TIME_LIMIT));
 	}
 
 	private void testSoftPerformance(Ai ai) {
 		long start = System.nanoTime();
+		String aiVarString = getAiVarString(ai);
 		for (int i = 0; i < ITERATION_SIZE; i++) {
 			ai.generateMove();
 		}
 		long time = System.nanoTime() - start;
 		long avgTime = (long) (time / ITERATION_SIZE);
-		String errorString = "this.startingAi.generateMove() exceeded the AVERAGE_TIME_LIMIT of "
-				+ getTimeUnits(Ai.AVERAGE_TIME_LIMIT, avgTime) + " by taking "
-				+ getTimeUnits(avgTime, Ai.AVERAGE_TIME_LIMIT);
+		String errorString = "this." + aiVarString + ".generateMove() exceeded the AVERAGE_TIME_LIMIT of "
+				+ getTimeUnits(Ai.AVERAGE_TIME_LIMIT) + " by taking " + getTimeUnits(avgTime);
 		if (avgTime > Ai.AVERAGE_TIME_LIMIT) {
-			System.err.println(
-					"FAIL average starting move generation time was " + getTimeUnits(avgTime, Ai.AVERAGE_TIME_LIMIT)
-							+ ", it should be under " + getTimeUnits(Ai.AVERAGE_TIME_LIMIT, avgTime));
-			System.out.println();
-			System.err.println();
+			System.err.println("FAIL average " + aiVarString + " move generation time was " + getTimeUnits(avgTime)
+					+ ", it should be under " + getTimeUnits(Ai.AVERAGE_TIME_LIMIT));
 		}
 		assertTrue(errorString, avgTime <= Ai.AVERAGE_TIME_LIMIT);
-		System.out.println("PASS average starting generation time was  " + getTimeUnits(avgTime, Ai.AVERAGE_TIME_LIMIT)
-				+ ", it should be under " + getTimeUnits(Ai.AVERAGE_TIME_LIMIT, avgTime));
-		System.out.println();
-		System.err.println();
+		System.out.println("PASS average " + aiVarString + " move generation time was " + getTimeUnits(avgTime)
+				+ ", it should be under " + getTimeUnits(Ai.AVERAGE_TIME_LIMIT));
 	}
 
 	@Test

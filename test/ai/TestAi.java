@@ -5,7 +5,10 @@ import static org.junit.Assert.assertNotNull;
 
 import java.util.HashMap;
 
+import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 
 import game.Coordinate;
 import game.Game;
@@ -18,7 +21,14 @@ import piece.Horse;
 import piece.Owner;
 import piece.Rabbit;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestAi extends AiSetup {
+	@BeforeClass
+	public static void setupStressSettings() {
+		RANDOM_MARGIN = 0.01;
+		ITERATION_SIZE = 10_000;
+	}
+
 	@Test
 	public void testConstructor() {
 		Ai ai = new Ai(Owner.Player2, new Game());
