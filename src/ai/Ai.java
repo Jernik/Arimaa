@@ -16,7 +16,7 @@ import piece.AbstractPiece;
 import piece.Owner;
 
 public class Ai {
-	public static final long HARD_TIME_LIMIT = 25_000_000;// ns, 25 miliseconds
+	public static final long HARD_TIME_LIMIT = 100_000_000;// ns, 100 miliseconds
 	public static final long AVERAGE_TIME_LIMIT = 500_000;// ns, 0.5 miliseconds
 	private Owner owner;
 	private Game game;
