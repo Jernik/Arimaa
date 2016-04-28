@@ -20,13 +20,6 @@ public class Ai {
 	private Owner owner;
 	private Game game;
 
-	enum MoveType {
-		Regular, Push, Pull;
-		static MoveType getRandomMoveType() {
-			return MoveType.values()[MoveType.values().length];
-		}
-	}
-
 	public Ai(Owner owner, Game game) {
 		this.owner = owner;
 		this.game = game;
