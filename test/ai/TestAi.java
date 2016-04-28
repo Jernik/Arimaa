@@ -121,5 +121,4 @@ public class TestAi extends AiSetup {
 		randomStressTest(expectedPercentages,
 				() -> this.startingAi.getGame().getPieceAt(this.startingAi.generateRandomPieceCoor()));
 	}
-
 }
