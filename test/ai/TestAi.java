@@ -2,6 +2,7 @@ package ai;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.HashMap;
 
@@ -130,5 +131,20 @@ public class TestAi extends AiSetup {
 
 		randomStressTest(expectedPercentages,
 				() -> this.startingAi.getGame().getPieceAt(this.startingAi.generateRandomPieceCoor()));
+	}
+
+	@Test
+	public void testGenerateMoveDoesNotMutateBoardState() {
+		for (int i = 0; i < ITERATION_SIZE; i++) {
+			this.normalAi.generateMove();
+			Game game = this.normalAi.getGame();
+			boolean hasOwner1 = false;
+			for (Coordinate coor : game.getBoardState().getAllCoordinates()) {
+				if (game.getPieceAt(coor).getOwner() == Owner.Player1) {
+					hasOwner1 = true;
+				}
+			}
+			assertTrue(hasOwner1);
+		}
 	}
 }

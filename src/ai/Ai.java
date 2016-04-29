@@ -2,6 +2,7 @@ package ai;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.Set;
@@ -100,7 +101,7 @@ public class Ai {
 	 */
 	// default scope
 	Coordinate generateRandomPieceCoor() {
-		Set<Coordinate> coors = this.game.currentBoard.getAllCoordinates();
+		Set<Coordinate> coors = new HashSet<Coordinate>(this.game.currentBoard.getAllCoordinates());
 		// removes all non ai controlled pieces
 		coors.removeIf((Coordinate coor) -> this.game.getPieceAt(coor).getOwner() != this.owner);
 
