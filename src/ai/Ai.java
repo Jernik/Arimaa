@@ -2,6 +2,7 @@ package ai;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.Set;
@@ -12,30 +13,13 @@ import move_commands.MoveCommand;
 import move_commands.PullMove;
 import move_commands.PushMove;
 import move_commands.RegularMove;
-import piece.AbstractPiece;
 import piece.Owner;
 
 public class Ai {
-	public static final long HARD_TIME_LIMIT = 25_000_000;// ns, 25 miliseconds
+	public static final long HARD_TIME_LIMIT = 100_000_000;// ns, 100 miliseconds
 	public static final long AVERAGE_TIME_LIMIT = 500_000;// ns, 0.5 miliseconds
 	private Owner owner;
 	private Game game;
-	private int times;
-
-	enum MoveType {
-		Regular, Push, Pull;
-		static MoveType getRandomMoveType() {
-			return MoveType.values()[MoveType.values().length];
-		}
-	}
-
-	interface returnsCoordinate {
-		public Coordinate execute();
-	}
-
-	interface returnsAbstractPiece {
-		public AbstractPiece execute();
-	}
 
 	public Ai(Owner owner, Game game) {
 		this.owner = owner;
@@ -56,9 +40,7 @@ public class Ai {
 	 * @return
 	 */
 	public MoveCommand generateMove() {
-		this.times++;
 		Coordinate pieceCoor = this.generateRandomPieceCoor();
-		AbstractPiece piece = this.game.getPieceAt(pieceCoor);
 		Coordinate randomDirection = this.generateRandomDirection(pieceCoor);
 		if (!randomDirection.isValid()) {
 			// can't move here because its off the board, try again
@@ -100,7 +82,11 @@ public class Ai {
 		}
 		// use regular method
 		MoveCommand regularMove = new RegularMove(this.game.getBoardState(), pieceCoor, randomDirection, this.owner);
-		return regularMove;
+		if (regularMove.isValidMove()) {
+			return regularMove;
+		}
+		// invalid regular move, try again
+		return this.generateMove();
 	}
 
 	// 1 / 4 chance of generating pull, 3 possible pull moves, and 1 regular move
@@ -115,7 +101,7 @@ public class Ai {
 	 */
 	// default scope
 	Coordinate generateRandomPieceCoor() {
-		Set<Coordinate> coors = this.game.currentBoard.getAllCoordinates();
+		Set<Coordinate> coors = new HashSet<Coordinate>(this.game.currentBoard.getAllCoordinates());
 		// removes all non ai controlled pieces
 		coors.removeIf((Coordinate coor) -> this.game.getPieceAt(coor).getOwner() != this.owner);
 
