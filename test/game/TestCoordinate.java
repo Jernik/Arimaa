@@ -110,9 +110,6 @@ public class TestCoordinate {
 		assertNotEquals(valid, invalid2);
 		assertNotEquals(invalid1, valid);
 		assertNotEquals(invalid2, valid);
-		
-		assertNotEquals(invalid1, invalid1);
-		assertNotEquals(invalid2, invalid2);
 	}
 	
 	@Test
