@@ -62,42 +62,42 @@ public class TestGenerateRandomMovePerformance extends AiSetup {
 	}
 
 	@Test
-	public void testNormalHardPerformanceLimit() {
+	public void testHardPerformanceLimitNormal() {
 		testHardPerformance(this.normalAi);
 	}
 
 	@Test
-	public void testNormalSoftPerformanceLimit() {
+	public void testSoftPerformanceLimitNormal() {
 		this.testSoftPerformance(this.normalAi);
 	}
 
 	@Test
-	public void testKatLoverHardPerformanceLimit() {
+	public void testHardPerformanceLimitKatLover() {
 		this.testHardPerformance(this.catLoverAi);
 	}
 
 	@Test
-	public void testKatLoverSoftPerformanceLimit() {
+	public void testSoftPerformanceLimitKatLover() {
 		this.testSoftPerformance(this.catLoverAi);
 	}
 
 	@Test
-	public void testNotManyMovesHardPerformanceLimit() {
+	public void testHardPerformanceLimitNotManyMoves() {
 		this.testHardPerformance(this.notManyMovesAi);
 	}
 
 	@Test
-	public void testNotManyMovesSoftPerformanceLimit() {
+	public void testSoftPerformanceLimitNotManyMoves() {
 		this.testSoftPerformance(this.notManyMovesAi);
 	}
 
 	@Test
-	public void testStartingHardPerformanceLimit() {
+	public void testHardPerformanceLimitStarting() {
 		this.testHardPerformance(this.startingAi);
 	}
 
 	@Test
-	public void testStartingSoftPerformanceLimit() {
+	public void testSoftPerformanceLimitStarting() {
 		testSoftPerformance(this.startingAi);
 	}
 }

@@ -8,19 +8,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class MoveCommand {
-
-
-    Owner turn;
-
+    protected Owner turn;
     protected BoardState originalBoard;
-
     abstract public BoardState execute();
-
-    abstract public BoardState getOriginalBoard();
-
     abstract public boolean isValidMove();
 
-    protected boolean isFrozen(Coordinate pieceToMove) {
+    public Owner getTurn() {
+		return turn;
+	}
+    
+    public BoardState getOriginalBoard() {
+    	return this.originalBoard;
+    }
+    
+	protected boolean isFrozen(Coordinate pieceToMove) {
         if (!isNextToStrongerPiece(pieceToMove, this.turn)
                 && isNextToStrongerPiece(pieceToMove, this.getOtherOwner())) {
             return true;
@@ -51,6 +52,25 @@ public abstract class MoveCommand {
         } else {
             return Owner.values()[0];
         }
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+    	if(!(o instanceof MoveCommand))
+			return false;
+		
+		MoveCommand moveCommand = (MoveCommand)o;
+		
+		return this.eq(moveCommand) && moveCommand.eq(this);    	
+    }
+    
+    protected boolean eq(MoveCommand moveCommand) {
+    	return this.turn.equals(moveCommand.getTurn()) && this.originalBoard.equals(moveCommand.getOriginalBoard());
+    }
+    
+    @Override
+    public int hashCode() {
+    	return this.turn.hashCode() + this.originalBoard.hashCode();
     }
 
 //	public boolean isValidMove();
