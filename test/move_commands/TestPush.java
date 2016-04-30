@@ -124,50 +124,50 @@ public class TestPush {
 	@Test
 	public void testPushWithDifferentDirections() {
 		assertTrue(pushingGame.push(4, 5, 1, 0));
-		assertEquals(new Elephant(Owner.Player1), pushingGame.getSpace(4, 6));
-		assertEquals(new Camel(Owner.Player2), pushingGame.getSpace(3, 6));
+		assertEquals(new Elephant(Owner.Player1), pushingGame.getPieceAt(new Coordinate(4, 6)));
+		assertEquals(new Camel(Owner.Player2), pushingGame.getPieceAt(new Coordinate(3, 6)));
 	}
 
 	@Test
 	public void testPushUpWithSamePlayersPieces() {
 		assertFalse(pushingGame.push(2, 2, 0, 0));
-		assertEquals(new Elephant(Owner.Player1), pushingGame.getSpace(2, 2));
-		assertEquals(new Rabbit(Owner.Player1), pushingGame.getSpace(1, 2));
+		assertEquals(new Elephant(Owner.Player1), pushingGame.getPieceAt(new Coordinate(2, 2)));
+		assertEquals(new Rabbit(Owner.Player1), pushingGame.getPieceAt(new Coordinate(1, 2)));
 	}
 
 	@Test
 	public void testPushRightWithSamePlayersPieces() {
 		assertFalse(pushingGame.push(2, 2, 1, 1));
-		assertEquals(new Elephant(Owner.Player1), pushingGame.getSpace(2, 2));
-		assertEquals(new Rabbit(Owner.Player1), pushingGame.getSpace(2, 3));
+		assertEquals(new Elephant(Owner.Player1), pushingGame.getPieceAt(new Coordinate(2, 2)));
+		assertEquals(new Rabbit(Owner.Player1), pushingGame.getPieceAt(new Coordinate(2, 3)));
 	}
 
 	@Test
 	public void testPushDownWithSamePlayersPieces() {
 		assertFalse(pushingGame.push(2, 2, 2, 2));
-		assertEquals(new Elephant(Owner.Player1), pushingGame.getSpace(2, 2));
-		assertEquals(new Rabbit(Owner.Player1), pushingGame.getSpace(3, 2));
+		assertEquals(new Elephant(Owner.Player1), pushingGame.getPieceAt(new Coordinate(2, 2)));
+		assertEquals(new Rabbit(Owner.Player1), pushingGame.getPieceAt(new Coordinate(3, 2)));
 	}
 
 	@Test
 	public void testPushLeftWithSamePlayersPieces() {
 		assertFalse(pushingGame.push(2, 2, 3, 3));
-		assertEquals(new Elephant(Owner.Player1), pushingGame.getSpace(2, 2));
-		assertEquals(new Rabbit(Owner.Player1), pushingGame.getSpace(2, 1));
+		assertEquals(new Elephant(Owner.Player1), pushingGame.getPieceAt(new Coordinate(2, 2)));
+		assertEquals(new Rabbit(Owner.Player1), pushingGame.getPieceAt(new Coordinate(2, 1)));
 	}
 
 	@Test
 	public void testThatPiecesMustBeStronpushingGameerToPushUp() {
 		assertFalse(pushingGame.push(6, 3, 0, 0));
-		assertEquals(new Rabbit(Owner.Player2), pushingGame.getSpace(6, 3));
-		assertEquals(new Camel(Owner.Player1), pushingGame.getSpace(5, 3));
+		assertEquals(new Rabbit(Owner.Player2), pushingGame.getPieceAt(new Coordinate(6, 3)));
+		assertEquals(new Camel(Owner.Player1), pushingGame.getPieceAt(new Coordinate(5, 3)));
 	}
 
 	@Test
 	public void testThatPiecesMustBeStronpushingGameerToPushRipushingGameht() {
 		assertFalse(pushingGame.push(6, 3, 1, 1));
-		assertEquals(new Rabbit(Owner.Player2), pushingGame.getSpace(6, 3));
-		assertEquals(new Camel(Owner.Player1), pushingGame.getSpace(6, 4));
+		assertEquals(new Rabbit(Owner.Player2), pushingGame.getPieceAt(new Coordinate(6, 3)));
+		assertEquals(new Camel(Owner.Player1), pushingGame.getPieceAt(new Coordinate(6, 4)));
 	}
 
 	@Test
@@ -176,8 +176,8 @@ public class TestPush {
 		assertFalse(pushingGame.push(6, 3, 2, 1));
 		assertFalse(pushingGame.push(6, 3, 2, 2));
 		assertFalse(pushingGame.push(6, 3, 2, 3));
-		assertEquals(new Rabbit(Owner.Player2), pushingGame.getSpace(6, 3));
-		assertEquals(new Camel(Owner.Player1), pushingGame.getSpace(7, 3));
+		assertEquals(new Rabbit(Owner.Player2), pushingGame.getPieceAt(new Coordinate(6, 3)));
+		assertEquals(new Camel(Owner.Player1), pushingGame.getPieceAt(new Coordinate(7, 3)));
 	}
 
 	@Test
@@ -186,8 +186,8 @@ public class TestPush {
 		assertFalse(pushingGame.push(6, 3, 3, 1));
 		assertFalse(pushingGame.push(6, 3, 3, 2));
 		assertFalse(pushingGame.push(6, 3, 3, 3));
-		assertEquals(new Rabbit(Owner.Player2), pushingGame.getSpace(6, 3));
-		assertEquals(new Camel(Owner.Player1), pushingGame.getSpace(6, 2));
+		assertEquals(new Rabbit(Owner.Player2), pushingGame.getPieceAt(new Coordinate(6, 3)));
+		assertEquals(new Camel(Owner.Player1), pushingGame.getPieceAt(new Coordinate(6, 2)));
 	}
 	
 	@Test
