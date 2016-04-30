@@ -47,6 +47,9 @@ public class RegularMove extends MoveCommand {
 		if (isFrozen(originalPlace)) {
 			return false;
 		}
+		if (this.originalBoard.pieceAt(newPlace)) {
+			return false;
+		}
 		if ((piece instanceof Rabbit)) {
 			if (((piece.getOwner() == Owner.values()[0]) && (newPlace.equals(originalPlace.up())))
 					|| ((piece.getOwner() == Owner.values()[1]) && (newPlace.equals(originalPlace.down())))) {
@@ -76,15 +79,4 @@ public class RegularMove extends MoveCommand {
 	public int hashCode() {
 		return super.hashCode() + this.newBoard.hashCode() + this.originalPlace.hashCode() + this.newPlace.hashCode();
 	}
-
-	// @Override
-	// public boolean isValidMove() {
-	// int row = this.newPlace.getX();
-	// int column = this.newPlace.getY();
-	// if (row >= 0 && row < 8 && column >= 0 && column < 8
-	// && !originalBoard.pieceAt(this.newPlace))
-	// return true;
-	// return false;
-	// }
-
 }

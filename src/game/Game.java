@@ -133,21 +133,17 @@ public class Game {
 		return this.currentBoard.pieceAt(coor);
 	}
 
-    public boolean move(MoveCommand m){
-        if(!m.isValidMove()) {
-            return false;
-        }
-        else{
-            this.currentBoard = m.execute();
-            this.moves.add(m);
-            endMove();
-            return true;
-        }
-    }
+	public boolean move(MoveCommand m) {
+		if (!m.isValidMove()) {
+			return false;
+		} else {
+			this.currentBoard = m.execute();
+			this.moves.add(m);
+			endMove();
+			return true;
+		}
+	}
 
-	
-	
-	
 	/**
 	 * 
 	 * @param ownerPiece
@@ -174,14 +170,18 @@ public class Game {
 					&& (this.checkStrongerAdjacent(ownerPiece, opponentPiece))) {
 				// Is the destination next to your piece?
 				if (ownerPiece.isOrthogonallyAdjacentTo(destination)) {
-					RegularMove yourPiece = new RegularMove(this.currentBoard, ownerPiece, destination, this.getOwner());
-					RegularMove theirPiece = new RegularMove(this.currentBoard, opponentPiece, ownerPiece, this.getOwner());
+					RegularMove yourPiece = new RegularMove(this.currentBoard, ownerPiece, destination,
+							this.getOwner());
+					RegularMove theirPiece = new RegularMove(this.currentBoard, opponentPiece, ownerPiece,
+							this.getOwner());
 					pushOrPullMove(yourPiece, theirPiece);
 					return true;
 					// Or is it next to their piece?
 				} else if (opponentPiece.isOrthogonallyAdjacentTo(destination)) {
-					RegularMove theirPiece = new RegularMove(this.currentBoard, opponentPiece, destination, this.getOwner());
-					RegularMove yourPiece = new RegularMove(this.currentBoard, ownerPiece, opponentPiece, this.getOwner());
+					RegularMove theirPiece = new RegularMove(this.currentBoard, opponentPiece, destination,
+							this.getOwner());
+					RegularMove yourPiece = new RegularMove(this.currentBoard, ownerPiece, opponentPiece,
+							this.getOwner());
 					pushOrPullMove(theirPiece, yourPiece);
 					return true;
 				} else
@@ -228,58 +228,72 @@ public class Game {
 	 * by the bottom row
 	 */
 	private void checkWin() {
-		if(this.getPlayerTurn() == 0){
+		if (this.getPlayerTurn() == 0) {
 			return;
 		}
+
+		//FIXME: I'll delete these comments after they've been acknowledged. 
 		
-		Owner lastPlayer = this.getPlayerTurn() == 1 ? Owner.Player1 : Owner.Player2;
+		// Owner lastPlayer = this.getPlayerTurn() == 1 ? Owner.Player1 :
+		// Owner.Player2;
+		// Doing it ^ this way actually doesn't make sense. Why should we ever
+		// check to see if anyone OTHER
+		// than player2 has a rabbit in the top row? That's not a win condition
+		// for player 1, so lastPlayer
+		// should never be capable of being player 1.
+		Owner lastPlayer = Owner.Player2;
 		for (int i = 0; i < 8; i++) {
 			if (this.currentBoard.pieceAt(new Coordinate(i, 0))) {
 				if (this.currentBoard.getPieceAt(new Coordinate(i, 0)).equals(new Rabbit(lastPlayer))) {
-					winner = this.getPlayerTurn();
+					winner = 2; // I hate to do this, but using player turn
+								// would be inconsistent since winning is not
+								// dependent on whose turn it currently is
 					return;
 				}
 			}
 		}
-		
-		Owner otherPlayer = this.getPlayerTurn() == 1 ? Owner.Player2 : Owner.Player1;
+
+		// Owner otherPlayer = this.getPlayerTurn() == 1 ? Owner.Player2 :
+		// Owner.Player1;
+		// Same thing here.
+		Owner otherPlayer = Owner.Player1;
 		for (int i = 0; i < 8; i++) {
 			if (this.currentBoard.pieceAt(new Coordinate(i, 7))) {
 				if (this.currentBoard.getPieceAt(new Coordinate(i, 7)).equals(new Rabbit(otherPlayer))) {
-					//Mapping from 1->2, 2->1
-					winner = 3 - this.getPlayerTurn();
+					// Mapping from 1->2, 2->1
+					winner = 1; //Same deal here. 
 					return;
 				}
 			}
 		}
-		
-		boolean lastRabbitExists = false;
-		boolean otherRabbitExists = false;
+
+		boolean player1Exists = false;
+		boolean player2Exists = false;
 		Set<Coordinate> coors = this.currentBoard.getAllCoordinates();
-		
-		for(Coordinate coor: coors) {
+
+		for (Coordinate coor : coors) {
 			AbstractPiece piece = this.currentBoard.getPieceAt(coor);
-			if(piece instanceof Rabbit) {
-				if(piece.getOwner() == lastPlayer) {
-					lastRabbitExists = true;
-				} else if (piece.getOwner() == otherPlayer) {
-					otherRabbitExists = true;
+			if (piece instanceof Rabbit) {
+				if (piece.getOwner() == Owner.Player1) {
+					player1Exists = true;
+				} else if (piece.getOwner() == Owner.Player2) {
+					player2Exists = true;
 				}
 			}
-		}		
-		if (!lastRabbitExists) {
-			winner = this.getPlayerTurn();
+		}
+		if (!player1Exists) {
+			winner = 2; //same deal as above
 			return;
 		}
-		if (!otherRabbitExists) {
-			winner = 3 - this.getPlayerTurn();
+		if (!player2Exists) {
+			winner = 1; //same deal as above
 			return;
 		}
 	}
 
 	/**
-	 * Piece death occurs when pieces are on the squares (2,2), (2,5), (5,2), (5,5), and has no friendly adjacent pieces
-	 * to it
+	 * Piece death occurs when pieces are on the squares (2,2), (2,5), (5,2),
+	 * (5,5), and has no friendly adjacent pieces to it
 	 */
 	private void checkDeaths(Coordinate toCheck) {
 		if (!this.currentBoard.pieceAt((toCheck)))
@@ -407,7 +421,8 @@ public class Game {
 			return false;
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
-				String s = ""; // + this.currentBoard.getBoardArray()[i][j] + ",";
+				String s = ""; // + this.currentBoard.getBoardArray()[i][j] +
+								// ",";
 				try {
 					fw.write(s);
 				} catch (IOException e) {
