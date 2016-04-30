@@ -1,7 +1,6 @@
 package game;
 
 import java.util.HashMap;
-import java.util.Random;
 import java.util.Set;
 
 import piece.AbstractPiece;
@@ -20,19 +19,21 @@ import piece.Rabbit;
  *
  */
 public class BoardState {
-	// Fields
 	public static final int MAX_BOARD_SIZE = 8;
 	private HashMap<Coordinate, AbstractPiece> pieces;
 
 	public BoardState() {
 		this.pieces = new HashMap<Coordinate, AbstractPiece>();
 		this.setUpDefaultBoardConfiguration();
-		
+
 	}
 
-	// maybe make this private?
 	public BoardState(HashMap<Coordinate, AbstractPiece> pieces) {
 		this.pieces = pieces;
+	}
+
+	public HashMap<Coordinate, AbstractPiece> getPieces() {
+		return this.pieces;
 	}
 
 	private void setUpDefaultBoardConfiguration() {
@@ -72,51 +73,7 @@ public class BoardState {
 		this.pieces.put(new Coordinate(6, 6), new Rabbit(Owner.Player2));
 		this.pieces.put(new Coordinate(7, 6), new Rabbit(Owner.Player2));
 	}
-	
-	// converter
-	@Deprecated
-	public BoardState(char[][] chars, int turns) {
-		System.out.println();
-		System.out.println("****************");
-		System.out.println();
-		int randId = new Random().nextInt(1000);
-		System.out.println(
-				"HashMap<Coordinate, AbstractPiece> p" + randId + " = new HashMap<Coordinate, AbstractPiece>();");
-		for (int y = 0; y < 8; y++) {
-			for (int x = 0; x < 8; x++) {
-				char piece = chars[y][x];
-				if (piece != ' ') {
-					String player = Character.isUpperCase(piece) ? "Owner.Player1" : "Owner.Player2";
-					piece = Character.toLowerCase(piece);
-					String clazz = "";
-					switch (piece) {
-					case 'r':
-						clazz = "Rabbit";
-						break;
-					case 'k':
-						clazz = "Cat";
-						break;
-					case 'd':
-						clazz = "Dog";
-						break;
-					case 'h':
-						clazz = "Horse";
-						break;
-					case 'c':
-						clazz = "Camel";
-						break;
-					case 'e':
-						clazz = "Elephant";
-						break;
-					}
-					System.out.println("p" + randId + ".put(new Coordinate(" + x + ", " + y + "), new " + clazz + "("
-							+ player + "));");
-				}
-			}
-			throw new RuntimeException("using the wrong constuctor");
-		}
-	}
-	
+
 	public Set<Coordinate> getAllCoordinates() {
 		return this.pieces.keySet();
 	}
@@ -152,7 +109,7 @@ public class BoardState {
 		}
 		return false;
 	}
-	
+
 	@Override
 	public BoardState clone() {
 		HashMap<Coordinate, AbstractPiece> copiedPieces = new HashMap<Coordinate, AbstractPiece>();
@@ -160,5 +117,19 @@ public class BoardState {
 			copiedPieces.put(new Coordinate(key), this.pieces.get(key));
 		}
 		return new BoardState(copiedPieces);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof BoardState)) {
+			return false;
+		}
+		BoardState other = (BoardState) o;
+		return this.pieces.equals(other.getPieces());
+	}
+
+	@Override
+	public int hashCode() {
+		return this.pieces.hashCode();
 	}
 }
