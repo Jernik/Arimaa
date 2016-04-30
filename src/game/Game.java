@@ -231,37 +231,20 @@ public class Game {
 		if (this.getPlayerTurn() == 0) {
 			return;
 		}
-
-		//FIXME: I'll delete these comments after they've been acknowledged. 
-		
-		// Owner lastPlayer = this.getPlayerTurn() == 1 ? Owner.Player1 :
-		// Owner.Player2;
-		// Doing it ^ this way actually doesn't make sense. Why should we ever
-		// check to see if anyone OTHER
-		// than player2 has a rabbit in the top row? That's not a win condition
-		// for player 1, so lastPlayer
-		// should never be capable of being player 1.
-		Owner lastPlayer = Owner.Player2;
+		Owner playerTwo = Owner.Player2;
 		for (int i = 0; i < 8; i++) {
 			if (this.currentBoard.pieceAt(new Coordinate(i, 0))) {
-				if (this.currentBoard.getPieceAt(new Coordinate(i, 0)).equals(new Rabbit(lastPlayer))) {
-					winner = 2; // I hate to do this, but using player turn
-								// would be inconsistent since winning is not
-								// dependent on whose turn it currently is
+				if (this.currentBoard.getPieceAt(new Coordinate(i, 0)).equals(new Rabbit(playerTwo))) {
+					winner = 2;
 					return;
 				}
 			}
 		}
-
-		// Owner otherPlayer = this.getPlayerTurn() == 1 ? Owner.Player2 :
-		// Owner.Player1;
-		// Same thing here.
-		Owner otherPlayer = Owner.Player1;
+		Owner playerOne = Owner.Player1;
 		for (int i = 0; i < 8; i++) {
 			if (this.currentBoard.pieceAt(new Coordinate(i, 7))) {
-				if (this.currentBoard.getPieceAt(new Coordinate(i, 7)).equals(new Rabbit(otherPlayer))) {
-					// Mapping from 1->2, 2->1
-					winner = 1; //Same deal here. 
+				if (this.currentBoard.getPieceAt(new Coordinate(i, 7)).equals(new Rabbit(playerOne))) {
+					winner = 1;
 					return;
 				}
 			}
@@ -282,11 +265,11 @@ public class Game {
 			}
 		}
 		if (!player1Exists) {
-			winner = 2; //same deal as above
+			winner = 2;
 			return;
 		}
 		if (!player2Exists) {
-			winner = 1; //same deal as above
+			winner = 1;
 			return;
 		}
 	}
