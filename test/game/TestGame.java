@@ -11,6 +11,8 @@ import java.util.HashMap;
 import org.junit.Before;
 import org.junit.Test;
 
+import move_commands.MoveCommand;
+import move_commands.RegularMove;
 import piece.AbstractPiece;
 import piece.Camel;
 import piece.Cat;
@@ -95,7 +97,11 @@ public class TestGame {
 
 		Game game = new Game(new BoardState(removeP));
 		// g.currentBoard.printBoard();
-		assertTrue(game.move(6, 3, 0));
+		Coordinate start = new Coordinate(3, 6);
+		Coordinate end = start.up();
+		Owner owner = game.getOwner();
+		MoveCommand move = new RegularMove(game.getBoardState(), start, end, owner);
+		assertTrue(game.move(move));
 		// g.currentBoard.printBoard();
 		assertFalse(game.checkCoor(2, 2));
 	}
@@ -116,9 +122,17 @@ public class TestGame {
 		removeP.put(new Coordinate(5, 2), new Camel(Owner.Player1));
 		removeP.put(new Coordinate(5, 1), new Dog(Owner.Player1));
 		Game game = new Game(new BoardState(removeP));
-		game.move(2, 2, 0);
+		Coordinate start = new Coordinate(2, 2);
+		Coordinate end = start.up();
+		Owner owner = game.getOwner();
+		MoveCommand move = new RegularMove(game.getBoardState(), start, end, owner);
+		game.move(move);
 		assertEquals(game.getPieceAt(new Coordinate(2, 5)), game.getPieceAt(new Coordinate(2, 5)));
-		game.move(1, 5, 0);
-		assertFalse(game.checkCoor(2, 5));
+		start = new Coordinate(5, 1);
+		end = start.up();
+		owner = game.getOwner();
+		move = new RegularMove(game.getBoardState(), start, end, owner);
+		game.move(move);
+		assertFalse(game.checkCoor(5, 1));
 	}
 }
