@@ -42,7 +42,7 @@ public class RegularMove extends MoveCommand {
 		if (isFrozen(originalPlace)) {
 			return false;
 		}
-		if (this.originalBoard.getPieceAt(newPlace) != null) {
+		if (this.originalBoard.pieceAt(newPlace)) {
 			return false;
 		}
 		if ((piece instanceof Rabbit)) {
