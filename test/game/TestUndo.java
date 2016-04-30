@@ -21,7 +21,7 @@ public class TestUndo {
 		Game standardStart = new Game();
 		g.move(1, 0, 2);
 		g.undoMove();
-		assertEquals(standardStart.getPieceAt(new Coordinate(1, 0)), g.getPieceAt(new Coordinate(1, 0)));
+		assertEquals(standardStart.getSpace(1, 0), g.getSpace(1, 0));
 	}
 
 	@Test
@@ -29,7 +29,7 @@ public class TestUndo {
 		g.move(1, 0, 2);
 		g.move(2, 0, 2);
 		g.undoMove();
-		assertEquals(new Rabbit(Owner.Player1), g.getPieceAt(new Coordinate(1, 0)));
+		assertEquals(new Rabbit(Owner.Player1), g.getSpace(1, 0));
 	}
 
 	@Test
@@ -38,7 +38,7 @@ public class TestUndo {
 		g.move(2, 0, 2);
 		g.move(3, 0, 2);
 		g.undoMove();
-		assertEquals(new Rabbit(Owner.Player1), g.getPieceAt(new Coordinate(1, 0)));
+		assertEquals(new Rabbit(Owner.Player1), g.getSpace(1, 0));
 	}
 
 	@Test
@@ -48,7 +48,7 @@ public class TestUndo {
 		g.move(3, 0, 2);
 		g.move(4, 0, 2);
 		g.undoMove();
-		assertEquals(new Rabbit(Owner.Player1), g.getPieceAt(new Coordinate(5, 0)));
+		assertEquals(new Rabbit(Owner.Player1), g.getSpace(5, 0));
 	}
 
 	@Test

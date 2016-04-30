@@ -110,9 +110,6 @@ public class TestCoordinate {
 		assertNotEquals(valid, invalid2);
 		assertNotEquals(invalid1, valid);
 		assertNotEquals(invalid2, valid);
-		
-		assertNotEquals(invalid1, invalid1);
-		assertNotEquals(invalid2, invalid2);
 	}
 	
 	@Test
@@ -139,65 +136,4 @@ public class TestCoordinate {
 		assertTrue(a.isOrthogonallyAdjacentTo(c));
 		assertFalse(a.isOrthogonallyAdjacentTo(d));
 	}
-	
-	@Test 
-	public void testUp() {
-		Coordinate a = new Coordinate(3, 3);
-		Coordinate b = new Coordinate(0, 0);
-		
-		Coordinate expected = new Coordinate(3, 2);
-		
-		assertEquals(expected, a.up());
-		assertTrue(expected.isValid());
-		
-		Coordinate falseExpected = b.up();
-		
-		assertFalse(falseExpected.isValid());
-	}
-	
-	@Test
-	public void testDown() {
-		Coordinate a = new Coordinate(3, 3);
-		Coordinate b = new Coordinate(7, 7);
-		
-		Coordinate expected = new Coordinate(3, 4);
-		
-		assertEquals(expected, a.down());
-		assertTrue(expected.isValid());
-		
-		Coordinate falseExpected = b.down();
-		
-		assertFalse(falseExpected.isValid());
-	}
-	
-	@Test
-	public void testLeft() {
-		Coordinate a = new Coordinate(3, 3);
-		Coordinate b = new Coordinate(0, 0);
-		
-		Coordinate expected = new Coordinate(2, 3);
-		
-		assertEquals(expected, a.left());
-		assertTrue(expected.isValid());
-		
-		Coordinate falseExpected = b.left();
-		
-		assertFalse(falseExpected.isValid());
-	}
-	
-	@Test
-	public void testRight() {
-		Coordinate a = new Coordinate(3, 3);
-		Coordinate b = new Coordinate(7, 7);
-		
-		Coordinate expected = new Coordinate(4, 3);
-		
-		assertEquals(expected, a.right());
-		assertTrue(expected.isValid());
-		
-		Coordinate falseExpected = b.right();
-		
-		assertFalse(falseExpected.isValid());
-	}
-	
 }

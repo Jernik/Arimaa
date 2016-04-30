@@ -63,15 +63,15 @@ public class TestPull {
 	@Test
 	public void testBasicPullUp() {
 		assertTrue(pullingGame.pull(5, 5, 6, 5, 0));
-		assertEquals(new Rabbit(Owner.Player2), pullingGame.getPieceAt(new Coordinate(5, 5)));
-		assertEquals(new Elephant(Owner.Player1), pullingGame.getPieceAt(new Coordinate(4, 5)));
+		assertEquals(new Rabbit(Owner.Player2), pullingGame.getSpace(5, 5));
+		assertEquals(new Elephant(Owner.Player1), pullingGame.getSpace(4, 5));
 	}
 
 	@Test
 	public void testBasicPullRight() {
 		assertTrue(pullingGame.pull(4, 4, 4, 3, 1));
-		assertEquals(new Rabbit(Owner.Player2), pullingGame.getPieceAt(new Coordinate(4, 4)));
-		assertEquals(new Elephant(Owner.Player1), pullingGame.getPieceAt(new Coordinate(4, 5)));
+		assertEquals(new Rabbit(Owner.Player2), pullingGame.getSpace(4, 4));
+		assertEquals(new Elephant(Owner.Player1), pullingGame.getSpace(4, 5));
 	}
 
 	@Test
@@ -79,15 +79,15 @@ public class TestPull {
 		// pullingGame.currentBoard.printBoard();
 		assertTrue(pullingGame.pull(3, 5, 2, 5, 2));
 		// pullingGame.currentBoard.printBoard();
-		assertEquals(new Rabbit(Owner.Player2), pullingGame.getPieceAt(new Coordinate(3, 5)));
-		assertEquals(new Elephant(Owner.Player1), pullingGame.getPieceAt(new Coordinate(4, 5)));
+		assertEquals(new Rabbit(Owner.Player2), pullingGame.getSpace(3, 5));
+		assertEquals(new Elephant(Owner.Player1), pullingGame.getSpace(4, 5));
 	}
 
 	@Test
 	public void testBasicPullLeft() {
 		assertTrue(pullingGame.pull(4, 6, 4, 7, 3));
-		assertEquals(new Rabbit(Owner.Player2), pullingGame.getPieceAt(new Coordinate(4, 6)));
-		assertEquals(new Elephant(Owner.Player1), pullingGame.getPieceAt(new Coordinate(4, 5)));
+		assertEquals(new Rabbit(Owner.Player2), pullingGame.getSpace(4, 6));
+		assertEquals(new Elephant(Owner.Player1), pullingGame.getSpace(4, 5));
 	}
 
 	@Test
@@ -183,42 +183,42 @@ public class TestPull {
 
 	@Test
 	public void testBidirectionalPullUpRight() {
-		AbstractPiece p1 = pullingGame.getPieceAt(new Coordinate(4, 4));
-		AbstractPiece p2 = pullingGame.getPieceAt(new Coordinate(4, 3));
+		AbstractPiece p1 = pullingGame.getSpace(4, 4);
+		AbstractPiece p2 = pullingGame.getSpace(4, 3);
 		assertTrue(pullingGame.pull(4, 4, 4, 3, 0));
-		assertEquals(p1, pullingGame.getPieceAt(new Coordinate(3, 4)));
-		assertEquals(p2, pullingGame.getPieceAt(new Coordinate(4, 4)));
+		assertEquals(p1, pullingGame.getSpace(3, 4));
+		assertEquals(p2, pullingGame.getSpace(4, 4));
 	}
 
 	@Test
 	public void testBidirectionalPullRightDown() {
-		AbstractPiece p1 = pullingGame.getPieceAt(new Coordinate(3, 5));
-		AbstractPiece p2 = pullingGame.getPieceAt(new Coordinate(2, 5));
+		AbstractPiece p1 = pullingGame.getSpace(3, 5);
+		AbstractPiece p2 = pullingGame.getSpace(2, 5);
 		assertTrue(pullingGame.pull(3, 5, 2, 5, 1));
-		assertEquals(p1, pullingGame.getPieceAt(new Coordinate(3, 6)));
-		assertEquals(p2, pullingGame.getPieceAt(new Coordinate(3, 5)));
+		assertEquals(p1, pullingGame.getSpace(3, 6));
+		assertEquals(p2, pullingGame.getSpace(3, 5));
 	}
 
 	@Test
 	public void testBidirectionalPullDownLeft() {
-		AbstractPiece p1 = pullingGame.getPieceAt(new Coordinate(4, 6));
-		AbstractPiece p2 = pullingGame.getPieceAt(new Coordinate(4, 7));
+		AbstractPiece p1 = pullingGame.getSpace(4, 6);
+		AbstractPiece p2 = pullingGame.getSpace(4, 7);
 		// pullingGame.currentBoard.printBoard();
 		assertTrue(pullingGame.pull(4, 6, 4, 7, 0));
 		// pullingGame.currentBoard.printBoard();
-		assertEquals(p1, pullingGame.getPieceAt(new Coordinate(3, 6)));
-		assertEquals(p2, pullingGame.getPieceAt(new Coordinate(4, 6)));
+		assertEquals(p1, pullingGame.getSpace(3, 6));
+		assertEquals(p2, pullingGame.getSpace(4, 6));
 	}
 
 	@Test
 	public void testBidirectionalPullLeftUp() {
 		// pullingGame.currentBoard.printBoard();
-		AbstractPiece p1 = pullingGame.getPieceAt(new Coordinate(5, 5));
-		AbstractPiece p2 = pullingGame.getPieceAt(new Coordinate(6, 5));
+		AbstractPiece p1 = pullingGame.getSpace(5, 5);
+		AbstractPiece p2 = pullingGame.getSpace(6, 5);
 		assertTrue(pullingGame.pull(5, 5, 6, 5, 3));
 		// pullingGame.currentBoard.printBoard();
-		assertEquals(p1, pullingGame.getPieceAt(new Coordinate(5, 4)));
-		assertEquals(p2, pullingGame.getPieceAt(new Coordinate(5, 5)));
+		assertEquals(p1, pullingGame.getSpace(5, 4));
+		assertEquals(p2, pullingGame.getSpace(5, 5));
 	}
 
 	@Test

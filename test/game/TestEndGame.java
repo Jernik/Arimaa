@@ -8,8 +8,6 @@ import java.util.HashMap;
 import org.junit.Before;
 import org.junit.Test;
 
-import move_commands.MoveCommand;
-import move_commands.RegularMove;
 import piece.AbstractPiece;
 import piece.Camel;
 import piece.Cat;
@@ -58,85 +56,37 @@ public class TestEndGame {
 	@Test
 	public void testPlayer2Win() {
 		game.setPlayerTurn(2);
-		Coordinate start = new Coordinate(1, 1);
-		Coordinate end = start.up();
-		Owner owner = game.getOwner();
-		MoveCommand move = new RegularMove(game.getBoardState(), start, end, owner); 
-		assertTrue(game.move(move));
+		assertTrue(game.move(1, 1, 0));
 		assertEquals(2, game.getWinner());
 	}
 
 	@Test
 	public void testPlayer1Win() {
-		Coordinate start = new Coordinate(1, 6);
-		Coordinate end = start.down();
-		Owner owner = game.getOwner();
-		MoveCommand move = new RegularMove(game.getBoardState(), start, end, owner); 
-		assertTrue(game.move(move));
+		assertTrue(game.move(6, 1, 2));
 		assertEquals(1, game.getWinner());
 	}
 
 	@Test
 	public void testWinWhenP1HasNoRabbits() {
-		Coordinate start = new Coordinate(1, 1);
-		Coordinate end = start.down();
-		Owner owner = game2.getOwner();
-		MoveCommand move = new RegularMove(game2.getBoardState(), start, end, owner); 
-		game2.move(move);
+		game2.move(1, 1, 2);
 		assertEquals(2, game2.getWinner());
 	}
 
 	@Test
 	public void testCheckFriendlyAdjacentDownCase() {
-		Coordinate start = new Coordinate(5, 1);
-		Coordinate end = start.right();
-		Owner owner = game2.getOwner();
-		MoveCommand move = new RegularMove(game2.getBoardState(), start, end, owner); 
-		assertTrue(game2.move(move));
+		assertTrue(game2.move(1, 5, 1));
 	}
 
 	@Test
 	public void testEndMove() {
 		Game g = new Game();
-		Coordinate start = new Coordinate(0,1);
-		Coordinate end = start.down();
-		Owner owner = g.getOwner();
-		MoveCommand move = new RegularMove(g.getBoardState(), start, end, owner); 
-		assertTrue(g.move(move));
-		start = new Coordinate(0, 2);
-		end = start.down();
-		owner = g.getOwner();
-		move = new RegularMove(g.getBoardState(), start, end, owner);
-		assertTrue(g.move(move));
-		start = new Coordinate(0, 3);
-		end = start.down();
-		owner = g.getOwner();
-		move = new RegularMove(g.getBoardState(), start, end, owner);
-		assertTrue(g.move(move));
-		start = new Coordinate(0, 4);
-		end = start.down();
-		owner = g.getOwner();
-		move = new RegularMove(g.getBoardState(), start, end, owner);
-		assertTrue(g.move(move));
-		start = new Coordinate(1, 6);
-		end = start.up();
-		owner = g.getOwner();
-		move = new RegularMove(g.getBoardState(), start, end, owner);
-		assertTrue(g.move(move));
-		start = new Coordinate(1, 5);
-		end = start.up();
-		owner = g.getOwner();
-		move = new RegularMove(g.getBoardState(), start, end, owner);
-		assertTrue(g.move(move));
-		start = new Coordinate(1, 4);
-		end = start.up();
-		owner = g.getOwner();
-		move = new RegularMove(g.getBoardState(), start, end, owner);
-		assertTrue(g.move(move));
-		start = new Coordinate(1, 3);
-		end = start.up();
-		owner = g.getOwner();
-		move = new RegularMove(g.getBoardState(), start, end, owner);
-		assertTrue(g.move(move));
+		assertTrue(g.move(1, 0, 2));
+		assertTrue(g.move(2, 0, 2));
+		assertTrue(g.move(3, 0, 2));
+		assertTrue(g.move(4, 0, 2));
+		assertTrue(g.move(6, 1, 0));
+		assertTrue(g.move(5, 1, 0));
+		assertTrue(g.move(4, 1, 0));
+		assertTrue(g.move(3, 1, 0));
 	}
 }
