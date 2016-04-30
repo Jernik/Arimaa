@@ -68,7 +68,7 @@ public class TestPush {
 		pp.put(new Coordinate(7, 0), new Elephant(Owner.Player2));
 		pushingGame = new Game(new BoardState(pp));
 	}
-	
+
 	@Test
 	public void testPushNotEnoughMoves() {
 		assertTrue(pushingGame.move(1, 7, 2));
@@ -189,7 +189,7 @@ public class TestPush {
 		assertEquals(new Rabbit(Owner.Player2), pushingGame.getPieceAt(new Coordinate(6, 3)));
 		assertEquals(new Camel(Owner.Player1), pushingGame.getPieceAt(new Coordinate(6, 2)));
 	}
-	
+
 	@Test
 	public void testCantPushPullWith1Move2() {
 		HashMap<Coordinate, AbstractPiece> pushPullP = new HashMap<Coordinate, AbstractPiece>();

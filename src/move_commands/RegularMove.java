@@ -22,14 +22,12 @@ public class RegularMove extends MoveCommand {
 
 	@Override
 	public BoardState execute() {
-		if(!isValidMove()){
+		if (!isValidMove()) {
 			return this.originalBoard;
 		}
 		this.newBoard.movePiece(originalPlace, newPlace);
 		return newBoard;
 	}
-
-
 
 	@Override
 	public BoardState getOriginalBoard() {
@@ -59,16 +57,16 @@ public class RegularMove extends MoveCommand {
 		return true;
 	}
 
-//	@Override
-//	public boolean isValidMove() {
-//		int row = this.newPlace.getX();
-//		int column = this.newPlace.getY();
-//		if (row >= 0 && row < 8 && column >= 0 && column < 8
-//				&& !originalBoard.pieceAt(this.newPlace))
-//			return true;
-//		return false;
-//	}
-	
+	// @Override
+	// public boolean isValidMove() {
+	// int row = this.newPlace.getX();
+	// int column = this.newPlace.getY();
+	// if (row >= 0 && row < 8 && column >= 0 && column < 8
+	// && !originalBoard.pieceAt(this.newPlace))
+	// return true;
+	// return false;
+	// }
+
 	public Coordinate getOriginalPlace() {
 		return this.originalPlace;
 	}

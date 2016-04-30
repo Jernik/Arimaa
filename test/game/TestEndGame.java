@@ -38,7 +38,7 @@ public class TestEndGame {
 		winP.put(new Coordinate(1, 1), new Rabbit(Owner.Player2));
 		winP.put(new Coordinate(5, 1), new Dog(Owner.Player1));
 		game = new Game(new BoardState(winP));
-		
+
 		HashMap<Coordinate, AbstractPiece> winP2 = new HashMap<Coordinate, AbstractPiece>();
 		winP2.put(new Coordinate(6, 7), new Cat(Owner.Player1));
 		winP2.put(new Coordinate(3, 6), new Dog(Owner.Player1));
@@ -54,14 +54,15 @@ public class TestEndGame {
 		winP2.put(new Coordinate(5, 1), new Dog(Owner.Player1));
 		game2 = new Game(new BoardState(winP2));
 	}
-	//move(int, int, int) used to be row,col,dir. dir enum: 0 = up, 1 = right, 2 = down, 3 = left
+
+	// move(int, int, int) used to be row,col,dir. dir enum: 0 = up, 1 = right, 2 = down, 3 = left
 	@Test
 	public void testPlayer2Win() {
 		game.setPlayerTurn(2);
 		Coordinate start = new Coordinate(1, 1);
 		Coordinate end = start.up();
 		Owner owner = game.getOwner();
-		MoveCommand move = new RegularMove(game.getBoardState(), start, end, owner); 
+		MoveCommand move = new RegularMove(game.getBoardState(), start, end, owner);
 		assertTrue(game.move(move));
 		assertEquals(2, game.getWinner());
 	}
@@ -71,7 +72,7 @@ public class TestEndGame {
 		Coordinate start = new Coordinate(1, 6);
 		Coordinate end = start.down();
 		Owner owner = game.getOwner();
-		MoveCommand move = new RegularMove(game.getBoardState(), start, end, owner); 
+		MoveCommand move = new RegularMove(game.getBoardState(), start, end, owner);
 		assertTrue(game.move(move));
 		assertEquals(1, game.getWinner());
 	}
@@ -81,7 +82,7 @@ public class TestEndGame {
 		Coordinate start = new Coordinate(1, 1);
 		Coordinate end = start.down();
 		Owner owner = game2.getOwner();
-		MoveCommand move = new RegularMove(game2.getBoardState(), start, end, owner); 
+		MoveCommand move = new RegularMove(game2.getBoardState(), start, end, owner);
 		game2.move(move);
 		assertEquals(2, game2.getWinner());
 	}
@@ -91,17 +92,17 @@ public class TestEndGame {
 		Coordinate start = new Coordinate(5, 1);
 		Coordinate end = start.right();
 		Owner owner = game2.getOwner();
-		MoveCommand move = new RegularMove(game2.getBoardState(), start, end, owner); 
+		MoveCommand move = new RegularMove(game2.getBoardState(), start, end, owner);
 		assertTrue(game2.move(move));
 	}
 
 	@Test
 	public void testEndMove() {
 		Game g = new Game();
-		Coordinate start = new Coordinate(0,1);
+		Coordinate start = new Coordinate(0, 1);
 		Coordinate end = start.down();
 		Owner owner = g.getOwner();
-		MoveCommand move = new RegularMove(g.getBoardState(), start, end, owner); 
+		MoveCommand move = new RegularMove(g.getBoardState(), start, end, owner);
 		assertTrue(g.move(move));
 		start = new Coordinate(0, 2);
 		end = start.down();

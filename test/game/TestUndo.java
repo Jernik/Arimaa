@@ -15,7 +15,7 @@ public class TestUndo {
 	public void setup() {
 		g = new Game();
 	}
-	
+
 	@Test
 	public void testBaseUndoCase() {
 		Game standardStart = new Game();
