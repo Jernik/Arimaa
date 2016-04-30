@@ -38,7 +38,7 @@ public class TestMove {
 		BoardState fb = new BoardState(fp);
 		freezingGame = new Game(fb);
 	}
-	
+
 	@Test
 	public void testMoveLegal() {
 		HashMap<Coordinate, AbstractPiece> p1 = new HashMap<Coordinate, AbstractPiece>();
@@ -51,12 +51,12 @@ public class TestMove {
 		Game g1 = new Game(b1);
 
 		assertEquals(new Cat(Owner.Player1), g1.getPieceAt(new Coordinate(7, 7)));
-		
+
 		Coordinate start = new Coordinate(7, 7);
 		Coordinate end = new Coordinate(7, 6);
 		Owner owner = g1.getOwner();
 		MoveCommand move = new RegularMove(g1.getBoardState(), start, end, owner);
-		
+
 		assertTrue(g1.move(move));
 		assertEquals(new Cat(Owner.Player1), g1.getPieceAt(new Coordinate(6, 7)));
 		assertFalse(g1.checkCoor(7, 7));
@@ -68,19 +68,19 @@ public class TestMove {
 		Coordinate end = new Coordinate(7, 6);
 		Owner owner = g.getOwner();
 		MoveCommand move = new RegularMove(g.getBoardState(), start, end, owner);
-		
+
 		assertFalse(g.move(move));
 	}
 
 	@Test
 	public void testMoveIllegalDown() {
 		g.setPlayerTurn(2);
-		
+
 		Coordinate start = new Coordinate(7, 7);
 		Coordinate end = start.down();
 		Owner owner = g.getOwner();
 		MoveCommand move = new RegularMove(g.getBoardState(), start, end, owner);
-		
+
 		assertFalse(g.move(move));
 	}
 
@@ -90,7 +90,7 @@ public class TestMove {
 		Coordinate end = start.up();
 		Owner owner = g.getOwner();
 		MoveCommand move = new RegularMove(g.getBoardState(), start, end, owner);
-		
+
 		assertFalse(g.move(move));
 
 	}
@@ -129,7 +129,7 @@ public class TestMove {
 		Coordinate start = new Coordinate(0, 1);
 		Coordinate end = start.right();
 		Owner owner = g.getOwner();
-		MoveCommand move = new RegularMove(g.getBoardState(), start, end, owner); 
+		MoveCommand move = new RegularMove(g.getBoardState(), start, end, owner);
 		assertFalse(g.move(move));
 		assertEquals(new Rabbit(Owner.Player1), g.getPieceAt(new Coordinate(0, 1)));
 	}
@@ -140,7 +140,7 @@ public class TestMove {
 		Coordinate start = new Coordinate(0, 0);
 		Coordinate end = start.down();
 		Owner owner = g.getOwner();
-		MoveCommand move = new RegularMove(g.getBoardState(), start, end, owner); 
+		MoveCommand move = new RegularMove(g.getBoardState(), start, end, owner);
 		assertFalse(g.move(move));
 		assertEquals(new Cat(Owner.Player1), g.getPieceAt(new Coordinate(0, 0)));
 	}
@@ -151,7 +151,7 @@ public class TestMove {
 		Coordinate start = new Coordinate(0, 1);
 		Coordinate end = start.left();
 		Owner owner = g.getOwner();
-		MoveCommand move = new RegularMove(g.getBoardState(), start, end, owner); 
+		MoveCommand move = new RegularMove(g.getBoardState(), start, end, owner);
 		assertFalse(g.move(move));
 		assertEquals(new Dog(Owner.Player1), g.getPieceAt(new Coordinate(1, 0)));
 	}
@@ -161,7 +161,7 @@ public class TestMove {
 		Coordinate start = new Coordinate(3, 4);
 		Coordinate end = start.left();
 		Owner owner = freezingGame.getOwner();
-		MoveCommand move = new RegularMove(freezingGame.getBoardState(), start, end, owner); 
+		MoveCommand move = new RegularMove(freezingGame.getBoardState(), start, end, owner);
 		assertFalse(freezingGame.move(move));
 	}
 
@@ -170,7 +170,7 @@ public class TestMove {
 		Coordinate start = new Coordinate(4, 3);
 		Coordinate end = start.left();
 		Owner owner = freezingGame.getOwner();
-		MoveCommand move = new RegularMove(freezingGame.getBoardState(), start, end, owner); 
+		MoveCommand move = new RegularMove(freezingGame.getBoardState(), start, end, owner);
 		assertTrue(freezingGame.move(move));
 	}
 
@@ -179,7 +179,7 @@ public class TestMove {
 		Coordinate start = new Coordinate(3, 4);
 		Coordinate end = start.up();
 		Owner owner = freezingGame.getOwner();
-		MoveCommand move = new RegularMove(freezingGame.getBoardState(), start, end, owner); 
+		MoveCommand move = new RegularMove(freezingGame.getBoardState(), start, end, owner);
 		assertFalse(g.move(move));
 	}
 }
