@@ -29,19 +29,19 @@ public class PullMove extends MoveCommand {
 	}
 
 	public BoardState getNewBoard() {
-		return newBoard;
+		return this.newBoard;
 	}
 
 	public Coordinate getOriginalPlace() {
-		return originalPlace;
+		return this.originalPlace;
 	}
 
 	public Coordinate getNewPlace() {
-		return newPlace;
+		return this.newPlace;
 	}
 
 	public Coordinate getPullPiecePlace() {
-		return pullPiecePlace;
+		return this.pullPiecePlace;
 	}
 
 	// you should assume that you are given 3 random coordinates, that might or might not be valid

@@ -98,6 +98,6 @@ public class TestMoveCommandEquality {
 				new PushMove(this.board, new Coordinate(3, 3), new Coordinate(3, 4), new Coordinate(4, 4), this.otherOwner));
 
 		assertNotEquals(this.pushMove, this.regularMove);
-		assertNotEquals(this.pushMove, this.pushMove);
+		assertNotEquals(this.pushMove, this.pullMove);
 	}
 }

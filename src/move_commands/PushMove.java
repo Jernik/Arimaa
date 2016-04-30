@@ -28,9 +28,20 @@ public class PushMove extends MoveCommand {
 		return null;
 	}
 
-	@Override
-	public BoardState getOriginalBoard() {
-		return null;
+	public BoardState getNewBoard() {
+		return this.newBoard;
+	}
+
+	public Coordinate getOriginalPlace() {
+		return this.originalPlace;
+	}
+
+	public Coordinate getNewPlace() {
+		return this.newPlace;
+	}
+
+	public Coordinate getPushPiecePlace() {
+		return this.pushPiecePlace;
 	}
 
 	// you should assume that you are given 3 random coordinates, that might or might not be valid 
@@ -57,14 +68,14 @@ public class PushMove extends MoveCommand {
 	
 	@Override
 	public boolean eq(MoveCommand moveCommand) {
-		if (!(moveCommand instanceof PullMove)) {
+		if (!(moveCommand instanceof PushMove)) {
 			return false;
 		}
-		PullMove pushMove = (PullMove) moveCommand;
+		PushMove pushMove = (PushMove) moveCommand;
 		return super.eq(pushMove) && this.newBoard.equals(pushMove.getNewBoard())
 				&& this.originalPlace.equals(pushMove.getOriginalPlace())
 				&& this.newPlace.equals(pushMove.getNewPlace())
-				&& this.pushPiecePlace.equals(pushMove.getPullPiecePlace());
+				&& this.pushPiecePlace.equals(pushMove.getPushPiecePlace());
 	}
 	
 	@Override
