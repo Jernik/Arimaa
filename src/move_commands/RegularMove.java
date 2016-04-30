@@ -37,6 +37,7 @@ public class RegularMove extends MoveCommand {
 		if (!isValidMove()) {
 			return this.originalBoard;
 		}
+		this.executed();
 		this.newBoard.movePiece(originalPlace, newPlace);
 		return newBoard;
 	}
