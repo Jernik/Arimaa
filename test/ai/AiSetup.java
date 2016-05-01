@@ -1,6 +1,6 @@
 package ai;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -111,6 +111,11 @@ public class AiSetup {
 		this.startingAi = new Ai(Owner.Player2, new Game());
 	}
 
+	public void randomStressTest(HashMap<Object, Double> expectedPercentages, Generater method) {
+		randomStressTest(expectedPercentages, method, (HashMap<Object, Double> map) -> {
+		});
+	}
+
 	public void randomStressTest(HashMap<Object, Double> expectedPercentages, Generater method, Asserter asserts) {
 		HashMap<Object, Double> countMap = new HashMap<Object, Double>();
 		for (int i = 0; i < ITERATION_SIZE; i++) {
@@ -150,12 +155,12 @@ public class AiSetup {
 	}
 
 	// have asserts statements
-	public void randomStressTest(double expectedPercentages, Generater method) {
-		randomStressTest(expectedPercentages, method, (HashMap<Object, Double> map) -> {
+	public void randomStressTest(int sampleSize, Generater method) {
+		randomStressTest(sampleSize, method, (HashMap<Object, Double> map) -> {
 		});
 	}
 
-	public void randomStressTest(double expectedPercentages, Generater method, Asserter asserts) {
+	public void randomStressTest(int sampleSize, Generater method, Asserter asserts) {
 		HashMap<Object, Double> countMap = new HashMap<Object, Double>();
 		for (int i = 0; i < ITERATION_SIZE; i++) {
 			Object returnValue = method.generate();
@@ -174,7 +179,8 @@ public class AiSetup {
 
 		DecimalFormat df = new DecimalFormat("0.00");
 		for (Object obj : countMap.keySet()) {
-			double expectedPercent = expectedPercentages;
+			// double expectedPercent = expectedPercentages;
+			double expectedPercent = 1 / (double) countMap.size();
 			double expectedLow = Math.max(expectedPercent - RANDOM_MARGIN,
 					Math.min(Double.MIN_NORMAL, expectedPercent));
 			double expectedHigh = Math.min(expectedPercent + RANDOM_MARGIN,
@@ -192,6 +198,8 @@ public class AiSetup {
 			}
 			assertTrue(errorString, expectedLow <= percent && percent <= expectedHigh);
 		}
+		assertEquals("expected a sample size of " + sampleSize + ", but was " + countMap.size(), sampleSize,
+				countMap.size());
 	}
 
 	public String getAiVarString(Ai ai) {

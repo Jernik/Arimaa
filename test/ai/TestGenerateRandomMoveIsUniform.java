@@ -10,26 +10,27 @@ public class TestGenerateRandomMoveIsUniform extends AiSetup {
 	@BeforeClass
 	public static void setupStressSettings() {
 		RANDOM_MARGIN = 0.005;
-		ITERATION_SIZE = 1000_000;
+		ITERATION_SIZE = 100_000;
 	}
 
+	// sample size may be counted wrong
 	@Test
 	public void testNormalGeneratedMoveIsUniform() {
-		randomStressTest(1 / 24.0, () -> this.normalAi.generateMove());
+		randomStressTest(24, () -> this.normalAi.generateMove());
 	}
 
 	@Test
 	public void testKatLoverGeneratedMoveIsUniform() {
-		randomStressTest(1 / 28.0, () -> this.catLoverAi.generateMove());
+		randomStressTest(28, () -> this.catLoverAi.generateMove());
 	}
 
 	@Test
 	public void testNotManyMovesGeneratedMoveIsUniform() {
-		randomStressTest(1 / 24.0, () -> this.notManyMovesAi.generateMove());
+		randomStressTest(24, () -> this.notManyMovesAi.generateMove());
 	}
 
 	@Test
 	public void testStartingGeneratedMoveIsUniform() {
-		randomStressTest(1 / 24.0, () -> this.startingAi.generateMove());
+		randomStressTest(24, () -> this.startingAi.generateMove());
 	}
 }
