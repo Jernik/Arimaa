@@ -27,7 +27,7 @@ public class TestAi extends AiSetup {
 	@BeforeClass
 	public static void setupStressSettings() {
 		RANDOM_MARGIN = 0.01;
-		ITERATION_SIZE = 10_000;
+		ITERATION_SIZE = 25_000;
 	}
 
 	@Test

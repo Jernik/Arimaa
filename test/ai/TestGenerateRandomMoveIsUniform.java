@@ -31,6 +31,6 @@ public class TestGenerateRandomMoveIsUniform extends AiSetup {
 
 	@Test
 	public void testStartingGeneratedMoveIsUniform() {
-		randomStressTest(24, () -> this.startingAi.generateMove());
+		randomStressTest(8, () -> this.startingAi.generateMove());
 	}
 }
