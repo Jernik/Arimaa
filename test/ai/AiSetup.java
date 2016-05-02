@@ -111,6 +111,10 @@ public class AiSetup {
 		this.startingAi = new Ai(Owner.Player2, new Game());
 	}
 
+	public void randomStressTest(Generater method) {
+		randomStressTest(-1, method);
+	}
+
 	public void randomStressTest(HashMap<Object, Double> expectedPercentages, Generater method) {
 		randomStressTest(expectedPercentages, method, (HashMap<Object, Double> map) -> {
 		});
@@ -179,7 +183,6 @@ public class AiSetup {
 
 		DecimalFormat df = new DecimalFormat("0.00");
 		for (Object obj : countMap.keySet()) {
-			// double expectedPercent = expectedPercentages;
 			double expectedPercent = 1 / (double) countMap.size();
 			double expectedLow = Math.max(expectedPercent - RANDOM_MARGIN,
 					Math.min(Double.MIN_NORMAL, expectedPercent));
@@ -198,8 +201,10 @@ public class AiSetup {
 			}
 			assertTrue(errorString, expectedLow <= percent && percent <= expectedHigh);
 		}
-		assertEquals("expected a sample size of " + sampleSize + ", but was " + countMap.size(), sampleSize,
-				countMap.size());
+		if (sampleSize > 0) {
+			assertEquals("expected a sample size of " + sampleSize + ", but was " + countMap.size(), sampleSize,
+					countMap.size());
+		}
 	}
 
 	public String getAiVarString(Ai ai) {
