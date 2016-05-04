@@ -241,11 +241,11 @@ public class GUI {
 			this.game = (Game) in.readObject();
 		} catch (IOException e) {
 			System.out.println("Could not load game. Please try again");
-			 e.printStackTrace();
+			e.printStackTrace();
 			return false;
 		} catch (ClassNotFoundException | ClassCastException e) {
 			System.out.println("Corrupted save file");
-			 e.printStackTrace();
+			e.printStackTrace();
 			return false;
 		} finally {
 			if (in != null) {
@@ -291,48 +291,5 @@ public class GUI {
 
 	public ObjectInputStream createInputStream(File f) throws IOException {
 		return new ObjectInputStream(new FileInputStream(f));
-	}
-
-	public boolean failSaveFile() throws IOException {
-		File d = new File("save");
-		File f = new File("save/Game.ser");
-		if (!d.exists()) {
-			Files.createDirectory(d.toPath());
-		}
-		if (!f.exists()) {
-			f.createNewFile();
-		}
-
-		FileOutputStream fileOut = new FileOutputStream("save/Game.ser");
-		ObjectOutputStream out = new ObjectOutputStream(fileOut);
-		try {
-			out.close();
-			out.writeObject(this.game);
-		} catch (IOException e) {
-			e.printStackTrace();
-			out.close();
-			return false;
-		}
-		out.close();
-		fileOut.close();
-		return true;
-	}
-
-	public boolean deleteButNotSave() throws IOException {
-		FileInputStream fileIn = new FileInputStream("save/bad.txt");
-		ObjectInputStream in = null;
-		try {
-			in = new ObjectInputStream(fileIn);
-			this.game = (Game) in.readObject();
-		} catch (IOException e) {
-			in.close();
-			e.printStackTrace();
-			return false;
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-		in.close();
-		fileIn.close();
-		return true;
 	}
 }
