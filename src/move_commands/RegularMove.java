@@ -1,14 +1,12 @@
 package move_commands;
 
-import java.io.Serializable;
-
 import game.BoardState;
 import game.Coordinate;
 import piece.AbstractPiece;
 import piece.Owner;
 import piece.Rabbit;
 
-public class RegularMove extends MoveCommand implements Serializable {
+public class RegularMove extends MoveCommand {
 
 	private BoardState newBoard;
 	private Coordinate originalPlace;
