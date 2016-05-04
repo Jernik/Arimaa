@@ -51,6 +51,10 @@ public class Ai {
 				// can't dislodge a friendly piece, try again
 				return this.generateMove();
 			}
+			if (!shouldGeneratePull()) {
+				// tryed to do a regular move and it didn't work
+				return this.generateMove();
+			}
 			// enemy piece is here, generate a push
 			Coordinate pushPiecePlace = this.generateRandomDirection(randomDirection);
 			while (pieceCoor.equals(pushPiecePlace)) {

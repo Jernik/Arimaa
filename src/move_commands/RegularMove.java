@@ -38,6 +38,18 @@ public class RegularMove extends MoveCommand implements Serializable {
 		return true;
 	}
 
+	public Coordinate getOriginalPlace() {
+		return this.originalPlace;
+	}
+
+	public Coordinate getNewPlace() {
+		return this.newPlace;
+	}
+
+	public BoardState getNewBoard() {
+		return this.newBoard;
+	}
+
 	@Override
 	public BoardState execute() {
 		if (!isValidMove()) {
@@ -45,11 +57,6 @@ public class RegularMove extends MoveCommand implements Serializable {
 		}
 		this.newBoard.movePiece(originalPlace, newPlace);
 		return newBoard;
-	}
-
-	@Override
-	public BoardState getOriginalBoard() {
-		return originalBoard;
 	}
 
 	@Override
@@ -75,18 +82,19 @@ public class RegularMove extends MoveCommand implements Serializable {
 		return true;
 	}
 
-	// @Override
-	// public boolean isValidMove() {
-	// int row = this.newPlace.getX();
-	// int column = this.newPlace.getY();
-	// if (row >= 0 && row < 8 && column >= 0 && column < 8
-	// && !originalBoard.pieceAt(this.newPlace))
-	// return true;
-	// return false;
-	// }
-
-	public Coordinate getOriginalPlace() {
-		return this.originalPlace;
+	@Override
+	public boolean eq(MoveCommand moveCommand) {
+		if (!(moveCommand instanceof RegularMove)) {
+			return false;
+		}
+		RegularMove regularMove = (RegularMove) moveCommand;
+		return super.eq(regularMove) && this.newBoard.equals(regularMove.getNewBoard())
+				&& this.originalPlace.equals(regularMove.getOriginalPlace())
+				&& this.newPlace.equals(regularMove.getNewPlace());
 	}
 
+	@Override
+	public int hashCode() {
+		return super.hashCode() + this.newBoard.hashCode() + this.originalPlace.hashCode() + this.newPlace.hashCode();
+	}
 }
