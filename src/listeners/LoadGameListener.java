@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.nio.file.Paths;
 import java.util.Scanner;
 
 import static game.GUI.*;
@@ -26,8 +27,7 @@ public class LoadGameListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setCurrentDirectory(new File(System
-                .getProperty("user.home")));
+        fileChooser.setCurrentDirectory(new File(Paths.get(GUI.SAVE_FOLDER).toAbsolutePath().toString()));
         int result = fileChooser.showOpenDialog(gui.activeFrames.get(0));
         if (result == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
@@ -43,7 +43,7 @@ public class LoadGameListener implements ActionListener {
 
     private void loadGame(File file) throws FileNotFoundException {
         Scanner scanner = new Scanner(file);
-        if (game.loadFile(scanner)) {
+        if (this.gui.loadFile(file)) {
             JFrame mainMenu = gui.activeFrames.get(0);
             gui.activeFrames.remove(0);
             mainMenu.dispose();

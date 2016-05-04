@@ -88,7 +88,7 @@ public class Coordinate implements Serializable {
 	}
 
 	public int hashCode() {
-		return Integer.hashCode(this.x) + Integer.hashCode(this.y) + Boolean.hashCode(this.valid);
+		return Integer.hashCode(this.x) * 1000 + Integer.hashCode(this.y) * 10000 + Boolean.hashCode(this.valid);
 	}
 
 	public String toString() {

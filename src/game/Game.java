@@ -14,9 +14,6 @@ import piece.Owner;
 import piece.Rabbit;
 
 public class Game implements Serializable {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -7894027967721918280L;
 	private ArrayList<MoveCommand> moves = new ArrayList<MoveCommand>();
 	public BoardState currentBoard = null;
@@ -43,6 +40,21 @@ public class Game implements Serializable {
 
 	public Game(BoardState b) {
 		currentBoard = b;
+	}
+
+	public Game(Game g) {
+		this.moves = g.getMoves();
+		this.currentBoard = g.currentBoard;
+		this.turnNumber = g.getTurnNumber();
+		this.moveTimer = g.getMoveTimer();
+		this.p1TimeBank = g.p1TimeBank;
+		this.p2TimeBank = g.p2TimeBank;
+		this.turnCounter = g.getTurnCounter();
+		this.p1Name = g.getP1Name();
+		this.p2Name = g.getP2Name();
+		this.winner = g.getWinner();
+		this.numMoves = g.getNumMoves();
+		this.playerTurn = g.getPlayerTurn();
 	}
 
 	public BoardState getBoardState() {
@@ -128,7 +140,7 @@ public class Game implements Serializable {
 	public AbstractPiece getPieceAt(Coordinate coor) {
 		return this.currentBoard.getPieceAt(coor);
 	}
-	
+
 	public ArrayList<MoveCommand> getMoves() {
 		return this.moves;
 	}
@@ -152,6 +164,7 @@ public class Game implements Serializable {
 			return true;
 		}
 	}
+
 	/**
 	 * 
 	 * @param ownerPiece
@@ -159,11 +172,9 @@ public class Game implements Serializable {
 	 * @param opponentPiece
 	 *            Coordinate of the opponent's piece
 	 * @param destination
-	 *            Coordinate of the position that either the opponent's piece
-	 *            will be pushed into or the position the owner's piece will be
-	 *            moved into.
-	 * @return Returns true when a push or pull with the given 3 Coordinate
-	 *         objects would result in a valid move.
+	 *            Coordinate of the position that either the opponent's piece will be pushed into or the position the
+	 *            owner's piece will be moved into.
+	 * @return Returns true when a push or pull with the given 3 Coordinate objects would result in a valid move.
 	 */
 
 	public boolean pushOrPull(Coordinate ownerPiece, Coordinate opponentPiece, Coordinate destination) {
@@ -232,8 +243,7 @@ public class Game implements Serializable {
 	}
 
 	/**
-	 * checks both rows for rabbits of the opposite side, top row first followed
-	 * by the bottom row
+	 * checks both rows for rabbits of the opposite side, top row first followed by the bottom row
 	 */
 	private void checkWin() {
 		if (this.getPlayerTurn() == 0) {
@@ -283,8 +293,8 @@ public class Game implements Serializable {
 	}
 
 	/**
-	 * Piece death occurs when pieces are on the squares (2,2), (2,5), (5,2),
-	 * (5,5), and has no friendly adjacent pieces to it
+	 * Piece death occurs when pieces are on the squares (2,2), (2,5), (5,2), (5,5), and has no friendly adjacent pieces
+	 * to it
 	 */
 	private void checkDeaths(Coordinate toCheck) {
 		if (!this.currentBoard.pieceAt((toCheck)))
@@ -339,57 +349,57 @@ public class Game implements Serializable {
 
 		this.numMoves = 4;
 	}
-	
+
 	public boolean equals(Game compGame) {
-//		for(int i = 0; i < this.moves.size(); i++) {
-//			if(!this.moves.get(i).equals(compGame.moves.get(i))) {
-//				return false;
-//			}
-//		}
-		if(!this.moves.equals(compGame.moves)) {
+		// for(int i = 0; i < this.moves.size(); i++) {
+		// if(!this.moves.get(i).equals(compGame.moves.get(i))) {
+		// return false;
+		// }
+		// }
+		if (!this.moves.equals(compGame.moves)) {
 			return false;
 		}
-		
-		if(!this.currentBoard.equals(compGame.currentBoard)) {
+
+		if (!this.currentBoard.equals(compGame.currentBoard)) {
 			return false;
 		}
-		
-		if(this.turnNumber != compGame.turnNumber) {
+
+		if (this.turnNumber != compGame.turnNumber) {
 			return false;
 		}
-		if(this.moveTimer != compGame.moveTimer) {
+		if (this.moveTimer != compGame.moveTimer) {
 			return false;
 		}
 		if (this.p1TimeBank != compGame.p1TimeBank) {
 			return false;
 		}
-		if(this.p2TimeBank != compGame.p2TimeBank) {
+		if (this.p2TimeBank != compGame.p2TimeBank) {
 			return false;
 		}
-		if(this.turnCounter != compGame.turnCounter) {
+		if (this.turnCounter != compGame.turnCounter) {
 			return false;
 		}
-		if(!this.p1Name.equals(compGame.p1Name)) {
+		if (!this.p1Name.equals(compGame.p1Name)) {
 			return false;
 		}
-		if(!this.p2Name.equals(compGame.p2Name)) {
+		if (!this.p2Name.equals(compGame.p2Name)) {
 			return false;
 		}
-		if(this.winner != compGame.winner) {
+		if (this.winner != compGame.winner) {
 			return false;
 		}
-		if(this.numMoves != compGame.numMoves) { 
+		if (this.numMoves != compGame.numMoves) {
 			return false;
 		}
-		if(this.playerTurn != compGame.playerTurn) {
+		if (this.playerTurn != compGame.playerTurn) {
 			return false;
 		}
-		
+
 		return true;
 	}
-//}
+	// }
 
-	 //doesn't work now, leave for another pull request
+	// doesn't work now, leave for another pull request
 	@Deprecated
 	public boolean loadFile(Scanner scanner) {
 		scanner.useDelimiter(",");
@@ -455,6 +465,7 @@ public class Game implements Serializable {
 		}
 		return true;
 	}
+
 	@Deprecated
 	public boolean saveFile(FileWriter fw) {
 		// TODO: Update to use serializable game states instead of char arrays

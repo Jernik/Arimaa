@@ -231,21 +231,32 @@ public class GUI {
 		winnerLabel.setVisible(true);
 	}
 
-	public boolean loadFile() throws IOException {
-		FileInputStream fileIn = new FileInputStream("save/Game.ser");
+	public boolean loadFile(File f) {
+		if (!f.exists()) {
+			System.out.println("file does not exist");
+			return false;
+		}
 		ObjectInputStream in = null;
 		try {
-			in = new ObjectInputStream(fileIn);
+			in = this.createInputStream(f);
 			this.game = (Game) in.readObject();
 		} catch (IOException e) {
-			in.close();
-			e.printStackTrace();
+			System.out.println("Could not load game. Please try again");
+//			e.printStackTrace();
 			return false;
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+		} catch (ClassNotFoundException | ClassCastException e) {
+			System.out.println("Corrupted save file");
+//			e.printStackTrace();
+			return false;
+		} finally {
+			if (in != null) {
+				try {
+					in.close();
+				} catch (IOException e) {
+					return false;
+				}
+			}
 		}
-		in.close();
-		fileIn.close();
 		return true;
 	}
 
@@ -256,7 +267,7 @@ public class GUI {
 			out = createOutputStream();
 			out.writeObject(this.game);
 		} catch (IOException e) {
-			System.out.println("could not save");
+			System.out.println("could not save the game");
 			e.printStackTrace();
 			return false;
 		} finally {
@@ -270,14 +281,18 @@ public class GUI {
 		}
 		return true;
 	}
-	
-	public ObjectOutputStream createOutputStream() throws IOException{
+
+	public ObjectOutputStream createOutputStream() throws IOException {
 		File d = new File(SAVE_FOLDER);
 		if (!d.isDirectory()) {
 			d.mkdir();
 		}
 		File f = new File(SAVE_PATH);
 		return new ObjectOutputStream(new FileOutputStream(f));
+	}
+
+	public ObjectInputStream createInputStream(File f) throws IOException {
+		return new ObjectInputStream(new FileInputStream(f));
 	}
 
 	public boolean failSaveFile() throws IOException {

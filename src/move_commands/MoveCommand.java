@@ -70,9 +70,6 @@ public abstract class MoveCommand implements Serializable{
 	}
 
 	protected boolean eq(MoveCommand moveCommand) {
-		System.out.println("");
-		System.out.println(this.turn);
-		System.out.println(this.originalBoard);
 		return this.turn.equals(moveCommand.getTurn()) && this.originalBoard.equals(moveCommand.getOriginalBoard());
 	}
 
