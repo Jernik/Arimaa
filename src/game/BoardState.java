@@ -21,18 +21,14 @@ import piece.Rabbit;
  */
 
 public class BoardState implements Serializable {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 5283869533255607044L;
-	// Fields
 	public static final int MAX_BOARD_SIZE = 8;
+
 	private HashMap<Coordinate, AbstractPiece> pieces;
 
 	public BoardState() {
 		this.pieces = new HashMap<Coordinate, AbstractPiece>();
 		this.setUpDefaultBoardConfiguration();
-
 	}
 
 	public BoardState(HashMap<Coordinate, AbstractPiece> pieces) {
@@ -125,7 +121,6 @@ public class BoardState implements Serializable {
 		}
 		return new BoardState(copiedPieces);
 	}
-
 
 	@Override
 	public boolean equals(Object o) {

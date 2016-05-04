@@ -6,7 +6,6 @@ public class Dog extends AbstractPiece {
 	public Dog(Owner owner) {
 		super(null, owner, 2);
 		loadImage(owner);
-
 	}
 
 	public void loadImage(Owner owner) {

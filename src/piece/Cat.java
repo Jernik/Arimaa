@@ -6,7 +6,6 @@ public class Cat extends AbstractPiece {
 	public Cat(Owner owner) {
 		super(null, owner, 1);
 		loadImage(owner);
-
 	}
 
 	public void loadImage(Owner owner) {

@@ -16,7 +16,7 @@ public abstract class AbstractPiece implements Serializable {
 	}
 
 	abstract public void loadImage(Owner owner);
-	
+
 	public Image getImage() {
 		return image;
 	}
@@ -45,10 +45,10 @@ public abstract class AbstractPiece implements Serializable {
 
 	public int hashCode() {
 		return this.getClass().hashCode() + this.image.hashCode() + this.owner.hashCode() + Integer.hashCode(this.rank);
-	} 
+	}
 
 	public boolean isStrongerThan(AbstractPiece p2) {
-		if(this.owner.equals(p2.owner))
+		if (this.owner.equals(p2.owner))
 			return true;
 		return (this.getRank() > p2.getRank());
 	}

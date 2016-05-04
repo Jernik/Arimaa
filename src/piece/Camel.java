@@ -6,7 +6,6 @@ public class Camel extends AbstractPiece {
 	public Camel(Owner owner) {
 		super(null, owner, 4);
 		loadImage(owner);
-
 	}
 
 	public void loadImage(Owner owner) {

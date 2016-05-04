@@ -6,15 +6,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.nio.file.Files;
 import java.util.ArrayList;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -242,11 +241,11 @@ public class GUI {
 			this.game = (Game) in.readObject();
 		} catch (IOException e) {
 			System.out.println("Could not load game. Please try again");
-//			e.printStackTrace();
+			 e.printStackTrace();
 			return false;
 		} catch (ClassNotFoundException | ClassCastException e) {
 			System.out.println("Corrupted save file");
-//			e.printStackTrace();
+			 e.printStackTrace();
 			return false;
 		} finally {
 			if (in != null) {
@@ -261,7 +260,6 @@ public class GUI {
 	}
 
 	public boolean saveFile() {
-		// System.out.println("Working Dir: " + System.getProperty("user.dir"));
 		ObjectOutputStream out = null;
 		try {
 			out = createOutputStream();

@@ -6,7 +6,6 @@ public class Rabbit extends AbstractPiece {
 	public Rabbit(Owner owner) {
 		super(null, owner, 0);
 		loadImage(owner);
-
 	}
 
 	public void loadImage(Owner owner) {
