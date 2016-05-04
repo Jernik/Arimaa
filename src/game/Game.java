@@ -212,7 +212,7 @@ public class Game implements Serializable {
 		return false;
 	}
 
-	private void pushOrPullMove(RegularMove m1, RegularMove m2) {
+	private void pushOrPullMove(MoveCommand m1, MoveCommand m2) {
 		this.currentBoard = m1.execute();
 		this.currentBoard = m2.execute();
 		this.moves.add(m1);
@@ -395,105 +395,6 @@ public class Game implements Serializable {
 			return false;
 		}
 
-		return true;
-	}
-	// }
-
-	// doesn't work now, leave for another pull request
-	@Deprecated
-	public boolean loadFile(Scanner scanner) {
-		scanner.useDelimiter(",");
-		BoardState boardToSet = new BoardState(); // so it compiles
-		String[] validBoardCharactersArray = { " ", "E", "C", "H", "D", "K", "R", "e", "c", "h", "d", "k", "r" };
-		ArrayList<String> vbc = new ArrayList<String>();
-		for (String s : validBoardCharactersArray) {
-			vbc.add(s);
-		}
-
-		for (int i = 0; i < 8; i++) {
-			for (int k = 0; k < 8; k++) {
-				if (!scanner.hasNext()) {
-					scanner.close();
-					return false;
-				}
-				String next = scanner.next();
-				if (!vbc.contains(next)) {
-					scanner.close();
-					return false;
-				}
-				// boardToSet.setBoardSpace(i, k, next);
-			}
-		}
-
-		if (!scanner.hasNext()) {
-			scanner.close();
-			return false;
-		}
-		int turnCounter = scanner.nextInt();
-
-		if (!scanner.hasNext()) {
-			scanner.close();
-			return false;
-		}
-		int turnTimer = scanner.nextInt();
-
-		if (!scanner.hasNext()) {
-			scanner.close();
-			return false;
-		}
-		String p1name = scanner.next();
-
-		if (!scanner.hasNext()) {
-			scanner.close();
-			return false;
-		}
-		String p2name = scanner.next();
-
-		scanner.close();
-
-		// Successful load! Push all changes to game permanently
-		this.currentBoard = boardToSet;
-		this.turnCounter = turnCounter;
-		this.moveTimer = turnTimer;
-		this.p1Name = p1name;
-		this.p2Name = p2name;
-
-		if (this.turnCounter % 2 == 1) {
-			this.playerTurn = 2;
-		} else {
-			this.playerTurn = 1;
-		}
-		return true;
-	}
-
-	@Deprecated
-	public boolean saveFile(FileWriter fw) {
-		// TODO: Update to use serializable game states instead of char arrays
-		if (fw == null)
-			return false;
-		for (int i = 0; i < 8; i++) {
-			for (int j = 0; j < 8; j++) {
-				String s = ""; // + this.currentBoard.getBoardArray()[i][j] +
-								// ",";
-				try {
-					fw.write(s);
-				} catch (IOException e) {
-					return false;
-				}
-			}
-		}
-
-		String s2 = "" + this.turnCounter + ",";
-
-		try {
-			fw.write(s2);
-			fw.write(this.moveTimer + ",");
-			fw.write(this.p1Name + ",");
-			fw.write(this.p2Name);
-			fw.close();
-		} catch (IOException e) {
-			return false;
-		}
 		return true;
 	}
 }
