@@ -6,11 +6,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
@@ -26,6 +28,9 @@ import listeners.NewGameListener;
 import piece.AbstractPiece;
 
 public class GUI {
+	public static final String SAVE_FOLDER = "save/";
+	public static final String SAVE_PATH = SAVE_FOLDER + "game.ser";
+
 	public String p1Name;
 	public String p2Name;
 	public ArrayList<JFrame> activeFrames;
@@ -131,7 +136,6 @@ public class GUI {
 			imgPanel.setLocation(imgPanel.getPixelX(), imgPanel.getPixelY());
 			imgPanel.setVisible(true);
 			this.boardPieces[coor.getX()][coor.getY()] = imgPanel;
-			
 
 		}
 	}
@@ -226,7 +230,7 @@ public class GUI {
 		winnerLabel.setLocation(winnerFrame.getWidth() / 2 - 75, winnerFrame.getHeight() / 2 - 87);
 		winnerLabel.setVisible(true);
 	}
-	
+
 	public boolean loadFile() throws IOException {
 		FileInputStream fileIn = new FileInputStream("save/Game.ser");
 		ObjectInputStream in = null;
@@ -245,41 +249,47 @@ public class GUI {
 		return true;
 	}
 
-	public boolean saveFile() throws IOException {
-//		System.out.println("Working Dir: " + System.getProperty("user.dir"));
-		File d = new File("save");
-		File f = new File("save/Game.ser");
-		if(!d.exists()) {
-			Files.createDirectory(d.toPath());
-		}
-		if(!f.exists()) {
-			f.createNewFile();
-		}
-		
-		FileOutputStream fileOut = new FileOutputStream("save/Game.ser");
-		ObjectOutputStream out = new ObjectOutputStream(fileOut);
+	public boolean saveFile() {
+		// System.out.println("Working Dir: " + System.getProperty("user.dir"));
+		ObjectOutputStream out = null;
 		try {
+			out = createOutputStream();
 			out.writeObject(this.game);
 		} catch (IOException e) {
+			System.out.println("could not save");
 			e.printStackTrace();
-			out.close();
 			return false;
+		} finally {
+			if (out != null) {
+				try {
+					out.close();
+				} catch (IOException e) {
+					return false;
+				}
+			}
 		}
-		out.close();
-		fileOut.close();
 		return true;
 	}
 	
+	public ObjectOutputStream createOutputStream() throws IOException{
+		File d = new File(SAVE_FOLDER);
+		if (!d.isDirectory()) {
+			d.mkdir();
+		}
+		File f = new File(SAVE_PATH);
+		return new ObjectOutputStream(new FileOutputStream(f));
+	}
+
 	public boolean failSaveFile() throws IOException {
 		File d = new File("save");
 		File f = new File("save/Game.ser");
-		if(!d.exists()) {
+		if (!d.exists()) {
 			Files.createDirectory(d.toPath());
 		}
-		if(!f.exists()) {
+		if (!f.exists()) {
 			f.createNewFile();
 		}
-		
+
 		FileOutputStream fileOut = new FileOutputStream("save/Game.ser");
 		ObjectOutputStream out = new ObjectOutputStream(fileOut);
 		try {
@@ -294,8 +304,8 @@ public class GUI {
 		fileOut.close();
 		return true;
 	}
-	
-	public boolean deleteButNotSave() throws IOException {		
+
+	public boolean deleteButNotSave() throws IOException {
 		FileInputStream fileIn = new FileInputStream("save/bad.txt");
 		ObjectInputStream in = null;
 		try {
