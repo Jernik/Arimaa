@@ -172,21 +172,23 @@ public class GUI {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			File selectedFile = null;
-			JFileChooser fileChooser = new JFileChooser();
-			fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
-			int result = fileChooser.showOpenDialog(gameBoardPanel);
-			if (result == JFileChooser.APPROVE_OPTION) {
-				selectedFile = fileChooser.getSelectedFile();
-				FileWriter fw = null;
-				try {
-					fw = new FileWriter(selectedFile);
-				} catch (IOException e) {
-					// Shouldn't ever happen...
-					System.out.println("No file selected!");
-				}
-				game.saveFile(fw);
-			}
+			saveFile();
+			// we can add functionallity to let the user choose where to save later
+//			File selectedFile = null;
+//			JFileChooser fileChooser = new JFileChooser();
+//			fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+//			int result = fileChooser.showOpenDialog(gameBoardPanel);
+//			if (result == JFileChooser.APPROVE_OPTION) {
+//				selectedFile = fileChooser.getSelectedFile();
+//				FileWriter fw = null;
+//				try {
+//					fw = new FileWriter(selectedFile);
+//				} catch (IOException e) {
+//					// Shouldn't ever happen...
+//					System.out.println("No file selected!");
+//				}
+//				game.saveFile(fw);
+//			}
 		}
 	}
 

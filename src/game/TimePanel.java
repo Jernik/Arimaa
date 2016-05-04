@@ -13,12 +13,10 @@ public class TimePanel {
 	private Timer updateTimer;
 
 	public TimePanel(GUI gui, Game game, int startTime, JLabel label) {
-
-		//timer = new Timer();
 		playerTurn = game.getPlayerTurn();
 		setTimerLabel(label);
 
-		this.updateTimer = new java.util.Timer();
+		this.updateTimer = new Timer();
 		updateTimer.scheduleAtFixedRate(new TimerTask() {
 			int s = startTime;
 
@@ -67,7 +65,7 @@ public class TimePanel {
 	public void setTimerLabel(JLabel timerLabel) {
 		this.timerLabel = timerLabel;
 	}
-	
+
 	public void stopTimer() {
 		this.updateTimer.cancel();
 	}
