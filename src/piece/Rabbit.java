@@ -3,6 +3,8 @@ package piece;
 import javax.swing.ImageIcon;
 
 public class Rabbit extends AbstractPiece {
+	private static final long serialVersionUID = 2790417979920397492L;
+
 	public Rabbit(Owner owner) {
 		super(null, owner, 0);
 		loadImage(owner);

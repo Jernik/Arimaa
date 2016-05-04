@@ -3,6 +3,8 @@ package piece;
 import javax.swing.ImageIcon;
 
 public class Horse extends AbstractPiece {
+	private static final long serialVersionUID = 8143779066737395067L;
+
 	public Horse(Owner owner) {
 		super(null, owner, 3);
 		loadImage(owner);
