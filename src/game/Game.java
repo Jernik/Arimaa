@@ -14,6 +14,10 @@ import piece.Owner;
 import piece.Rabbit;
 
 public class Game implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7894027967721918280L;
 	private ArrayList<MoveCommand> moves = new ArrayList<MoveCommand>();
 	public BoardState currentBoard = null;
 	private int turnNumber;
@@ -123,6 +127,10 @@ public class Game implements Serializable {
 
 	public AbstractPiece getPieceAt(Coordinate coor) {
 		return this.currentBoard.getPieceAt(coor);
+	}
+	
+	public ArrayList<MoveCommand> getMoves() {
+		return this.moves;
 	}
 
 	// refactor for future pull request
@@ -333,10 +341,13 @@ public class Game implements Serializable {
 	}
 	
 	public boolean equals(Game compGame) {
-		for(int i = 0; i < this.moves.size(); i++) {
-			if(!this.moves.get(i).equals(compGame.moves.get(i))) {
-				return false;
-			}
+//		for(int i = 0; i < this.moves.size(); i++) {
+//			if(!this.moves.get(i).equals(compGame.moves.get(i))) {
+//				return false;
+//			}
+//		}
+		if(!this.moves.equals(compGame.moves)) {
+			return false;
 		}
 		
 		if(!this.currentBoard.equals(compGame.currentBoard)) {

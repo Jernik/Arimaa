@@ -4,6 +4,7 @@ import java.awt.Image;
 import java.io.Serializable;
 
 public abstract class AbstractPiece implements Serializable {
+	private static final long serialVersionUID = 1115622952453934265L;
 	private transient Image image;
 	private Owner owner;
 	private int rank;
@@ -14,6 +15,8 @@ public abstract class AbstractPiece implements Serializable {
 		this.rank = rank;
 	}
 
+	abstract public void loadImage(Owner owner);
+	
 	public Image getImage() {
 		return image;
 	}

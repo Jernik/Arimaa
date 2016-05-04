@@ -110,6 +110,7 @@ public class TestSaveLoad {
 		boolean loaded = myGUI.loadFile();
 		assertTrue(saved && loaded);
 		assertNotNull(myGUI.game);
+		assertNotNull(moveGUI.game);
 		assertTrue(myGUI.game.equals(moveGUI.game));
 	}
 
