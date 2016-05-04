@@ -28,14 +28,59 @@ public class PullMove extends MoveCommand {
 		return null;
 	}
 
-	@Override
-	public BoardState getOriginalBoard() {
-		return null;
+	public BoardState getNewBoard() {
+		return this.newBoard;
 	}
 
-	// you should assume that you are given 3 random coordinates, that might or might not be valid 
+	public Coordinate getOriginalPlace() {
+		return this.originalPlace;
+	}
+
+	public Coordinate getNewPlace() {
+		return this.newPlace;
+	}
+
+	public Coordinate getPullPiecePlace() {
+		return this.pullPiecePlace;
+	}
+
+	// you should assume that you are given 3 random coordinates, that might or might not be valid
 	@Override
 	public boolean isValidMove() {
-		return false;
+		if (!this.originalPlace.isValid() || !this.newPlace.isValid() || !this.pullPiecePlace.isValid()) {
+			return false;
+		}
+		if (this.originalPlace.equals(this.newPlace) || this.originalPlace.equals(this.pullPiecePlace)
+				|| this.newPlace.equals(this.pullPiecePlace)) {
+			return false;
+		}
+		BoardState board = this.originalBoard;
+		if (!board.pieceAt(this.originalPlace) || board.pieceAt(this.newPlace) || !board.pieceAt(this.pullPiecePlace)) {
+			return false;
+		}
+		if (!board.getPieceAt(this.originalPlace).getOwner().equals(this.turn)
+				|| board.getPieceAt(this.pullPiecePlace).getOwner().equals(this.turn)) {
+			return false;
+		}
+
+		// TODO finish this
+		return true;
+	}
+
+	@Override
+	public boolean eq(MoveCommand moveCommand) {
+		if (!(moveCommand instanceof PullMove)) {
+			return false;
+		}
+		PullMove pullMove = (PullMove) moveCommand;
+		return super.eq(pullMove) && this.newBoard.equals(pullMove.getNewBoard())
+				&& this.originalPlace.equals(pullMove.getOriginalPlace())
+				&& this.newPlace.equals(pullMove.getNewPlace())
+				&& this.pullPiecePlace.equals(pullMove.getPullPiecePlace());
+	}
+	
+	@Override
+	public int hashCode() {
+		return super.hashCode() + this.newBoard.hashCode() + this.originalPlace.hashCode() + this.newPlace.hashCode() + this.pullPiecePlace.hashCode();
 	}
 }

@@ -27,7 +27,7 @@ public class TestAi extends AiSetup {
 	@BeforeClass
 	public static void setupStressSettings() {
 		RANDOM_MARGIN = 0.01;
-		ITERATION_SIZE = 10_000;
+		ITERATION_SIZE = 25_000;
 	}
 
 	@Test
@@ -66,13 +66,13 @@ public class TestAi extends AiSetup {
 	@Test
 	public void testGenerateRandomDirectionMiddle() {
 		Coordinate coor = new Coordinate(3, 6);
-		randomStressTest(0.25, () -> this.normalAi.generateRandomDirection(coor));
+		randomStressTest(4, () -> this.normalAi.generateRandomDirection(coor));
 	}
 
 	@Test
 	public void testGenerateRandomDirectionEdge() {
 		Coordinate coor = new Coordinate(3, 0);
-		randomStressTest(0.25, () -> this.normalAi.generateRandomDirection(coor));
+		randomStressTest(4, () -> this.normalAi.generateRandomDirection(coor));
 	}
 
 	@Test
@@ -89,7 +89,7 @@ public class TestAi extends AiSetup {
 
 	@Test
 	public void testNormalGenerateRandomPieceIsUniform() {
-		randomStressTest(1 / 6.0, () -> this.normalAi.getGame().getPieceAt(this.normalAi.generateRandomPieceCoor()));
+		randomStressTest(6, () -> this.normalAi.getGame().getPieceAt(this.normalAi.generateRandomPieceCoor()));
 	}
 
 	@Test

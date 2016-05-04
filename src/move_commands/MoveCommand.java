@@ -1,65 +1,78 @@
 package move_commands;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import game.BoardState;
 import game.Coordinate;
 import piece.Owner;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public abstract class MoveCommand {
+	protected Owner turn;
+	protected BoardState originalBoard;
 
+	abstract public BoardState execute();
 
-    Owner turn;
+	abstract public boolean isValidMove();
 
-    protected BoardState originalBoard;
+	public Owner getTurn() {
+		return turn;
+	}
 
-    abstract public BoardState execute();
+	public BoardState getOriginalBoard() {
+		return this.originalBoard;
+	}
 
-    abstract public BoardState getOriginalBoard();
+	protected boolean isFrozen(Coordinate pieceToMove) {
+		if (!isNextToStrongerPiece(pieceToMove, this.turn)
+				&& isNextToStrongerPiece(pieceToMove, this.getOtherOwner())) {
+			return true;
+		}
+		return false;
+	}
 
-    abstract public boolean isValidMove();
+	private boolean isNextToStrongerPiece(Coordinate pieceToMove, Owner player) {
+		List<Coordinate> checkList = new ArrayList<>();
+		checkList.add(pieceToMove.up());
+		checkList.add(pieceToMove.down());
+		checkList.add(pieceToMove.left());
+		checkList.add(pieceToMove.right());
+		for (Coordinate coor : checkList) {
+			if (this.originalBoard.getPieceAt(coor) != null) {
+				if (coor.isValid() && !coor.equals(pieceToMove)
+						&& this.originalBoard.getPieceAt(coor).getOwner() == player && this.originalBoard
+								.getPieceAt(coor).isStrongerThan(this.originalBoard.getPieceAt(pieceToMove))) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 
-    protected boolean isFrozen(Coordinate pieceToMove) {
-        if (!isNextToStrongerPiece(pieceToMove, this.turn)
-                && isNextToStrongerPiece(pieceToMove, this.getOtherOwner())) {
-            return true;
-        }
-        return false;
-    }
+	public Owner getOtherOwner() {
+		if (turn == Owner.values()[0]) {
+			return Owner.values()[1];
+		} else {
+			return Owner.values()[0];
+		}
+	}
 
-    private boolean isNextToStrongerPiece(Coordinate pieceToMove, Owner player) {
-        List<Coordinate> checkList = new ArrayList<>();
-        checkList.add(pieceToMove.up());
-        checkList.add(pieceToMove.down());
-        checkList.add(pieceToMove.left());
-        checkList.add(pieceToMove.right());
-        for(Coordinate coor:checkList){
-            if (this.originalBoard.getPieceAt(coor) != null) {
-                if (coor.isValid() && !coor.equals(pieceToMove)
-                        && this.originalBoard.getPieceAt(coor).getOwner() == player
-                        && this.originalBoard.getPieceAt(coor).isStrongerThan(this.originalBoard.getPieceAt(pieceToMove))) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-    public Owner getOtherOwner() {
-        if (turn == Owner.values()[0]) {
-            return Owner.values()[1];
-        } else {
-            return Owner.values()[0];
-        }
-    }
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof MoveCommand))
+			return false;
 
-//	public boolean isValidMove();
+		MoveCommand moveCommand = (MoveCommand) o;
 
-//	public static boolean validMove(BoardState originalBoard, int row, int column) {
-//		if (row >= 0 && row < 8 && column >= 0 && column < 8
-//				&& originalBoard.getBoardArray()[row][column] == ' ')
-//			return true;
-//		return false;
-//	}
+		return this.eq(moveCommand) && moveCommand.eq(this);
+	}
 
+	protected boolean eq(MoveCommand moveCommand) {
+		return this.turn.equals(moveCommand.getTurn()) && this.originalBoard.equals(moveCommand.getOriginalBoard());
+	}
+
+	@Override
+	public int hashCode() {
+		return this.turn.hashCode() + this.originalBoard.hashCode();
+	}
 }

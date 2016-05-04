@@ -1,6 +1,6 @@
 package ai;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -56,9 +56,9 @@ public class AiSetup {
 		this.normalAi = new Ai(Owner.Player2, new Game(new BoardState(pieces)));
 
 		HashMap<Coordinate, AbstractPiece> catLoverPieces = new HashMap<Coordinate, AbstractPiece>();
-		catLoverPieces.put(new Coordinate(0, 0), new Rabbit(Owner.Player1));
+		catLoverPieces.put(new Coordinate(4, 2), new Rabbit(Owner.Player1));
 		catLoverPieces.put(new Coordinate(0, 1), new Dog(Owner.Player1));
-		catLoverPieces.put(new Coordinate(1, 0), new Rabbit(Owner.Player1));
+		catLoverPieces.put(new Coordinate(2, 4), new Rabbit(Owner.Player1));
 		catLoverPieces.put(new Coordinate(1, 1), new Dog(Owner.Player1));
 
 		catLoverPieces.put(new Coordinate(6, 7), new Cat(Owner.Player2));
@@ -71,7 +71,7 @@ public class AiSetup {
 		catLoverPieces.put(new Coordinate(3, 6), new Rabbit(Owner.Player2));
 		catLoverPieces.put(new Coordinate(3, 4), new Camel(Owner.Player2));
 		catLoverPieces.put(new Coordinate(4, 4), new Elephant(Owner.Player2));
-		catLoverPieces.put(new Coordinate(0, 0), new Horse(Owner.Player2));
+		catLoverPieces.put(new Coordinate(1, 2), new Horse(Owner.Player2));
 		this.catLoverAi = new Ai(Owner.Player2, new Game(new BoardState(catLoverPieces)));
 
 		HashMap<Coordinate, AbstractPiece> notManyMovesPieces = new HashMap<Coordinate, AbstractPiece>();
@@ -111,7 +111,16 @@ public class AiSetup {
 		this.startingAi = new Ai(Owner.Player2, new Game());
 	}
 
+	public void randomStressTest(Generater method) {
+		randomStressTest(-1, method);
+	}
+
 	public void randomStressTest(HashMap<Object, Double> expectedPercentages, Generater method) {
+		randomStressTest(expectedPercentages, method, (HashMap<Object, Double> map) -> {
+		});
+	}
+
+	public void randomStressTest(HashMap<Object, Double> expectedPercentages, Generater method, Asserter asserts) {
 		HashMap<Object, Double> countMap = new HashMap<Object, Double>();
 		for (int i = 0; i < ITERATION_SIZE; i++) {
 			Object returnValue = method.generate();
@@ -123,8 +132,9 @@ public class AiSetup {
 
 		// convert count to percentages
 		for (Object obj : countMap.keySet()) {
-			countMap.put(obj, round(countMap.get(obj) / ITERATION_SIZE, 2));
+			countMap.put(obj, round(countMap.get(obj) / ITERATION_SIZE, 4));
 		}
+		asserts.execute(countMap);
 
 		DecimalFormat df = new DecimalFormat("0.00");
 		for (Object obj : countMap.keySet()) {
@@ -140,7 +150,7 @@ public class AiSetup {
 			if (expectedLow > percent || percent > expectedHigh) {
 				StackTraceElement methodName = Thread.currentThread().getStackTrace()[2];
 				System.err.println("FAIL " + methodName);
-				// System.err.println(countMap);
+				System.err.println(countMap);
 				System.out.println();
 				System.err.println();
 			}
@@ -148,7 +158,13 @@ public class AiSetup {
 		}
 	}
 
-	public void randomStressTest(double expectedPercentages, Generater method) {
+	// have asserts statements
+	public void randomStressTest(int sampleSize, Generater method) {
+		randomStressTest(sampleSize, method, (HashMap<Object, Double> map) -> {
+		});
+	}
+
+	public void randomStressTest(int sampleSize, Generater method, Asserter asserts) {
 		HashMap<Object, Double> countMap = new HashMap<Object, Double>();
 		for (int i = 0; i < ITERATION_SIZE; i++) {
 			Object returnValue = method.generate();
@@ -160,12 +176,14 @@ public class AiSetup {
 
 		// convert count to percentages
 		for (Object obj : countMap.keySet()) {
-			countMap.put(obj, round(countMap.get(obj) / ITERATION_SIZE, 2));
+			countMap.put(obj, round(countMap.get(obj) / ITERATION_SIZE, 4));
 		}
+
+		asserts.execute(countMap);
 
 		DecimalFormat df = new DecimalFormat("0.00");
 		for (Object obj : countMap.keySet()) {
-			double expectedPercent = expectedPercentages;
+			double expectedPercent = 1 / (double) countMap.size();
 			double expectedLow = Math.max(expectedPercent - RANDOM_MARGIN,
 					Math.min(Double.MIN_NORMAL, expectedPercent));
 			double expectedHigh = Math.min(expectedPercent + RANDOM_MARGIN,
@@ -177,11 +195,15 @@ public class AiSetup {
 			if (expectedLow > percent || percent > expectedHigh) {
 				StackTraceElement methodName = Thread.currentThread().getStackTrace()[2];
 				System.err.println("FAIL " + methodName);
-				// System.err.println(countMap);
+				System.err.println(countMap);
 				System.out.println();
 				System.err.println();
 			}
 			assertTrue(errorString, expectedLow <= percent && percent <= expectedHigh);
+		}
+		if (sampleSize > 0) {
+			assertEquals("expected a sample size of " + sampleSize + ", but was " + countMap.size(), sampleSize,
+					countMap.size());
 		}
 	}
 
