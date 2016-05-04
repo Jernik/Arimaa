@@ -2,6 +2,7 @@ package game;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -46,6 +47,7 @@ public class TestSaveLoad {
 		
 		GUI moveGUI = new GUI();
 		g1.move(new RegularMove(g1.currentBoard, new Coordinate(6, 7), new Coordinate(5, 7), g1.getOwner()));
+		moveGUI.game = g1;
 		
 		boolean saved = moveGUI.saveFile();
 		boolean loaded = myGUI.loadFile();
@@ -71,6 +73,7 @@ public class TestSaveLoad {
 		g1.move(new RegularMove(g1.currentBoard, new Coordinate(5, 7), new Coordinate(6, 7), g1.getOwner()));
 		g1.move(new RegularMove(g1.currentBoard, new Coordinate(3, 6), new Coordinate(4, 6), g1.getOwner()));
 		g1.move(new RegularMove(g1.currentBoard, new Coordinate(4, 6), new Coordinate(3, 6), g1.getOwner()));
+		moveGUI.game = g1;
 		
 		boolean saved = moveGUI.saveFile();
 		boolean loaded = myGUI.loadFile();
@@ -101,10 +104,12 @@ public class TestSaveLoad {
 		//Done failing moves.
 		g1.move(new RegularMove(g1.currentBoard, new Coordinate(4, 4), new Coordinate(4, 3), g1.getOwner()));
 		g1.move(new RegularMove(g1.currentBoard, new Coordinate(7, 7), new Coordinate(7, 6), g1.getOwner()));
+		moveGUI.game = g1;
 		
 		boolean saved = moveGUI.saveFile();
 		boolean loaded = myGUI.loadFile();
 		assertTrue(saved && loaded);
+		assertNotNull(myGUI.game);
 		assertTrue(myGUI.game.equals(moveGUI.game));
 	}
 
@@ -116,23 +121,23 @@ public class TestSaveLoad {
 	}
 	
 	//Not 100% how this test will work yet
-//	@Test(expected=IOException.class)
-//	public void testSaveFileFailsWhenNoSave() throws IOException {
-//		HashMap<Coordinate, AbstractPiece> p1 = new HashMap<Coordinate, AbstractPiece>();
-//		p1.put(new Coordinate(6, 7), new Cat(Owner.Player1));
-//		p1.put(new Coordinate(7, 7), new Rabbit(Owner.Player1));
-//		p1.put(new Coordinate(3, 6), new Dog(Owner.Player1));
-//		p1.put(new Coordinate(3, 4), new Camel(Owner.Player1));
-//		p1.put(new Coordinate(4, 4), new Elephant(Owner.Player1));
-//		BoardState b1 = new BoardState(p1);
-//		Game g1 = new Game(b1);
-//		GUI myGUI = new GUI();
-//		myGUI.game = null;
-//		
-//		GUI moveGUI = new GUI();
-//		boolean saved = moveGUI.deleteButNotSave();
-//		boolean loaded = myGUI.loadFile();
-//		System.out.println(saved + " " + loaded);
-//	}
+	@Test(expected=IOException.class)
+	public void testSaveFileFailsWhenNoSave() throws IOException {
+		HashMap<Coordinate, AbstractPiece> p1 = new HashMap<Coordinate, AbstractPiece>();
+		p1.put(new Coordinate(6, 7), new Cat(Owner.Player1));
+		p1.put(new Coordinate(7, 7), new Rabbit(Owner.Player1));
+		p1.put(new Coordinate(3, 6), new Dog(Owner.Player1));
+		p1.put(new Coordinate(3, 4), new Camel(Owner.Player1));
+		p1.put(new Coordinate(4, 4), new Elephant(Owner.Player1));
+		BoardState b1 = new BoardState(p1);
+		Game g1 = new Game(b1);
+		GUI myGUI = new GUI();
+		myGUI.game = null;
+		
+		GUI moveGUI = new GUI();
+		boolean saved = moveGUI.deleteButNotSave();
+		boolean loaded = myGUI.loadFile();
+		System.out.println(saved + " " + loaded);
+	}
 	
 }

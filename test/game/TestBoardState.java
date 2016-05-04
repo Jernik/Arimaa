@@ -1,6 +1,7 @@
 package game;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -34,14 +35,14 @@ public class TestBoardState {
 				assertTrue(b.pieceAt(new Coordinate(x, y)));
 			}
 		}
-		
-		assertEquals(new Rabbit(Owner.Player1), b.getPieceAt(new Coordinate(4, 6)));
-		assertEquals(new Camel(Owner.Player1), b.getPieceAt(new Coordinate(3, 7)));
-		assertEquals(new Elephant(Owner.Player1), b.getPieceAt(new Coordinate(4, 7)));
 
-		assertEquals(new Rabbit(Owner.Player2), b.getPieceAt(new Coordinate(4, 1)));
-		assertEquals(new Camel(Owner.Player2), b.getPieceAt(new Coordinate(3, 0)));
-		assertEquals(new Elephant(Owner.Player2), b.getPieceAt(new Coordinate(4, 0)));
+		assertEquals(new Rabbit(Owner.Player2), b.getPieceAt(new Coordinate(4, 6)));
+		assertEquals(new Camel(Owner.Player2), b.getPieceAt(new Coordinate(3, 7)));
+		assertEquals(new Elephant(Owner.Player2), b.getPieceAt(new Coordinate(4, 7)));
+
+		assertEquals(new Rabbit(Owner.Player1), b.getPieceAt(new Coordinate(4, 1)));
+		assertEquals(new Camel(Owner.Player1), b.getPieceAt(new Coordinate(3, 0)));
+		assertEquals(new Elephant(Owner.Player1), b.getPieceAt(new Coordinate(4, 0)));
 	}
 
 	@Test
@@ -161,7 +162,7 @@ public class TestBoardState {
 		assertEquals(p3, b.getPieceAt(new Coordinate(2, 2)));
 		assertEquals(p4, b.getPieceAt(new Coordinate(3, 3)));
 	}
-	
+
 	@Test
 	public void testValidRemove() {
 		HashMap<Coordinate, AbstractPiece> pieces = new HashMap<Coordinate, AbstractPiece>();
@@ -176,10 +177,10 @@ public class TestBoardState {
 		pieces.put(new Coordinate(3, 3), p4);
 
 		BoardState b = new BoardState(pieces);
-		
+
 		assertTrue(b.removePiece(new Coordinate(0, 0)));
 		assertFalse(b.pieceAt(new Coordinate(0, 0)));
-	}	
+	}
 
 	@Test
 	public void testInValidRemove() {
@@ -195,10 +196,10 @@ public class TestBoardState {
 		pieces.put(new Coordinate(3, 3), p4);
 
 		BoardState b = new BoardState(pieces);
-		
+
 		assertFalse(b.removePiece(new Coordinate(1, 0)));
 		assertFalse(b.pieceAt(new Coordinate(1, 0)));
-	}	
+	}
 
 	@Test
 	public void testClone() {
@@ -215,10 +216,115 @@ public class TestBoardState {
 
 		BoardState b = new BoardState(pieces);
 		BoardState cloned = b.clone();
+		assertEquals(b, cloned);
 		b.movePiece(new Coordinate(0, 0), new Coordinate(1, 0));
-		
+
 		assertEquals(p1, cloned.getPieceAt(new Coordinate(0, 0)));
 		assertFalse(b.pieceAt(new Coordinate(0, 0)));
 		assertEquals(p1, b.getPieceAt(new Coordinate(1, 0)));
+	}
+
+	@Test
+	public void testEquals() {
+		HashMap<Coordinate, AbstractPiece> pieces1 = new HashMap<Coordinate, AbstractPiece>();
+		AbstractPiece p11 = new Cat(Owner.Player1);
+		AbstractPiece p12 = new Camel(Owner.Player1);
+		AbstractPiece p13 = new Horse(Owner.Player2);
+		AbstractPiece p14 = new Dog(Owner.Player2);
+
+		pieces1.put(new Coordinate(0, 0), p11);
+		pieces1.put(new Coordinate(1, 1), p12);
+		pieces1.put(new Coordinate(2, 2), p13);
+		pieces1.put(new Coordinate(3, 3), p14);
+
+		BoardState b1 = new BoardState(pieces1);
+
+		HashMap<Coordinate, AbstractPiece> pieces2 = new HashMap<Coordinate, AbstractPiece>();
+		AbstractPiece p21 = new Cat(Owner.Player1);
+		AbstractPiece p22 = new Camel(Owner.Player1);
+		AbstractPiece p23 = new Horse(Owner.Player2);
+		AbstractPiece p24 = new Dog(Owner.Player2);
+
+		pieces2.put(new Coordinate(0, 0), p21);
+		pieces2.put(new Coordinate(1, 1), p22);
+		pieces2.put(new Coordinate(2, 2), p23);
+		pieces2.put(new Coordinate(3, 3), p24);
+
+		BoardState b2 = new BoardState(pieces2);
+
+		HashMap<Coordinate, AbstractPiece> pieces3 = new HashMap<Coordinate, AbstractPiece>();
+		AbstractPiece p31 = new Cat(Owner.Player1);
+		AbstractPiece p32 = new Camel(Owner.Player1);
+		AbstractPiece p33 = new Horse(Owner.Player2);
+		AbstractPiece p34 = new Dog(Owner.Player2);
+
+		pieces3.put(new Coordinate(0, 0), p31);
+		pieces3.put(new Coordinate(1, 1), p32);
+		pieces3.put(new Coordinate(2, 2), p34);
+		pieces3.put(new Coordinate(3, 3), p33);
+
+		BoardState b3 = new BoardState(pieces3);
+
+		assertNotEquals(b1, null); // null test
+		assertEquals(b1, b1); // reflexive
+
+		assertEquals(b1, b2); // symmetric
+		assertEquals(b2, b1);
+
+		assertEquals(new BoardState(), new BoardState());
+
+		assertNotEquals(b1, b3);
+		assertNotEquals(b3, b1);
+
+		assertNotEquals(b1, new BoardState());
+		assertNotEquals(new BoardState(), b1);
+	}
+
+	@Test
+	public void testHashCode() {
+		HashMap<Coordinate, AbstractPiece> pieces1 = new HashMap<Coordinate, AbstractPiece>();
+		AbstractPiece p11 = new Cat(Owner.Player1);
+		AbstractPiece p12 = new Camel(Owner.Player1);
+		AbstractPiece p13 = new Horse(Owner.Player2);
+		AbstractPiece p14 = new Dog(Owner.Player2);
+
+		pieces1.put(new Coordinate(0, 0), p11);
+		pieces1.put(new Coordinate(1, 1), p12);
+		pieces1.put(new Coordinate(2, 2), p13);
+		pieces1.put(new Coordinate(3, 3), p14);
+
+		BoardState b1 = new BoardState(pieces1);
+
+		HashMap<Coordinate, AbstractPiece> pieces2 = new HashMap<Coordinate, AbstractPiece>();
+		AbstractPiece p21 = new Cat(Owner.Player1);
+		AbstractPiece p22 = new Camel(Owner.Player1);
+		AbstractPiece p23 = new Horse(Owner.Player2);
+		AbstractPiece p24 = new Dog(Owner.Player2);
+
+		pieces2.put(new Coordinate(0, 0), p21);
+		pieces2.put(new Coordinate(1, 1), p22);
+		pieces2.put(new Coordinate(2, 2), p23);
+		pieces2.put(new Coordinate(3, 3), p24);
+
+		BoardState b2 = new BoardState(pieces2);
+
+		HashMap<Coordinate, AbstractPiece> pieces3 = new HashMap<Coordinate, AbstractPiece>();
+		AbstractPiece p31 = new Cat(Owner.Player1);
+		AbstractPiece p32 = new Camel(Owner.Player1);
+		AbstractPiece p33 = new Horse(Owner.Player2);
+		AbstractPiece p34 = new Dog(Owner.Player2);
+
+		pieces3.put(new Coordinate(0, 0), p31);
+		pieces3.put(new Coordinate(1, 1), p32);
+		pieces3.put(new Coordinate(2, 2), p34);
+		pieces3.put(new Coordinate(3, 3), p33);
+
+		BoardState b3 = new BoardState(pieces3);
+
+		assertEquals(b1.hashCode(), b1.hashCode());
+		assertEquals(b1.hashCode(), b2.hashCode());
+
+		assertNotEquals(b1.hashCode(), b3.hashCode());
+		assertNotEquals(b1.hashCode(), new BoardState().hashCode());
 	}
 }

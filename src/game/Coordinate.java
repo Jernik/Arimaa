@@ -82,7 +82,7 @@ public class Coordinate implements Serializable {
 	public boolean equals(Object obj) {
 		if (obj instanceof Coordinate) {
 			Coordinate other = (Coordinate) obj;
-			return this.valid && other.isValid() && this.x == other.getX() && this.y == other.getY();
+			return this.valid == other.isValid() && this.x == other.getX() && this.y == other.getY();
 		}
 		return false;
 	}

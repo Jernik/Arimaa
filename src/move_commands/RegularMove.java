@@ -40,14 +40,12 @@ public class RegularMove extends MoveCommand implements Serializable {
 
 	@Override
 	public BoardState execute() {
-		if(!isValidMove()){
+		if (!isValidMove()) {
 			return this.originalBoard;
 		}
 		this.newBoard.movePiece(originalPlace, newPlace);
 		return newBoard;
 	}
-
-
 
 	@Override
 	public BoardState getOriginalBoard() {
@@ -58,6 +56,9 @@ public class RegularMove extends MoveCommand implements Serializable {
 	public boolean isValidMove() {
 		AbstractPiece piece = this.originalBoard.getPieceAt(originalPlace);
 		if (isFrozen(originalPlace)) {
+			return false;
+		}
+		if (this.originalBoard.pieceAt(newPlace)) {
 			return false;
 		}
 		if ((piece instanceof Rabbit)) {
@@ -74,16 +75,16 @@ public class RegularMove extends MoveCommand implements Serializable {
 		return true;
 	}
 
-//	@Override
-//	public boolean isValidMove() {
-//		int row = this.newPlace.getX();
-//		int column = this.newPlace.getY();
-//		if (row >= 0 && row < 8 && column >= 0 && column < 8
-//				&& !originalBoard.pieceAt(this.newPlace))
-//			return true;
-//		return false;
-//	}
-	
+	// @Override
+	// public boolean isValidMove() {
+	// int row = this.newPlace.getX();
+	// int column = this.newPlace.getY();
+	// if (row >= 0 && row < 8 && column >= 0 && column < 8
+	// && !originalBoard.pieceAt(this.newPlace))
+	// return true;
+	// return false;
+	// }
+
 	public Coordinate getOriginalPlace() {
 		return this.originalPlace;
 	}
