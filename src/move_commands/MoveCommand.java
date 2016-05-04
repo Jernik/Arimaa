@@ -1,20 +1,15 @@
 package move_commands;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import game.BoardState;
 import game.Coordinate;
 import piece.Owner;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public abstract class MoveCommand {
 	protected Owner turn;
 	protected BoardState originalBoard;
-	protected boolean executed;
-
-	public MoveCommand() {
-		this.executed = false;
-	}
 
 	abstract public BoardState execute();
 
@@ -26,14 +21,6 @@ public abstract class MoveCommand {
 
 	public BoardState getOriginalBoard() {
 		return this.originalBoard;
-	}
-
-	public boolean hasExecuted() {
-		return this.executed;
-	}
-
-	protected void executed() {
-		this.executed = true;
 	}
 
 	protected boolean isFrozen(Coordinate pieceToMove) {
@@ -81,22 +68,11 @@ public abstract class MoveCommand {
 	}
 
 	protected boolean eq(MoveCommand moveCommand) {
-		return this.turn.equals(moveCommand.getTurn()) && this.originalBoard.equals(moveCommand.getOriginalBoard())
-				&& this.executed == moveCommand.hasExecuted();
+		return this.turn.equals(moveCommand.getTurn()) && this.originalBoard.equals(moveCommand.getOriginalBoard());
 	}
 
 	@Override
 	public int hashCode() {
 		return this.turn.hashCode() + this.originalBoard.hashCode();
 	}
-
-	// public boolean isValidMove();
-
-	// public static boolean validMove(BoardState originalBoard, int row, int column) {
-	// if (row >= 0 && row < 8 && column >= 0 && column < 8
-	// && originalBoard.getBoardArray()[row][column] == ' ')
-	// return true;
-	// return false;
-	// }
-
 }
