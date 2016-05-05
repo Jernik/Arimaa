@@ -15,6 +15,7 @@ public class TestTimePanel {
 	public void testInitializes() {
 		TimePanel tp = new TimePanel(new GUI(), new Game(), 15, new JLabel());
 		assertNotNull(tp);
+		tp.stopTimer();
 	}
 	
 	@Test
@@ -28,6 +29,7 @@ public class TestTimePanel {
 			e.printStackTrace();
 		}
 		assertEquals("<html> <b>" + 0 + ":" + 14 + "</b> </html>", tp.getTimerLabel().getText());
+		tp.stopTimer();
 	}
 	
 	@Test
@@ -43,6 +45,7 @@ public class TestTimePanel {
 			e.printStackTrace();
 		}
 		assertEquals(1, game.getWinner());
+		tp.stopTimer();
 	}
 
 	@Test
@@ -80,5 +83,6 @@ public class TestTimePanel {
 			//e.printStackTrace();
 		}
 		assertEquals(2,  fieldValue);
+		tp.stopTimer();
 	}
 }

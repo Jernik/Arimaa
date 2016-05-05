@@ -1,5 +1,6 @@
 package game;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -18,14 +19,16 @@ import piece.Rabbit;
  * @author shellajt
  *
  */
-public class BoardState {
+
+public class BoardState implements Serializable {
+	private static final long serialVersionUID = 5283869533255607044L;
 	public static final int MAX_BOARD_SIZE = 8;
+
 	private HashMap<Coordinate, AbstractPiece> pieces;
 
 	public BoardState() {
 		this.pieces = new HashMap<Coordinate, AbstractPiece>();
 		this.setUpDefaultBoardConfiguration();
-
 	}
 
 	public BoardState(HashMap<Coordinate, AbstractPiece> pieces) {

@@ -19,7 +19,7 @@ public class RegularMove extends MoveCommand {
 		this.originalPlace = originalPlace;
 		this.newPlace = newPlace;
 	}
-
+	
 	public Coordinate getOriginalPlace() {
 		return this.originalPlace;
 	}

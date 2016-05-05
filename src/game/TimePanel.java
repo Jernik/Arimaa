@@ -9,16 +9,14 @@ import javax.swing.JLabel;
 
 public class TimePanel {
 	private JLabel timerLabel;
-	Timer timer;
 	int playerTurn;
+	private Timer updateTimer;
 
 	public TimePanel(GUI gui, Game game, int startTime, JLabel label) {
-
-		//timer = new Timer();
 		playerTurn = game.getPlayerTurn();
 		setTimerLabel(label);
 
-		java.util.Timer updateTimer = new java.util.Timer();
+		this.updateTimer = new Timer();
 		updateTimer.scheduleAtFixedRate(new TimerTask() {
 			int s = startTime;
 
@@ -66,5 +64,9 @@ public class TimePanel {
 
 	public void setTimerLabel(JLabel timerLabel) {
 		this.timerLabel = timerLabel;
+	}
+
+	public void stopTimer() {
+		this.updateTimer.cancel();
 	}
 }

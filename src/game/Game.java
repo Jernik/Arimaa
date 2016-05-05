@@ -2,6 +2,7 @@ package game;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Set;
@@ -12,7 +13,8 @@ import piece.AbstractPiece;
 import piece.Owner;
 import piece.Rabbit;
 
-public class Game {
+public class Game implements Serializable {
+	private static final long serialVersionUID = -7894027967721918280L;
 	private ArrayList<MoveCommand> moves = new ArrayList<MoveCommand>();
 	public BoardState currentBoard = null;
 	private int turnNumber;
@@ -38,6 +40,21 @@ public class Game {
 
 	public Game(BoardState b) {
 		currentBoard = b;
+	}
+
+	public Game(Game g) {
+		this.moves = g.getMoves();
+		this.currentBoard = g.currentBoard;
+		this.turnNumber = g.getTurnNumber();
+		this.moveTimer = g.getMoveTimer();
+		this.p1TimeBank = g.p1TimeBank;
+		this.p2TimeBank = g.p2TimeBank;
+		this.turnCounter = g.getTurnCounter();
+		this.p1Name = g.getP1Name();
+		this.p2Name = g.getP2Name();
+		this.winner = g.getWinner();
+		this.numMoves = g.getNumMoves();
+		this.playerTurn = g.getPlayerTurn();
 	}
 
 	public BoardState getBoardState() {
@@ -124,6 +141,10 @@ public class Game {
 		return this.currentBoard.getPieceAt(coor);
 	}
 
+	public ArrayList<MoveCommand> getMoves() {
+		return this.moves;
+	}
+
 	// refactor for future pull request
 	public boolean checkCoor(int row, int column) {
 		return this.checkCoor(new Coordinate(row, column));
@@ -151,11 +172,9 @@ public class Game {
 	 * @param opponentPiece
 	 *            Coordinate of the opponent's piece
 	 * @param destination
-	 *            Coordinate of the position that either the opponent's piece
-	 *            will be pushed into or the position the owner's piece will be
-	 *            moved into.
-	 * @return Returns true when a push or pull with the given 3 Coordinate
-	 *         objects would result in a valid move.
+	 *            Coordinate of the position that either the opponent's piece will be pushed into or the position the
+	 *            owner's piece will be moved into.
+	 * @return Returns true when a push or pull with the given 3 Coordinate objects would result in a valid move.
 	 */
 
 	public boolean pushOrPull(Coordinate ownerPiece, Coordinate opponentPiece, Coordinate destination) {
@@ -224,8 +243,7 @@ public class Game {
 	}
 
 	/**
-	 * checks both rows for rabbits of the opposite side, top row first followed
-	 * by the bottom row
+	 * checks both rows for rabbits of the opposite side, top row first followed by the bottom row
 	 */
 	private void checkWin() {
 		if (this.getPlayerTurn() == 0) {
@@ -275,8 +293,8 @@ public class Game {
 	}
 
 	/**
-	 * Piece death occurs when pieces are on the squares (2,2), (2,5), (5,2),
-	 * (5,5), and has no friendly adjacent pieces to it
+	 * Piece death occurs when pieces are on the squares (2,2), (2,5), (5,2), (5,5), and has no friendly adjacent pieces
+	 * to it
 	 */
 	private void checkDeaths(Coordinate toCheck) {
 		if (!this.currentBoard.pieceAt((toCheck)))
@@ -332,99 +350,51 @@ public class Game {
 		this.numMoves = 4;
 	}
 
-	// doesn't work now, leave for another pull request
-	public boolean loadFile(Scanner scanner) {
-		scanner.useDelimiter(",");
-		BoardState boardToSet = new BoardState(); // so it compiles
-		String[] validBoardCharactersArray = { " ", "E", "C", "H", "D", "K", "R", "e", "c", "h", "d", "k", "r" };
-		ArrayList<String> vbc = new ArrayList<String>();
-		for (String s : validBoardCharactersArray) {
-			vbc.add(s);
-		}
-
-		for (int i = 0; i < 8; i++) {
-			for (int k = 0; k < 8; k++) {
-				if (!scanner.hasNext()) {
-					scanner.close();
-					return false;
-				}
-				String next = scanner.next();
-				if (!vbc.contains(next)) {
-					scanner.close();
-					return false;
-				}
-				// boardToSet.setBoardSpace(i, k, next);
-			}
-		}
-
-		if (!scanner.hasNext()) {
-			scanner.close();
+	public boolean equals(Game compGame) {
+		// for(int i = 0; i < this.moves.size(); i++) {
+		// if(!this.moves.get(i).equals(compGame.moves.get(i))) {
+		// return false;
+		// }
+		// }
+		if (!this.moves.equals(compGame.moves)) {
 			return false;
 		}
-		int turnCounter = scanner.nextInt();
 
-		if (!scanner.hasNext()) {
-			scanner.close();
+		if (!this.currentBoard.equals(compGame.currentBoard)) {
 			return false;
 		}
-		int turnTimer = scanner.nextInt();
 
-		if (!scanner.hasNext()) {
-			scanner.close();
+		if (this.turnNumber != compGame.turnNumber) {
 			return false;
 		}
-		String p1name = scanner.next();
-
-		if (!scanner.hasNext()) {
-			scanner.close();
+		if (this.moveTimer != compGame.moveTimer) {
 			return false;
 		}
-		String p2name = scanner.next();
-
-		scanner.close();
-
-		// Successful load! Push all changes to game permanently
-		this.currentBoard = boardToSet;
-		this.turnCounter = turnCounter;
-		this.moveTimer = turnTimer;
-		this.p1Name = p1name;
-		this.p2Name = p2name;
-
-		if (this.turnCounter % 2 == 1) {
-			this.playerTurn = 2;
-		} else {
-			this.playerTurn = 1;
-		}
-		return true;
-	}
-
-	public boolean saveFile(FileWriter fw) {
-		// TODO: Update to use serializable game states instead of char arrays
-		if (fw == null)
-			return false;
-		for (int i = 0; i < 8; i++) {
-			for (int j = 0; j < 8; j++) {
-				String s = ""; // + this.currentBoard.getBoardArray()[i][j] +
-								// ",";
-				try {
-					fw.write(s);
-				} catch (IOException e) {
-					return false;
-				}
-			}
-		}
-
-		String s2 = "" + this.turnCounter + ",";
-
-		try {
-			fw.write(s2);
-			fw.write(this.moveTimer + ",");
-			fw.write(this.p1Name + ",");
-			fw.write(this.p2Name);
-			fw.close();
-		} catch (IOException e) {
+		if (this.p1TimeBank != compGame.p1TimeBank) {
 			return false;
 		}
+		if (this.p2TimeBank != compGame.p2TimeBank) {
+			return false;
+		}
+		if (this.turnCounter != compGame.turnCounter) {
+			return false;
+		}
+		if (!this.p1Name.equals(compGame.p1Name)) {
+			return false;
+		}
+		if (!this.p2Name.equals(compGame.p2Name)) {
+			return false;
+		}
+		if (this.winner != compGame.winner) {
+			return false;
+		}
+		if (this.numMoves != compGame.numMoves) {
+			return false;
+		}
+		if (this.playerTurn != compGame.playerTurn) {
+			return false;
+		}
+
 		return true;
 	}
 }

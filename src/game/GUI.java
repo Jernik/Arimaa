@@ -5,8 +5,13 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.nio.file.Files;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
@@ -22,6 +27,9 @@ import listeners.NewGameListener;
 import piece.AbstractPiece;
 
 public class GUI {
+	public static final String SAVE_FOLDER = "save/";
+	public static final String SAVE_PATH = SAVE_FOLDER + "game.ser";
+
 	public String p1Name;
 	public String p2Name;
 	public ArrayList<JFrame> activeFrames;
@@ -127,7 +135,6 @@ public class GUI {
 			imgPanel.setLocation(imgPanel.getPixelX(), imgPanel.getPixelY());
 			imgPanel.setVisible(true);
 			this.boardPieces[coor.getX()][coor.getY()] = imgPanel;
-			
 
 		}
 	}
@@ -165,21 +172,23 @@ public class GUI {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			File selectedFile = null;
-			JFileChooser fileChooser = new JFileChooser();
-			fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
-			int result = fileChooser.showOpenDialog(gameBoardPanel);
-			if (result == JFileChooser.APPROVE_OPTION) {
-				selectedFile = fileChooser.getSelectedFile();
-				FileWriter fw = null;
-				try {
-					fw = new FileWriter(selectedFile);
-				} catch (IOException e) {
-					// Shouldn't ever happen...
-					System.out.println("No file selected!");
-				}
-				game.saveFile(fw);
-			}
+			saveFile();
+			// we can add functionallity to let the user choose where to save later
+//			File selectedFile = null;
+//			JFileChooser fileChooser = new JFileChooser();
+//			fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+//			int result = fileChooser.showOpenDialog(gameBoardPanel);
+//			if (result == JFileChooser.APPROVE_OPTION) {
+//				selectedFile = fileChooser.getSelectedFile();
+//				FileWriter fw = null;
+//				try {
+//					fw = new FileWriter(selectedFile);
+//				} catch (IOException e) {
+//					// Shouldn't ever happen...
+//					System.out.println("No file selected!");
+//				}
+//				game.saveFile(fw);
+//			}
 		}
 	}
 
@@ -221,5 +230,68 @@ public class GUI {
 		panel.add(winnerLabel);
 		winnerLabel.setLocation(winnerFrame.getWidth() / 2 - 75, winnerFrame.getHeight() / 2 - 87);
 		winnerLabel.setVisible(true);
+	}
+
+	public boolean loadFile(File f) {
+		if (!f.exists()) {
+			System.out.println("file does not exist");
+			return false;
+		}
+		ObjectInputStream in = null;
+		try {
+			in = this.createInputStream(f);
+			this.game = (Game) in.readObject();
+		} catch (IOException e) {
+			System.out.println("Could not load game. Please try again");
+			e.printStackTrace();
+			return false;
+		} catch (ClassNotFoundException | ClassCastException e) {
+			System.out.println("Corrupted save file");
+			e.printStackTrace();
+			return false;
+		} finally {
+			if (in != null) {
+				try {
+					in.close();
+				} catch (IOException e) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
+	public boolean saveFile() {
+		ObjectOutputStream out = null;
+		try {
+			out = createOutputStream();
+			out.writeObject(this.game);
+		} catch (IOException e) {
+			System.out.println("could not save the game");
+			e.printStackTrace();
+			return false;
+		} finally {
+			if (out != null) {
+				try {
+					out.close();
+				} catch (IOException e) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
+	public ObjectOutputStream createOutputStream() throws IOException {
+		File d = new File(SAVE_FOLDER);
+		if (!d.isDirectory()) {
+			d.mkdir();
+		}
+		File f = new File(SAVE_PATH);
+		return new ObjectOutputStream(new FileOutputStream(f));
+	}
+
+	public ObjectInputStream createInputStream(File f) throws IOException {
+		return new ObjectInputStream(new FileInputStream(f));
 	}
 }

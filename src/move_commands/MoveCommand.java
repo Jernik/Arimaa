@@ -1,5 +1,6 @@
 package move_commands;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,7 +8,8 @@ import game.BoardState;
 import game.Coordinate;
 import piece.Owner;
 
-public abstract class MoveCommand {
+public abstract class MoveCommand implements Serializable{
+	private static final long serialVersionUID = -1176514408247586630L;
 	protected Owner turn;
 	protected BoardState originalBoard;
 

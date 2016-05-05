@@ -41,7 +41,7 @@ public class TestGame {
 
 	@Test
 	public void testInitializes() {
-		Game g = new Game(null);
+		Game g = new Game();
 		assertNotNull(g);
 	}
 
