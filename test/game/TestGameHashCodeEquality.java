@@ -1,7 +1,7 @@
 package game;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
 import org.junit.Before;
@@ -10,7 +10,7 @@ import org.junit.Test;
 import move_commands.RegularMove;
 import piece.Owner;
 
-public class TestGameEquality {
+public class TestGameHashCodeEquality {
 	private Game g1;
 	private Game g2;
 
@@ -24,9 +24,9 @@ public class TestGameEquality {
 				new RegularMove(this.g2.getBoardState(), new Coordinate(0, 1), new Coordinate(0, 2), Owner.Player1));
 	}
 
-	public void testNotEquals(VoidMethod method) {
+	public void testHashCodeNotEquals(VoidMethod method) {
 		method.execute();
-		assertNotEquals(this.g1, this.g2);
+		assertNotEquals(this.g1.hashCode(), this.g2.hashCode());
 	}
 	
 	@Test
@@ -52,7 +52,7 @@ public class TestGameEquality {
 
 	@Test
 	public void testGameNotEqualIfDifferentMoves() {
-		testNotEquals(() -> {
+		testHashCodeNotEquals(() -> {
 			RegularMove move = new RegularMove(this.g1.getBoardState(), new Coordinate(0, 2), new Coordinate(0, 3),
 					Owner.Player1);
 			this.g1.getMoves().add(move);
@@ -61,7 +61,7 @@ public class TestGameEquality {
 
 	@Test
 	public void testGameNotEqualIfDifferentBoardStates() {
-		testNotEquals(() -> {
+		testHashCodeNotEquals(() -> {
 			this.g1.getBoardState().movePiece(new Coordinate(0, 2), new Coordinate(0, 3));
 			// hack to make the move lists still be the same
 			this.g1.getMoves().clear();
@@ -71,14 +71,14 @@ public class TestGameEquality {
 
 	@Test
 	public void testGameNotEqualIfDifferentTurn() {
-		testNotEquals(() -> {
+		testHashCodeNotEquals(() -> {
 			this.g1.incrementTurn();
 		});
 	}
 
 	@Test
 	public void testGameNotEqualIfDifferentTurnCounter() {
-		testNotEquals(() -> {
+		testHashCodeNotEquals(() -> {
 			// to increment the turn counter, make moves and delete them
 			// 1st move
 			RegularMove move = new RegularMove(this.g1.getBoardState(), new Coordinate(0, 2), new Coordinate(0, 3),
@@ -108,20 +108,20 @@ public class TestGameEquality {
 
 	@Test
 	public void testGameNotEqualIfDifferentPlayerTurn() {
-		testNotEquals(() -> {
+		testHashCodeNotEquals(() -> {
 			this.g1.setPlayerTurn(2);
 		});
 	}
 
 	@Test
 	public void testGameNotEqualIfDifferentWinner() {
-		testNotEquals(() -> {
+		testHashCodeNotEquals(() -> {
 			this.g1.setWinner(1);
 		});
-		testNotEquals(() -> {
+		testHashCodeNotEquals(() -> {
 			this.g1.setWinner(2);
 		});
-		testNotEquals(() -> {
+		testHashCodeNotEquals(() -> {
 			this.g1.setWinner(1);
 			this.g2.setWinner(2);
 		});
@@ -129,7 +129,7 @@ public class TestGameEquality {
 
 	@Test
 	public void testGameNotEqualIfDifferentNumberOfMoves() {
-		testNotEquals(() -> {
+		testHashCodeNotEquals(() -> {
 			RegularMove move = new RegularMove(this.g1.getBoardState(), new Coordinate(0, 2), new Coordinate(0, 3),
 					Owner.Player1);
 			this.g1.move(move);
@@ -142,21 +142,21 @@ public class TestGameEquality {
 
 	@Test
 	public void testGameNotEqualIfDifferentPlayer1Name() {
-		testNotEquals(() -> {
+		testHashCodeNotEquals(() -> {
 			this.g1.setP1Name("something different");
 		});
 	}
 
 	@Test
 	public void testGameNotEqualIfDifferentPlayer2Name() {
-		testNotEquals(() -> {
+		testHashCodeNotEquals(() -> {
 			this.g2.setP1Name("something different");
 		});
 	}
 
 	@Test
 	public void testGameNotEqualIfDifferentMoveTimer() {
-		testNotEquals(() -> {
+		testHashCodeNotEquals(() -> {
 			this.g1.setMoveTimer(3456);
 		});
 	}
