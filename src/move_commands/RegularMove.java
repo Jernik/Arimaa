@@ -7,7 +7,7 @@ import piece.Owner;
 import piece.Rabbit;
 
 public class RegularMove extends MoveCommand {
-
+	private static final long serialVersionUID = 4434841689278271636L;
 	private BoardState newBoard;
 	private Coordinate originalPlace;
 	private Coordinate newPlace;
@@ -19,7 +19,7 @@ public class RegularMove extends MoveCommand {
 		this.originalPlace = originalPlace;
 		this.newPlace = newPlace;
 	}
-	
+
 	public Coordinate getOriginalPlace() {
 		return this.originalPlace;
 	}

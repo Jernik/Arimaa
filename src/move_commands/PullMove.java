@@ -8,6 +8,7 @@ import piece.Owner;
  * Created by millerlj on 4/27/2016.
  */
 public class PullMove extends MoveCommand {
+	private static final long serialVersionUID = -2023708661926206228L;
 	private BoardState newBoard;
 	private Coordinate originalPlace;
 	private Coordinate newPlace;
@@ -78,9 +79,10 @@ public class PullMove extends MoveCommand {
 				&& this.newPlace.equals(pullMove.getNewPlace())
 				&& this.pullPiecePlace.equals(pullMove.getPullPiecePlace());
 	}
-	
+
 	@Override
 	public int hashCode() {
-		return super.hashCode() + this.newBoard.hashCode() + this.originalPlace.hashCode() + this.newPlace.hashCode() + this.pullPiecePlace.hashCode();
+		return super.hashCode() + this.newBoard.hashCode() + this.originalPlace.hashCode() + this.newPlace.hashCode()
+				+ this.pullPiecePlace.hashCode();
 	}
 }

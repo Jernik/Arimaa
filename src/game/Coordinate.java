@@ -3,6 +3,7 @@ package game;
 import java.io.Serializable;
 
 public class Coordinate implements Serializable {
+	private static final long serialVersionUID = 1938906095938960188L;
 	private int x;
 	private int y;
 	private boolean valid;
@@ -17,7 +18,8 @@ public class Coordinate implements Serializable {
 			this.x = -1;
 			this.y = -1;
 		}
-	}	
+	}
+
 	public Coordinate(Coordinate coor) {
 		this.x = coor.getX();
 		this.y = coor.getY();
@@ -43,38 +45,35 @@ public class Coordinate implements Serializable {
 	public Coordinate down() {
 		return new Coordinate(x, y + 1);
 	}
-	
+
 	public Coordinate up() {
 		return new Coordinate(x, y - 1);
 	}
-	
+
 	public Coordinate left() {
 		return new Coordinate(x - 1, y);
 	}
-	
+
 	public Coordinate right() {
 		return new Coordinate(x + 1, y);
 	}
 
-	
-	
 	/**
 	 * 
 	 * @param other
 	 *            Coordinate to be compared to
-	 * @return Returns true if both the caller Coordinate and parameter
-	 *         Coordinate are within one position of each other relative to a
-	 *         single board tile in either the X or Y direction. Returns false
-	 *         if the two objects are equivalent.
+	 * @return Returns true if both the caller Coordinate and parameter Coordinate are within one position of each other
+	 *         relative to a single board tile in either the X or Y direction. Returns false if the two objects are
+	 *         equivalent.
 	 */
 	public boolean isOrthogonallyAdjacentTo(Coordinate other) {
 		return !this.equals(other) && (isHorizontal(other) || isVertical(other)) && this.isValid() && other.isValid();
 	}
-	
+
 	private boolean isHorizontal(Coordinate other) {
 		return (Math.abs(this.getX() - other.getX()) <= 1 && this.getY() == other.getY());
 	}
-	
+
 	private boolean isVertical(Coordinate other) {
 		return (this.getX() == other.getX() && Math.abs(this.getY() - other.getY()) <= 1);
 	}
