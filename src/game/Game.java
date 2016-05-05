@@ -1,10 +1,7 @@
 package game;
 
-import java.io.FileWriter;
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Scanner;
 import java.util.Set;
 
 import move_commands.MoveCommand;
@@ -15,21 +12,23 @@ import piece.Rabbit;
 
 public class Game implements Serializable {
 	private static final long serialVersionUID = -7894027967721918280L;
+
 	private ArrayList<MoveCommand> moves = new ArrayList<MoveCommand>();
-	public BoardState currentBoard = null;
+	private BoardState currentBoard;
 	private int turnNumber;
 
-	int moveTimer = 0;
-	int p1TimeBank = 0;
-	int p2TimeBank = 0;
-	int turnCounter = 0;
-
-	String p1Name = "Player1";
-	String p2Name = "Player2";
 	// 0 is nobody, 1 is player1, 2 is player2
+	private int playerTurn = 1;
 	private int winner = 0;
 	private int numMoves = 4;
-	private int playerTurn = 1;
+
+	private String p1Name = "Player1";
+	private String p2Name = "Player2";
+
+	private int p1TimeBank = 0;
+	private int p2TimeBank = 0;
+	private int moveTimer = 0;
+	private int turnCounter = 0;
 
 	/**
 	 * Creates a board with a default starting layout
@@ -44,37 +43,28 @@ public class Game implements Serializable {
 
 	public Game(Game g) {
 		this.moves = g.getMoves();
-		this.currentBoard = g.currentBoard;
+		this.currentBoard = g.getBoardState();
 		this.turnNumber = g.getTurnNumber();
-		this.moveTimer = g.getMoveTimer();
-		this.p1TimeBank = g.p1TimeBank;
-		this.p2TimeBank = g.p2TimeBank;
-		this.turnCounter = g.getTurnCounter();
-		this.p1Name = g.getP1Name();
-		this.p2Name = g.getP2Name();
+
+		this.playerTurn = g.getPlayerTurn();
 		this.winner = g.getWinner();
 		this.numMoves = g.getNumMoves();
-		this.playerTurn = g.getPlayerTurn();
+
+		this.p1Name = g.getP1Name();
+		this.p2Name = g.getP2Name();
+
+		this.p1TimeBank = g.getP1TimeBank();
+		this.p2TimeBank = g.getP2TimeBank();
+		this.moveTimer = g.getMoveTimer();
+		this.turnCounter = g.getTurnCounter();
+	}
+
+	public ArrayList<MoveCommand> getMoves() {
+		return this.moves;
 	}
 
 	public BoardState getBoardState() {
 		return this.currentBoard;
-	}
-
-	public int getMoveTimer() {
-		return moveTimer;
-	}
-
-	public void setMoveTimer(int moveTimer) {
-		this.moveTimer = moveTimer;
-	}
-
-	public void setP1Name(String p1Name) {
-		this.p1Name = p1Name;
-	}
-
-	public void setP2Name(String p2Name) {
-		this.p2Name = p2Name;
 	}
 
 	public int getTurnNumber() {
@@ -93,12 +83,16 @@ public class Game implements Serializable {
 		return this.turnCounter;
 	}
 
-	public String getP1Name() {
-		return this.p1Name;
+	public int getPlayerTurn() {
+		return playerTurn;
 	}
 
-	public String getP2Name() {
-		return this.p2Name;
+	public void setPlayerTurn(int playerTurn) {
+		this.playerTurn = playerTurn;
+	}
+
+	public int getWinner() {
+		return winner;
 	}
 
 	public void setWinner(int winner) {
@@ -109,16 +103,36 @@ public class Game implements Serializable {
 		return numMoves;
 	}
 
-	public int getTurnTimer() {
+	public String getP1Name() {
+		return this.p1Name;
+	}
+
+	public void setP1Name(String p1Name) {
+		this.p1Name = p1Name;
+	}
+
+	public String getP2Name() {
+		return this.p2Name;
+	}
+
+	public void setP2Name(String p2Name) {
+		this.p2Name = p2Name;
+	}
+
+	public int getP1TimeBank() {
+		return p1TimeBank;
+	}
+
+	public int getP2TimeBank() {
+		return p2TimeBank;
+	}
+
+	public int getMoveTimer() {
 		return moveTimer;
 	}
 
-	public int getWinner() {
-		return winner;
-	}
-
-	public int getPlayerTurn() {
-		return playerTurn;
+	public void setMoveTimer(int moveTimer) {
+		this.moveTimer = moveTimer;
 	}
 
 	public Owner getOwner() {
@@ -133,16 +147,8 @@ public class Game implements Serializable {
 		}
 	}
 
-	public void setPlayerTurn(int playerTurn) {
-		this.playerTurn = playerTurn;
-	}
-
 	public AbstractPiece getPieceAt(Coordinate coor) {
 		return this.currentBoard.getPieceAt(coor);
-	}
-
-	public ArrayList<MoveCommand> getMoves() {
-		return this.moves;
 	}
 
 	// refactor for future pull request

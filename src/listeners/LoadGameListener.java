@@ -183,7 +183,7 @@ public class LoadGameListener implements ActionListener {
 
             // P1 Time Panel
             TimePanel timePanel = new TimePanel(gui, game,
-                    game.getTurnTimer(), gui.timerLabel);
+                    game.getMoveTimer(), gui.timerLabel);
             gui.timer = timePanel;
 
             // Set up Save Game Button
