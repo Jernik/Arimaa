@@ -24,9 +24,9 @@ public class TestLoad extends EasyMockSupport {
 		GUI gui = new GUI();
 		gui.saveFile();
 
-		Game before = new Game(gui.game);
+		Game before = new Game(gui.getGame());
 		assertTrue(gui.loadFile(new File(GUI.SAVE_PATH)));
-		assertEquals(before, gui.game);
+		assertEquals(before, gui.getGame());
 	}
 
 	@Test
@@ -34,15 +34,15 @@ public class TestLoad extends EasyMockSupport {
 		GUI gui = new GUI();
 		gui.saveFile();
 
-		Game before = new Game(gui.game);
-		Ai ai = new Ai(Owner.Player1, gui.game);
-		gui.game.move(ai.generateMove());
-		gui.game.move(ai.generateMove());
-		gui.game.move(ai.generateMove());
+		Game before = new Game(gui.getGame());
+		Ai ai = new Ai(Owner.Player1, gui.getGame());
+		gui.getGame().move(ai.generateMove());
+		gui.getGame().move(ai.generateMove());
+		gui.getGame().move(ai.generateMove());
 
-		assertNotEquals(before, gui.game);
+		assertNotEquals(before, gui.getGame());
 		assertTrue(gui.loadFile(new File(GUI.SAVE_PATH)));
-		assertEquals(before, gui.game);
+		assertEquals(before, gui.getGame());
 	}
 
 	@Test
@@ -50,21 +50,21 @@ public class TestLoad extends EasyMockSupport {
 		GUI gui = new GUI();
 		gui.saveFile();
 
-		Game before = new Game(gui.game);
-		Ai ai = new Ai(Owner.Player1, gui.game);
-		gui.game.move(ai.generateMove());
-		Game afterMove = new Game(gui.game);
+		Game before = new Game(gui.getGame());
+		Ai ai = new Ai(Owner.Player1, gui.getGame());
+		gui.getGame().move(ai.generateMove());
+		Game afterMove = new Game(gui.getGame());
 
-		assertNotEquals(before, gui.game);
+		assertNotEquals(before, gui.getGame());
 		assertFalse(gui.loadFile(new File("sdfkjhas")));
-		assertEquals(afterMove, gui.game);
+		assertEquals(afterMove, gui.getGame());
 
 	}
 
 	@Test
 	public void testLoadFileReturnsFalseIfErrors() {
 		GUI gui = partialMockBuilder(GUI.class).addMockedMethod("createInputStream").createMock();
-		gui.game = new Game();
+		gui.setGame(new Game());
 		gui.saveFile();
 		File f = new File(GUI.SAVE_PATH);
 		try {
@@ -74,12 +74,12 @@ public class TestLoad extends EasyMockSupport {
 		}
 		replayAll();
 
-		Ai ai = new Ai(Owner.Player1, gui.game);
-		gui.game.move(ai.generateMove());
-		Game afterMove = new Game(gui.game);
+		Ai ai = new Ai(Owner.Player1, gui.getGame());
+		gui.getGame().move(ai.generateMove());
+		Game afterMove = new Game(gui.getGame());
 
 		assertFalse(gui.loadFile(f));
-		assertEquals(afterMove, gui.game);
+		assertEquals(afterMove, gui.getGame());
 		verifyAll();
 	}
 
@@ -96,11 +96,11 @@ public class TestLoad extends EasyMockSupport {
 		}
 
 		GUI gui = new GUI();
-		Ai ai = new Ai(Owner.Player1, gui.game);
-		gui.game.move(ai.generateMove());
-		Game afterMove = new Game(gui.game);
+		Ai ai = new Ai(Owner.Player1, gui.getGame());
+		gui.getGame().move(ai.generateMove());
+		Game afterMove = new Game(gui.getGame());
 
 		assertFalse(gui.loadFile(f));
-		assertEquals(afterMove, gui.game);
+		assertEquals(afterMove, gui.getGame());
 	}
 }

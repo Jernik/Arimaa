@@ -7,17 +7,14 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.nio.file.Files;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
@@ -30,31 +27,32 @@ public class GUI {
 	public static final String SAVE_FOLDER = "save/";
 	public static final String SAVE_PATH = SAVE_FOLDER + "game.ser";
 
-	public String p1Name;
-	public String p2Name;
-	public ArrayList<JFrame> activeFrames;
-	public Game game;
-	public ImagePanel gameBoardPanel = null;
-	public ImagePanel[][] boardPieces;
-	public JTextField p1TextField;
-	public JTextField p2TextField;
-	public JComboBox<Integer> timerComboBox;
-	public JLabel moveCountLabel;
-	public JLabel turnCountLabel;
-	public JLabel turnIndicatorLabel;
-	public JLabel timerLabel;
-	public TimePanel timer;
+	private Game game;
+	private ArrayList<JFrame> activeFrames;
+
+	private String p1Name;
+	private String p2Name;
+
+	private ImagePanel gameBoardPanel;
+	private ImagePanel[][] boardPieces;
+	private TimePanel timer;
+
+	private JTextField p1TextField;
+	private JTextField p2TextField;
+	private JComboBox<Integer> timerComboBox;
+	private JLabel moveCountLabel;
+	private JLabel turnCountLabel;
+	private JLabel turnIndicatorLabel;
+	private JLabel timerLabel;
 
 	public GUI() {
 		this.p1Name = "Player 1";
 		this.p2Name = "Player 2";
-		p2TextField = null;
-		p1TextField = null;
 		this.game = new Game();
 		this.boardPieces = new ImagePanel[8][8];
 		this.activeFrames = new ArrayList<JFrame>();
 		JFrame mainMenuFrame = new JFrame();
-		this.activeFrames.add(mainMenuFrame);
+		this.getActiveFrames().add(mainMenuFrame);
 		mainMenuFrame.setTitle("Welcome to Arimaa!");
 		mainMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
@@ -64,8 +62,8 @@ public class GUI {
 
 		// Add MAIN MENU panel with appropriate background image
 		ImagePanel panel = new ImagePanel(new ImageIcon("resources/BoardStoneBig.jpg").getImage());
-		g.activeFrames.get(0).getContentPane().add(panel);
-		g.activeFrames.get(0).pack();
+		g.getActiveFrames().get(0).getContentPane().add(panel);
+		g.getActiveFrames().get(0).pack();
 		panel.setVisible(true);
 
 		// Add the NEW GAME button to the Main Menu
@@ -94,38 +92,119 @@ public class GUI {
 		// Setup ActionListener for the LOAD GAME button
 		loadGameButton.addActionListener(new LoadGameListener(g));
 
-		g.activeFrames.get(0).setVisible(true);
+		g.getActiveFrames().get(0).setVisible(true);
 	}
 
-	public String getP1name() {
-		return p1Name;
+	public Game getGame() {
+		return game;
 	}
 
-	public void setP1name(String p1name) {
-		this.p1Name = p1name;
-	}
-
-	public String getP2name() {
-		return p2Name;
-	}
-
-	public void setP2name(String p2name) {
-		this.p2Name = p2name;
+	// default scope for testing
+	void setGame(Game g) {
+		this.game = g;
 	}
 
 	public ArrayList<JFrame> getActiveFrames() {
 		return activeFrames;
 	}
 
-	public void setActiveFrames(ArrayList<JFrame> frames) {
-		this.activeFrames = frames;
+	public String getP1Name() {
+		return p1Name;
+	}
+
+	public void setP1Name(String p1name) {
+		this.p1Name = p1name;
+	}
+
+	public String getP2Name() {
+		return p2Name;
+	}
+
+	public void setP2Name(String p2Name) {
+		this.p2Name = p2Name;
+	}
+
+	public ImagePanel getGameBoardPanel() {
+		return gameBoardPanel;
+	}
+
+	public void setGameBoardPanel(ImagePanel gameBoardPanel) {
+		this.gameBoardPanel = gameBoardPanel;
+	}
+
+	public ImagePanel[][] getBoardPieces() {
+		return boardPieces;
+	}
+
+	public TimePanel getTimer() {
+		return timer;
+	}
+
+	public void setTimer(TimePanel timer) {
+		this.timer = timer;
+	}
+
+	public JTextField getP2TextField() {
+		return p2TextField;
+	}
+
+	public void setP2TextField(JTextField p2TextField) {
+		this.p2TextField = p2TextField;
+	}
+
+	public JTextField getP1TextField() {
+		return p1TextField;
+	}
+
+	public void setP1TextField(JTextField p1TextField) {
+		this.p1TextField = p1TextField;
+	}
+
+	public JComboBox<Integer> getTimerComboBox() {
+		return timerComboBox;
+	}
+
+	public void setTimerComboBox(JComboBox<Integer> timerComboBox) {
+		this.timerComboBox = timerComboBox;
+	}
+
+	public JLabel getMoveCountLabel() {
+		return moveCountLabel;
+	}
+
+	public void setMoveCountLabel(JLabel moveCountLabel) {
+		this.moveCountLabel = moveCountLabel;
+	}
+
+	public JLabel getTurnCountLabel() {
+		return turnCountLabel;
+	}
+
+	public void setTurnCountLabel(JLabel turnCountLabel) {
+		this.turnCountLabel = turnCountLabel;
+	}
+
+	public JLabel getTurnIndicatorLabel() {
+		return turnIndicatorLabel;
+	}
+
+	public void setTurnIndicatorLabel(JLabel turnIndicatorLabel) {
+		this.turnIndicatorLabel = turnIndicatorLabel;
+	}
+
+	public JLabel getTimerLabel() {
+		return timerLabel;
+	}
+
+	public void setTimerLabel(JLabel timerLabel) {
+		this.timerLabel = timerLabel;
 	}
 
 	public void renderInitialBoard() {
-		if (game.getWinner() != 0) {
+		if (getGame().getWinner() != 0) {
 			createWinWindow();
 		}
-		BoardState boardState = this.game.getBoardState();
+		BoardState boardState = this.getGame().getBoardState();
 		for (Coordinate coor : boardState.getAllCoordinates()) {
 			AbstractPiece piece = boardState.getPieceAt(coor);
 			ImagePanel imgPanel = new ImagePanel(piece.getImage());
@@ -135,7 +214,6 @@ public class GUI {
 			imgPanel.setLocation(imgPanel.getPixelX(), imgPanel.getPixelY());
 			imgPanel.setVisible(true);
 			this.boardPieces[coor.getX()][coor.getY()] = imgPanel;
-
 		}
 	}
 
@@ -147,12 +225,12 @@ public class GUI {
 				this.boardPieces[i][k] = null;
 			}
 		}
-		moveCountLabel.setText("<html> <b>" + "Moves Left: \n" + game.getNumMoves() + "</b></html>");
-		turnCountLabel.setText("<html> <b>" + "Turn: " + game.getTurnCounter() + "</b></html>");
-		if (game.getPlayerTurn() == 1) {
-			turnIndicatorLabel.setText("<html> <b>" + game.getP1Name() + "'s turn" + "</b></html>");
+		moveCountLabel.setText("<html> <b>" + "Moves Left: \n" + getGame().getNumMoves() + "</b></html>");
+		turnCountLabel.setText("<html> <b>" + "Turn: " + getGame().getTurnCounter() + "</b></html>");
+		if (getGame().getPlayerTurn() == 1) {
+			turnIndicatorLabel.setText("<html> <b>" + getGame().getP1Name() + "'s turn" + "</b></html>");
 		} else {
-			turnIndicatorLabel.setText("<html> <b>" + game.getP2Name() + "'s turn" + "</b></html>");
+			turnIndicatorLabel.setText("<html> <b>" + getGame().getP2Name() + "'s turn" + "</b></html>");
 		}
 		renderInitialBoard();
 	}
@@ -162,8 +240,8 @@ public class GUI {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			JFrame settingsFrame = activeFrames.get(1);
-			activeFrames.remove(1);
+			JFrame settingsFrame = getActiveFrames().get(1);
+			getActiveFrames().remove(1);
 			settingsFrame.dispose();
 		}
 	}
@@ -174,42 +252,41 @@ public class GUI {
 		public void actionPerformed(ActionEvent arg0) {
 			saveFile();
 			// we can add functionallity to let the user choose where to save later
-//			File selectedFile = null;
-//			JFileChooser fileChooser = new JFileChooser();
-//			fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
-//			int result = fileChooser.showOpenDialog(gameBoardPanel);
-//			if (result == JFileChooser.APPROVE_OPTION) {
-//				selectedFile = fileChooser.getSelectedFile();
-//				FileWriter fw = null;
-//				try {
-//					fw = new FileWriter(selectedFile);
-//				} catch (IOException e) {
-//					// Shouldn't ever happen...
-//					System.out.println("No file selected!");
-//				}
-//				game.saveFile(fw);
-//			}
+			// File selectedFile = null;
+			// JFileChooser fileChooser = new JFileChooser();
+			// fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+			// int result = fileChooser.showOpenDialog(gameBoardPanel);
+			// if (result == JFileChooser.APPROVE_OPTION) {
+			// selectedFile = fileChooser.getSelectedFile();
+			// FileWriter fw = null;
+			// try {
+			// fw = new FileWriter(selectedFile);
+			// } catch (IOException e) {
+			// // Shouldn't ever happen...
+			// System.out.println("No file selected!");
+			// }
+			// game.saveFile(fw);
+			// }
 		}
 	}
 
 	public class UndoListener implements ActionListener {
-
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			game.undoMove();
+			getGame().undoMove();
 			renderBoard();
 		}
 	}
 
 	public void createWinWindow() {
 		String playerName = "";
-		if (this.game.getWinner() == 1)
-			playerName = game.getP1Name();
-		else if (this.game.getWinner() == 2)
-			playerName = game.getP2Name();
+		if (this.getGame().getWinner() == 1)
+			playerName = getGame().getP1Name();
+		else if (this.getGame().getWinner() == 2)
+			playerName = getGame().getP2Name();
 
 		JFrame winnerFrame = new JFrame();
-		activeFrames.add(winnerFrame);
+		getActiveFrames().add(winnerFrame);
 		winnerFrame.setTitle("Winner!");
 		winnerFrame.setLocation(650 / 2 - 324 / 2 + 5, 650 / 2 - 324 / 2 + 44);
 		winnerFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -273,7 +350,7 @@ public class GUI {
 		ObjectOutputStream out = null;
 		try {
 			out = createOutputStream();
-			out.writeObject(this.game);
+			out.writeObject(this.getGame());
 		} catch (IOException e) {
 			System.out.println("could not save the game");
 			e.printStackTrace();

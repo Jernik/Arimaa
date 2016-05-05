@@ -18,7 +18,7 @@ public class NewGameListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         JFrame settingsFrame = new JFrame();
-        gui.activeFrames.add(settingsFrame);
+        gui.getActiveFrames().add(settingsFrame);
         settingsFrame.setTitle("New Game Options");
         settingsFrame.setLocation(650 / 2 - 324 / 2 + 5, 650 / 2 - 324 / 2
                 + 44);
@@ -53,7 +53,7 @@ public class NewGameListener implements ActionListener {
         panel.add(p1NameField);
         p1NameField.setLocation(panel.getWidth() / 2, panel.getHeight() / 2
                 - p1NameField.getHeight() * 2);
-        gui.p1TextField = p1NameField;
+        gui.setP1TextField(p1NameField);
         p1NameField.setVisible(true);
 
         // Set up Player 2 Name Label and Text Field
@@ -76,7 +76,7 @@ public class NewGameListener implements ActionListener {
         panel.add(p2NameField);
         p2NameField.setLocation(panel.getWidth() / 2, panel.getHeight() / 2
                 - p2NameField.getHeight());
-        gui.p2TextField = p2NameField;
+        gui.setP2TextField(p2NameField);
         p2NameField.setVisible(true);
 
         // Set up Turn Timer Label and Text Field
@@ -96,7 +96,7 @@ public class NewGameListener implements ActionListener {
                 150, 165, 180 };
         JComboBox<Integer> turnTimerComboBox = new JComboBox<Integer>(
                 turnTimerPresets);
-        gui.timerComboBox = turnTimerComboBox;
+        gui.setTimerComboBox(turnTimerComboBox);
         turnTimerComboBox.setEditable(false);
         turnTimerComboBox.setSize(110, 25);
         panel.add(turnTimerComboBox);
