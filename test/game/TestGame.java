@@ -11,6 +11,7 @@ import java.util.HashMap;
 import org.junit.Before;
 import org.junit.Test;
 
+import ai.Ai;
 import move_commands.MoveCommand;
 import move_commands.RegularMove;
 import piece.AbstractPiece;
@@ -43,6 +44,33 @@ public class TestGame {
 	public void testInitializes() {
 		Game g = new Game();
 		assertNotNull(g);
+	}
+
+	@Test
+	public void testCopyConstructor() {
+		Game game = new Game(this.g);
+		assertFalse(game == this.g);
+		assertEquals(this.g, game);
+
+		game = new Game(this.g1);
+		assertFalse(game == this.g1);
+		assertEquals(this.g1, game);
+
+		game = new Game();
+		Ai ai1 = new Ai(Owner.Player1, game);
+		Ai ai2 = new Ai(Owner.Player2, game);
+		// play 4 moves
+		for (int i = 0; i < 4; i++) {
+			for (int k = 0; k < 4; k++) {
+				game.move(ai1.generateMove());
+			}
+			for (int k = 0; k < 4; k++) {
+				game.move(ai2.generateMove());
+			}
+		}
+		Game gameCopy = new Game(game);
+		assertFalse(gameCopy == game);
+		assertEquals(game, gameCopy);
 	}
 
 	@Test
