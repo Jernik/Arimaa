@@ -1,12 +1,7 @@
 package listeners;
 
-import game.GUI;
-import game.Game;
-import game.ImagePanel;
-import game.TimePanel;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -14,199 +9,197 @@ import java.io.FileNotFoundException;
 import java.nio.file.Paths;
 import java.util.Scanner;
 
-import static game.GUI.*;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+
+import game.GUI;
+import game.Game;
+import game.ImagePanel;
+import game.TimePanel;
 
 public class LoadGameListener implements ActionListener {
-    GUI gui;
-    private Game game;
+	GUI gui;
+	private Game game;
 
-    public LoadGameListener(GUI gui){
-        this.game = gui.getGame();
-        this.gui = gui;
-    }
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setCurrentDirectory(new File(Paths.get(GUI.SAVE_FOLDER).toAbsolutePath().toString()));
-        int result = fileChooser.showOpenDialog(gui.getActiveFrames().get(0));
-        if (result == JFileChooser.APPROVE_OPTION) {
-            File selectedFile = fileChooser.getSelectedFile();
-            try {
-                loadGame(selectedFile);
-                gui.setP1Name(game.getP1Name());
-                gui.setP2Name(game.getP2Name());
-            } catch (FileNotFoundException e1) {
-                System.out.println("Load game failed!");
-            }
-        }
-    }
+	public LoadGameListener(GUI gui) {
+		this.game = gui.getGame();
+		this.gui = gui;
+	}
 
-    private void loadGame(File file) throws FileNotFoundException {
-        Scanner scanner = new Scanner(file);
-        if (this.gui.loadFile(file)) {
-            JFrame mainMenu = gui.getActiveFrames().get(0);
-            gui.getActiveFrames().remove(0);
-            mainMenu.dispose();
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		JFileChooser fileChooser = new JFileChooser();
+		fileChooser.setCurrentDirectory(new File(Paths.get(GUI.SAVE_FOLDER).toAbsolutePath().toString()));
+		int result = fileChooser.showOpenDialog(gui.getActiveFrames().get(0));
+		if (result == JFileChooser.APPROVE_OPTION) {
+			File selectedFile = fileChooser.getSelectedFile();
+			try {
+				loadGame(selectedFile);
+				gui.setP1Name(game.getP1Name());
+				gui.setP2Name(game.getP2Name());
+			} catch (FileNotFoundException e1) {
+				System.out.println("Load game failed!");
+			}
+		}
+	}
 
-            JFrame gameFrame = new JFrame();
-            gui.getActiveFrames().add(gameFrame);
-            gameFrame.setTitle("Let's Play!");
-            gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	private void loadGame(File file) throws FileNotFoundException {
+		Scanner scanner = new Scanner(file);
+		if (this.gui.loadFile(file)) {
+			JFrame mainMenu = gui.getActiveFrames().get(0);
+			gui.getActiveFrames().remove(0);
+			mainMenu.dispose();
 
-            ImagePanel panel = new ImagePanel(new ImageIcon(
-                    "resources/board.jpg").getImage());
-            gui.getActiveFrames().get(0).getContentPane().add(panel);
-            gui.getActiveFrames().get(0).pack();
-            panel.setVisible(true);
-            gui.setGameBoardPanel(panel);
+			JFrame gameFrame = new JFrame();
+			gui.getActiveFrames().add(gameFrame);
+			gameFrame.setTitle("Let's Play!");
+			gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-            gui.getGameBoardPanel().addMouseListener(new MovementListener(gui));
-            gui.getActiveFrames().get(0).setBackground(Color.BLACK);
+			ImagePanel panel = new ImagePanel(new ImageIcon("resources/board.jpg").getImage());
+			gui.getActiveFrames().get(0).getContentPane().add(panel);
+			gui.getActiveFrames().get(0).pack();
+			panel.setVisible(true);
+			gui.setGameBoardPanel(panel);
 
-            gameFrame.setVisible(true);
+			gui.getGameBoardPanel().addMouseListener(new MovementListener(gui));
+			gui.getActiveFrames().get(0).setBackground(Color.BLACK);
 
-            // Set Up Player1 Label
-            JLabel p1Label = new JLabel();
-            p1Label.setText("<html> <b>Player 1: </b></html>");
-            p1Label.setForeground(Color.BLACK);
-            Font p1Font = p1Label.getFont();
-            p1Label.setFont(new Font(p1Font.getName(), 4, 22));
-            p1Label.setSize(110, 25);
-            gui.getGameBoardPanel().add(p1Label);
-            p1Label.setLocation(675, 25);
-            p1Label.setVisible(true);
+			gameFrame.setVisible(true);
 
-            // Set Up Player1 name Label
-            JLabel p1NameLabel = new JLabel();
-            p1NameLabel.setText("<html> <b>" + game.getP1Name() + "</b></html>");
-            p1NameLabel.setForeground(Color.BLACK);
-            Font p1NameFont = p1NameLabel.getFont();
-            p1NameLabel.setFont(new Font(p1NameFont.getName(), 4, 18));
-            p1NameLabel.setSize(110, 100);
-            gui.getGameBoardPanel().add(p1NameLabel);
-            p1NameLabel.setLocation(675, 25);
-            p1NameLabel.setVisible(true);
+			// Set Up Player1 Label
+			JLabel p1Label = new JLabel();
+			p1Label.setText("<html> <b>Player 1: </b></html>");
+			p1Label.setForeground(Color.BLACK);
+			Font p1Font = p1Label.getFont();
+			p1Label.setFont(new Font(p1Font.getName(), 4, 22));
+			p1Label.setSize(110, 25);
+			gui.getGameBoardPanel().add(p1Label);
+			p1Label.setLocation(675, 25);
+			p1Label.setVisible(true);
 
-            // Set Up Player2 Label
-            JLabel p2Label = new JLabel();
-            p2Label.setText("<html> <b>Player 2: </b></html>");
-            p2Label.setForeground(Color.BLACK);
-            Font p2Font = p2Label.getFont();
-            p2Label.setFont(new Font(p2Font.getName(), 4, 22));
-            p2Label.setSize(110, 25);
-            gui.getGameBoardPanel().add(p2Label);
-            p2Label.setLocation(675, 550);
-            p2Label.setVisible(true);
+			// Set Up Player1 name Label
+			JLabel p1NameLabel = new JLabel();
+			p1NameLabel.setText("<html> <b>" + game.getP1Name() + "</b></html>");
+			p1NameLabel.setForeground(Color.BLACK);
+			Font p1NameFont = p1NameLabel.getFont();
+			p1NameLabel.setFont(new Font(p1NameFont.getName(), 4, 18));
+			p1NameLabel.setSize(110, 100);
+			gui.getGameBoardPanel().add(p1NameLabel);
+			p1NameLabel.setLocation(675, 25);
+			p1NameLabel.setVisible(true);
 
-            // Set Up Player2 name Label
-            JLabel p2NameLabel = new JLabel();
-            p2NameLabel.setText("<html> <b>" + game.getP2Name() + "</b></html>");
-            p2NameLabel.setForeground(Color.BLACK);
-            Font p2NameFont = p2NameLabel.getFont();
-            p2NameLabel.setFont(new Font(p2NameFont.getName(), 4, 18));
-            p2NameLabel.setSize(110, 100);
-            gui.getGameBoardPanel().add(p2NameLabel);
-            p2NameLabel.setLocation(675, 550);
-            p2NameLabel.setVisible(true);
+			// Set Up Player2 Label
+			JLabel p2Label = new JLabel();
+			p2Label.setText("<html> <b>Player 2: </b></html>");
+			p2Label.setForeground(Color.BLACK);
+			Font p2Font = p2Label.getFont();
+			p2Label.setFont(new Font(p2Font.getName(), 4, 22));
+			p2Label.setSize(110, 25);
+			gui.getGameBoardPanel().add(p2Label);
+			p2Label.setLocation(675, 550);
+			p2Label.setVisible(true);
 
-            // Set up Turn Counter label
-            JLabel turnCounterLabel = new JLabel();
-            gui.setTurnCountLabel(turnCounterLabel);
-            turnCounterLabel.setText("<html> <b>" + "Turn: "
-                    + game.getTurnCounter() + "</b></html>");
-            turnCounterLabel.setForeground(Color.BLACK);
-            Font turnCounterFont = turnCounterLabel.getFont();
-            turnCounterLabel.setFont(new Font(turnCounterFont.getName(), 4,
-                    18));
-            turnCounterLabel.setSize(110, 25);
-            gui.getGameBoardPanel().add(turnCounterLabel);
-            turnCounterLabel.setLocation(675, 130);
-            turnCounterLabel.setVisible(true);
+			// Set Up Player2 name Label
+			JLabel p2NameLabel = new JLabel();
+			p2NameLabel.setText("<html> <b>" + game.getP2Name() + "</b></html>");
+			p2NameLabel.setForeground(Color.BLACK);
+			Font p2NameFont = p2NameLabel.getFont();
+			p2NameLabel.setFont(new Font(p2NameFont.getName(), 4, 18));
+			p2NameLabel.setSize(110, 100);
+			gui.getGameBoardPanel().add(p2NameLabel);
+			p2NameLabel.setLocation(675, 550);
+			p2NameLabel.setVisible(true);
 
-            // Set up Player Turn label
-            JLabel playerTurnLabel = new JLabel();
-            gui.setTurnIndicatorLabel(playerTurnLabel);
-            if (game.getPlayerTurn() == 1) {
-                playerTurnLabel.setText("<html> <b>" + game.getP1Name()
-                        + "'s turn" + "</b></html>");
-            } else {
-                playerTurnLabel.setText("<html> <b>" + game.getP2Name()
-                        + "'s turn" + "</b></html>");
-            }
-            playerTurnLabel.setForeground(Color.BLACK);
-            Font playerTurnFont = playerTurnLabel.getFont();
-            playerTurnLabel.setFont(new Font(playerTurnFont.getName(), 4,
-                    18));
-            playerTurnLabel.setSize(110, 50);
-            gui.getGameBoardPanel().add(playerTurnLabel);
-            playerTurnLabel.setLocation(675, 200);
-            playerTurnLabel.setVisible(true);
+			// Set up Turn Counter label
+			JLabel turnCounterLabel = new JLabel();
+			gui.setTurnCountLabel(turnCounterLabel);
+			turnCounterLabel.setText("<html> <b>" + "Turn: " + game.getTurnCounter() + "</b></html>");
+			turnCounterLabel.setForeground(Color.BLACK);
+			Font turnCounterFont = turnCounterLabel.getFont();
+			turnCounterLabel.setFont(new Font(turnCounterFont.getName(), 4, 18));
+			turnCounterLabel.setSize(110, 25);
+			gui.getGameBoardPanel().add(turnCounterLabel);
+			turnCounterLabel.setLocation(675, 130);
+			turnCounterLabel.setVisible(true);
 
-            // Set up move counter label
-            JLabel moveCounterLabel = new JLabel();
-            gui.setMoveCountLabel(moveCounterLabel);
-            moveCounterLabel.setText("<html> <b>" + "Moves Left: \n"
-                    + game.getNumMoves() + "</b></html>");
-            moveCounterLabel.setForeground(Color.BLACK);
-            Font moveCounterFont = moveCounterLabel.getFont();
-            moveCounterLabel.setFont(new Font(moveCounterFont.getName(), 4,
-                    18));
-            moveCounterLabel.setSize(110, 50);
-            gui.getGameBoardPanel().add(moveCounterLabel);
-            moveCounterLabel.setLocation(675, 370);
-            moveCounterLabel.setVisible(true);
+			// Set up Player Turn label
+			JLabel playerTurnLabel = new JLabel();
+			gui.setTurnIndicatorLabel(playerTurnLabel);
+			if (game.getPlayerTurn() == 1) {
+				playerTurnLabel.setText("<html> <b>" + game.getP1Name() + "'s turn" + "</b></html>");
+			} else {
+				playerTurnLabel.setText("<html> <b>" + game.getP2Name() + "'s turn" + "</b></html>");
+			}
+			playerTurnLabel.setForeground(Color.BLACK);
+			Font playerTurnFont = playerTurnLabel.getFont();
+			playerTurnLabel.setFont(new Font(playerTurnFont.getName(), 4, 18));
+			playerTurnLabel.setSize(110, 50);
+			gui.getGameBoardPanel().add(playerTurnLabel);
+			playerTurnLabel.setLocation(675, 200);
+			playerTurnLabel.setVisible(true);
 
-            // Set up turn timer name label
-            JLabel turnTimerNameLabel = new JLabel();
-            turnTimerNameLabel.setText("<html> <b>" + "Turn Time:"
-                    + "</b></html>");
-            turnTimerNameLabel.setForeground(Color.BLACK);
-            Font turnTimerNameFont = turnTimerNameLabel.getFont();
-            turnTimerNameLabel.setFont(new Font(
-                    turnTimerNameFont.getName(), 4, 18));
-            turnTimerNameLabel.setSize(110, 25);
-            gui.getGameBoardPanel().add(turnTimerNameLabel);
-            turnTimerNameLabel.setLocation(675, 450);
-            turnTimerNameLabel.setVisible(true);
+			// Set up move counter label
+			JLabel moveCounterLabel = new JLabel();
+			gui.setMoveCountLabel(moveCounterLabel);
+			moveCounterLabel.setText("<html> <b>" + "Moves Left: \n" + game.getNumMoves() + "</b></html>");
+			moveCounterLabel.setForeground(Color.BLACK);
+			Font moveCounterFont = moveCounterLabel.getFont();
+			moveCounterLabel.setFont(new Font(moveCounterFont.getName(), 4, 18));
+			moveCounterLabel.setSize(110, 50);
+			gui.getGameBoardPanel().add(moveCounterLabel);
+			moveCounterLabel.setLocation(675, 370);
+			moveCounterLabel.setVisible(true);
 
-            // Set up actual timer label
-            JLabel turnTimerLabel = new JLabel();
-            gui.setTimerLabel(turnTimerLabel);
-            turnTimerLabel.setForeground(Color.BLACK);
-            Font turnTimerFont = turnTimerLabel.getFont();
-            turnTimerLabel
-                    .setFont(new Font(turnTimerFont.getName(), 4, 18));
-            turnTimerLabel.setSize(110, 25);
-            gui.getGameBoardPanel().add(turnTimerLabel);
-            turnTimerLabel.setLocation(675, 475);
-            turnTimerLabel.setVisible(true);
+			// Set up turn timer name label
+			JLabel turnTimerNameLabel = new JLabel();
+			turnTimerNameLabel.setText("<html> <b>" + "Turn Time:" + "</b></html>");
+			turnTimerNameLabel.setForeground(Color.BLACK);
+			Font turnTimerNameFont = turnTimerNameLabel.getFont();
+			turnTimerNameLabel.setFont(new Font(turnTimerNameFont.getName(), 4, 18));
+			turnTimerNameLabel.setSize(110, 25);
+			gui.getGameBoardPanel().add(turnTimerNameLabel);
+			turnTimerNameLabel.setLocation(675, 450);
+			turnTimerNameLabel.setVisible(true);
 
-            // P1 Time Panel
-            TimePanel timePanel = new TimePanel(gui, game,
-                    game.getMoveTimer(), gui.getTimerLabel());
-            gui.setTimer(timePanel);
+			// Set up actual timer label
+			JLabel turnTimerLabel = new JLabel();
+			gui.setTimerLabel(turnTimerLabel);
+			turnTimerLabel.setForeground(Color.BLACK);
+			Font turnTimerFont = turnTimerLabel.getFont();
+			turnTimerLabel.setFont(new Font(turnTimerFont.getName(), 4, 18));
+			turnTimerLabel.setSize(110, 25);
+			gui.getGameBoardPanel().add(turnTimerLabel);
+			turnTimerLabel.setLocation(675, 475);
+			turnTimerLabel.setVisible(true);
 
-            // Set up Save Game Button
-            JButton saveGameButton = new JButton();
-            saveGameButton.setSize(65, 75);
-            saveGameButton.setText("Save");
-            saveGameButton.setLocation(660, gameFrame.getHeight() / 2 - 75);
-            gui.getGameBoardPanel().add(saveGameButton);
-            saveGameButton.addActionListener(gui.new SaveGameListener());
-            saveGameButton.setVisible(true);
+			// P1 Time Panel
+			TimePanel timePanel = new TimePanel(gui, game, game.getMoveTimer(), gui.getTimerLabel());
+			gui.setTimer(timePanel);
 
-            // Set up Undo Button
-            JButton undoButton = new JButton();
-            undoButton.setSize(65, 75);
-            undoButton.setText("Undo");
-            undoButton.setLocation(730, gameFrame.getHeight() / 2 - 75);
-            gui.getGameBoardPanel().add(undoButton);
-            undoButton.addActionListener(gui.new UndoListener());
-            undoButton.setVisible(true);
+			// Set up Save Game Button
+			JButton saveGameButton = new JButton();
+			saveGameButton.setSize(65, 75);
+			saveGameButton.setText("Save");
+			saveGameButton.setLocation(660, gameFrame.getHeight() / 2 - 75);
+			gui.getGameBoardPanel().add(saveGameButton);
+			saveGameButton.addActionListener(gui.new SaveGameListener());
+			saveGameButton.setVisible(true);
 
-            gui.renderInitialBoard();
-        } else {
-            System.err.println("Invalid game state");
-        }
-    }
+			// Set up Undo Button
+			JButton undoButton = new JButton();
+			undoButton.setSize(65, 75);
+			undoButton.setText("Undo");
+			undoButton.setLocation(730, gameFrame.getHeight() / 2 - 75);
+			gui.getGameBoardPanel().add(undoButton);
+			undoButton.addActionListener(gui.new UndoListener());
+			undoButton.setVisible(true);
+
+			gui.renderInitialBoard();
+		} else {
+			System.err.println("Invalid game state");
+		}
+	}
 }
