@@ -16,6 +16,7 @@ public class Game implements Serializable {
 	private ArrayList<MoveCommand> moves = new ArrayList<MoveCommand>();
 	private BoardState currentBoard;
 	private int turnNumber;
+	private int turnCounter = 0;
 
 	// 0 is nobody, 1 is player1, 2 is player2
 	private int playerTurn = 1;
@@ -25,20 +26,29 @@ public class Game implements Serializable {
 	private String p1Name = "Player1";
 	private String p2Name = "Player2";
 
-	private int p1TimeBank = 0;
-	private int p2TimeBank = 0;
 	private int moveTimer = 0;
-	private int turnCounter = 0;
 
 	/**
 	 * Creates a board with a default starting layout
 	 */
 	public Game() {
-		currentBoard = new BoardState();
+		this(new BoardState());
 	}
 
 	public Game(BoardState b) {
-		currentBoard = b;
+		this.moves = new ArrayList<MoveCommand>();
+		this.currentBoard = b;
+		this.turnNumber = 0;
+		this.turnCounter = 0;
+
+		this.playerTurn = 1;
+		this.winner = 0;
+		this.numMoves = 4;
+
+		this.p1Name = "Player1";
+		this.p2Name = "Player2";
+
+		this.moveTimer = 0;
 	}
 
 	public Game(Game g) {
@@ -53,8 +63,6 @@ public class Game implements Serializable {
 		this.p1Name = g.getP1Name();
 		this.p2Name = g.getP2Name();
 
-		this.p1TimeBank = g.getP1TimeBank();
-		this.p2TimeBank = g.getP2TimeBank();
 		this.moveTimer = g.getMoveTimer();
 		this.turnCounter = g.getTurnCounter();
 	}
@@ -117,14 +125,6 @@ public class Game implements Serializable {
 
 	public void setP2Name(String p2Name) {
 		this.p2Name = p2Name;
-	}
-
-	public int getP1TimeBank() {
-		return p1TimeBank;
-	}
-
-	public int getP2TimeBank() {
-		return p2TimeBank;
 	}
 
 	public int getMoveTimer() {
@@ -356,51 +356,35 @@ public class Game implements Serializable {
 		this.numMoves = 4;
 	}
 
-	public boolean equals(Game compGame) {
-		// for(int i = 0; i < this.moves.size(); i++) {
-		// if(!this.moves.get(i).equals(compGame.moves.get(i))) {
-		// return false;
-		// }
-		// }
-		if (!this.moves.equals(compGame.moves)) {
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof Game)) {
 			return false;
 		}
+		Game g = (Game) o;
+		boolean historyEqual = this.moves.equals(g.getMoves()) && this.currentBoard.equals(g.getBoardState())
+				&& this.turnNumber == g.getTurnNumber() && this.turnCounter == g.getTurnCounter();
 
-		if (!this.currentBoard.equals(compGame.currentBoard)) {
-			return false;
-		}
+		boolean p1Equal = this.p1Name.equals(g.getP1Name());
+		boolean p2Equal = this.p2Name.equals(g.getP2Name());
 
-		if (this.turnNumber != compGame.turnNumber) {
-			return false;
-		}
-		if (this.moveTimer != compGame.moveTimer) {
-			return false;
-		}
-		if (this.p1TimeBank != compGame.p1TimeBank) {
-			return false;
-		}
-		if (this.p2TimeBank != compGame.p2TimeBank) {
-			return false;
-		}
-		if (this.turnCounter != compGame.turnCounter) {
-			return false;
-		}
-		if (!this.p1Name.equals(compGame.p1Name)) {
-			return false;
-		}
-		if (!this.p2Name.equals(compGame.p2Name)) {
-			return false;
-		}
-		if (this.winner != compGame.winner) {
-			return false;
-		}
-		if (this.numMoves != compGame.numMoves) {
-			return false;
-		}
-		if (this.playerTurn != compGame.playerTurn) {
-			return false;
-		}
+		boolean turnEqual = this.playerTurn == g.getPlayerTurn() && this.numMoves == g.getNumMoves()
+				&& this.winner == g.getWinner();
 
-		return true;
+		boolean timerEqual = this.moveTimer == g.getMoveTimer();
+		return timerEqual && turnEqual && p1Equal && p2Equal && historyEqual;
+	}
+
+	@Override
+	public int hashCode() {
+		return this.moves.hashCode() + this.currentBoard.hashCode() + getHashCode(this.turnNumber)
+				+ getHashCode(this.turnCounter) + this.p1Name.hashCode() + this.p2Name.hashCode()
+				+ getHashCode(this.playerTurn) + getHashCode(this.numMoves) + getHashCode(this.winner)
+				+ getHashCode(this.moveTimer);
+	}
+
+	// this prevents collisions better with serial numbers
+	private int getHashCode(int numb) {
+		return Integer.rotateLeft(numb, Integer.BYTES / 2);
 	}
 }

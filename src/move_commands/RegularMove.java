@@ -43,6 +43,9 @@ public class RegularMove extends MoveCommand {
 
 	@Override
 	public boolean isValidMove() {
+		if (!this.originalBoard.pieceAt(this.originalPlace) || this.originalBoard.pieceAt(this.newPlace)) {
+			return false;
+		}
 		AbstractPiece piece = this.originalBoard.getPieceAt(originalPlace);
 		if (isFrozen(originalPlace)) {
 			return false;
