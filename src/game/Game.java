@@ -52,7 +52,7 @@ public class Game implements Serializable {
 	}
 
 	public Game(Game g) {
-		this.moves = g.getMoves();
+		this.moves = new ArrayList<MoveCommand>(g.getMoves());
 		this.currentBoard = g.getBoardState();
 		this.turnNumber = g.getTurnNumber();
 

@@ -1,6 +1,7 @@
 package game;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -71,6 +72,10 @@ public class TestGame {
 		Game gameCopy = new Game(game);
 		assertFalse(gameCopy == game);
 		assertEquals(game, gameCopy);
+		assertFalse(game.getMoves() == gameCopy.getMoves());
+		
+		game.move(ai1.generateMove());
+		assertNotEquals(game.getMoves(), gameCopy.getMoves());
 	}
 
 	@Test
