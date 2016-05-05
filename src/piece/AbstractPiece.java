@@ -3,25 +3,25 @@ package piece;
 import java.awt.Image;
 import java.io.Serializable;
 
+import javax.swing.ImageIcon;
+
 public abstract class AbstractPiece implements Serializable {
 	private static final long serialVersionUID = 1115622952453934265L;
-	private transient Image image;
+	private ImageIcon image;
 	private Owner owner;
 	private int rank;
 
-	public AbstractPiece(Image image, Owner owner, int rank) {
+	public AbstractPiece(ImageIcon image, Owner owner, int rank) {
 		this.image = image;
 		this.owner = owner;
 		this.rank = rank;
 	}
 
-	abstract public void loadImage(Owner owner);
-
 	public Image getImage() {
-		return image;
+		return image.getImage();
 	}
 
-	public void setImage(Image image) {
+	public void setImage(ImageIcon image) {
 		this.image = image;
 	}
 
@@ -44,7 +44,7 @@ public abstract class AbstractPiece implements Serializable {
 	}
 
 	public int hashCode() {
-		return this.getClass().hashCode() + this.image.hashCode() + this.owner.hashCode() + Integer.hashCode(this.rank);
+		return this.getClass().hashCode() + this.image.getImage().hashCode() + this.owner.hashCode() + Integer.hashCode(this.rank);
 	}
 
 	public boolean isStrongerThan(AbstractPiece p2) {

@@ -47,7 +47,7 @@ public class TestPiece {
 	public void testThatImageCanBeSet() {
 		Image img = new BufferedImage(1, 1, 1);
 		AbstractPiece p = new Camel(Owner.Player1);
-		p.setImage(img);
+		p.setImage(new ImageIcon(img));
 		assertEquals(img, p.getImage());
 	}
 
