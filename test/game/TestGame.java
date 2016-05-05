@@ -52,10 +52,14 @@ public class TestGame {
 		Game game = new Game(this.g);
 		assertFalse(game == this.g);
 		assertEquals(this.g, game);
+		assertFalse(game.getMoves() == this.g.getMoves());
+		assertFalse(game.getBoardState() == this.g.getBoardState());
 
 		game = new Game(this.g1);
 		assertFalse(game == this.g1);
 		assertEquals(this.g1, game);
+		assertFalse(game.getMoves() == this.g1.getMoves());
+		assertFalse(game.getBoardState() == this.g1.getBoardState());
 
 		game = new Game();
 		Ai ai1 = new Ai(Owner.Player1, game);
@@ -73,9 +77,11 @@ public class TestGame {
 		assertFalse(gameCopy == game);
 		assertEquals(game, gameCopy);
 		assertFalse(game.getMoves() == gameCopy.getMoves());
-		
+		assertFalse(game.getBoardState() == gameCopy.getBoardState());
+
 		game.move(ai1.generateMove());
 		assertNotEquals(game.getMoves(), gameCopy.getMoves());
+		assertNotEquals(game.getBoardState(), gameCopy.getBoardState());
 	}
 
 	@Test
