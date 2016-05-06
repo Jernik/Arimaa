@@ -8,7 +8,6 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -37,6 +36,8 @@ public class TestLoad extends EasyMockSupport {
 
 		Game before = new Game(gui.game);
 		Ai ai = new Ai(Owner.Player1, gui.game);
+		gui.game.move(ai.generateMove());
+		gui.game.move(ai.generateMove());
 		gui.game.move(ai.generateMove());
 
 		assertNotEquals(before, gui.game);
@@ -81,7 +82,7 @@ public class TestLoad extends EasyMockSupport {
 		assertEquals(afterMove, gui.game);
 		verifyAll();
 	}
-	
+
 	@Test
 	public void testLoadFileReturnsFalseIfWrongObject() {
 		File f = new File(GUI.SAVE_PATH);
@@ -93,7 +94,7 @@ public class TestLoad extends EasyMockSupport {
 			e.printStackTrace();
 			fail("Couldn't write a serializble file");
 		}
-		
+
 		GUI gui = new GUI();
 		Ai ai = new Ai(Owner.Player1, gui.game);
 		gui.game.move(ai.generateMove());

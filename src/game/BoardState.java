@@ -31,6 +31,10 @@ public class BoardState implements Serializable {
 		this.setUpDefaultBoardConfiguration();
 	}
 
+	public BoardState(BoardState b) {
+		this.pieces = new HashMap<Coordinate, AbstractPiece>(b.getPieces());
+	}
+
 	public BoardState(HashMap<Coordinate, AbstractPiece> pieces) {
 		this.pieces = pieces;
 	}

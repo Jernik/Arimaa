@@ -53,7 +53,7 @@ public class Game implements Serializable {
 
 	public Game(Game g) {
 		this.moves = new ArrayList<MoveCommand>(g.getMoves());
-		this.currentBoard = g.getBoardState();
+		this.currentBoard = new BoardState(g.getBoardState());
 		this.turnNumber = g.getTurnNumber();
 
 		this.playerTurn = g.getPlayerTurn();
@@ -364,14 +364,12 @@ public class Game implements Serializable {
 		Game g = (Game) o;
 		boolean historyEqual = this.moves.equals(g.getMoves()) && this.currentBoard.equals(g.getBoardState())
 				&& this.turnNumber == g.getTurnNumber() && this.turnCounter == g.getTurnCounter();
-
 		boolean p1Equal = this.p1Name.equals(g.getP1Name());
 		boolean p2Equal = this.p2Name.equals(g.getP2Name());
-
 		boolean turnEqual = this.playerTurn == g.getPlayerTurn() && this.numMoves == g.getNumMoves()
 				&& this.winner == g.getWinner();
-
 		boolean timerEqual = this.moveTimer == g.getMoveTimer();
+
 		return timerEqual && turnEqual && p1Equal && p2Equal && historyEqual;
 	}
 

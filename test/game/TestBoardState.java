@@ -44,6 +44,19 @@ public class TestBoardState {
 		assertEquals(new Camel(Owner.Player1), b.getPieceAt(new Coordinate(3, 0)));
 		assertEquals(new Elephant(Owner.Player1), b.getPieceAt(new Coordinate(4, 0)));
 	}
+	
+	@Test
+	public void testCopyConstructor() {
+		BoardState b = new BoardState();
+		BoardState bCopy = new BoardState(b);
+		assertFalse(b == bCopy);
+		assertFalse(b.getPieces() == bCopy.getPieces());
+		assertEquals(b, bCopy);
+		
+		
+		b.movePiece(new Coordinate(0,1), new Coordinate(0, 2));
+		assertNotEquals(b, bCopy);
+	}
 
 	@Test
 	public void testPieceAt() {
