@@ -8,6 +8,7 @@ import piece.Owner;
  * Created by millerlj on 4/27/2016.
  */
 public class PushMove extends MoveCommand {
+	private static final long serialVersionUID = -4958510415349881730L;
 	private BoardState newBoard;
 	private Coordinate originalPlace;
 	private Coordinate newPlace;
@@ -44,7 +45,7 @@ public class PushMove extends MoveCommand {
 		return this.pushPiecePlace;
 	}
 
-	// you should assume that you are given 3 random coordinates, that might or might not be valid 
+	// you should assume that you are given 3 random coordinates, that might or might not be valid
 	@Override
 	public boolean isValidMove() {
 		if (!this.originalPlace.isValid() || !this.newPlace.isValid() || !this.pushPiecePlace.isValid()) {
@@ -65,7 +66,7 @@ public class PushMove extends MoveCommand {
 		// TODO finish
 		return true;
 	}
-	
+
 	@Override
 	public boolean eq(MoveCommand moveCommand) {
 		if (!(moveCommand instanceof PushMove)) {
@@ -77,9 +78,10 @@ public class PushMove extends MoveCommand {
 				&& this.newPlace.equals(pushMove.getNewPlace())
 				&& this.pushPiecePlace.equals(pushMove.getPushPiecePlace());
 	}
-	
+
 	@Override
 	public int hashCode() {
-		return super.hashCode() + this.newBoard.hashCode() + this.originalPlace.hashCode() + this.newPlace.hashCode() + this.pushPiecePlace.hashCode();
+		return super.hashCode() + this.newBoard.hashCode() + this.originalPlace.hashCode() + this.newPlace.hashCode()
+				+ this.pushPiecePlace.hashCode();
 	}
 }

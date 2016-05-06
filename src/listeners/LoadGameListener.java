@@ -7,7 +7,6 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.nio.file.Paths;
-import java.util.Scanner;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -47,7 +46,6 @@ public class LoadGameListener implements ActionListener {
 	}
 
 	private void loadGame(File file) throws FileNotFoundException {
-		Scanner scanner = new Scanner(file);
 		if (this.gui.loadFile(file)) {
 			JFrame mainMenu = gui.getActiveFrames().get(0);
 			gui.getActiveFrames().remove(0);
