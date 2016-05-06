@@ -9,29 +9,18 @@ import piece.Owner;
  */
 public class PullMove extends MoveCommand {
 	private static final long serialVersionUID = -2023708661926206228L;
+	public static final int NUMBER_OF_MOVES = 2;
 	private Coordinate pullPiecePosition;
 
 	public PullMove(BoardState board, Coordinate originalPosition, Coordinate newPosition, Coordinate pullPiecePosition,
-			Owner turn) {
-		super(board, originalPosition, newPosition, turn);
+			Owner turn, int movesLeft) {
+		super(board, originalPosition, newPosition, turn, movesLeft);
 		this.pullPiecePosition = pullPiecePosition;
 	}
 
 	@Override
 	public BoardState execute() {
 		return this.originalBoard;
-	}
-
-	public BoardState getNewBoard() {
-		return this.newBoard;
-	}
-
-	public Coordinate getOriginalPlace() {
-		return this.originalPosition;
-	}
-
-	public Coordinate getNewPlace() {
-		return this.newPosition;
 	}
 
 	public Coordinate getPullPiecePlace() {

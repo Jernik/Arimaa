@@ -1,8 +1,8 @@
 package game;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -139,7 +139,7 @@ public class TestGame {
 		Coordinate start = new Coordinate(3, 6);
 		Coordinate end = start.up();
 		Owner owner = game.getOwner();
-		MoveCommand move = new RegularMove(game.getBoardState(), start, end, owner);
+		MoveCommand move = new RegularMove(game.getBoardState(), start, end, owner, game.getNumMoves());
 		assertTrue(game.move(move));
 		// g.currentBoard.printBoard();
 		assertFalse(game.checkCoor(2, 2));
@@ -164,13 +164,13 @@ public class TestGame {
 		Coordinate start = new Coordinate(2, 2);
 		Coordinate end = start.up();
 		Owner owner = game.getOwner();
-		MoveCommand move = new RegularMove(game.getBoardState(), start, end, owner);
+		MoveCommand move = new RegularMove(game.getBoardState(), start, end, owner, game.getNumMoves());
 		game.move(move);
 		assertEquals(game.getPieceAt(new Coordinate(2, 5)), game.getPieceAt(new Coordinate(2, 5)));
 		start = new Coordinate(5, 1);
 		end = start.up();
 		owner = game.getOwner();
-		move = new RegularMove(game.getBoardState(), start, end, owner);
+		move = new RegularMove(game.getBoardState(), start, end, owner, game.getNumMoves());
 		game.move(move);
 		assertFalse(game.checkCoor(5, 1));
 	}

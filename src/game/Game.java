@@ -196,17 +196,17 @@ public class Game implements Serializable {
 				// Is the destination next to your piece?
 				if (ownerPiece.isOrthogonallyAdjacentTo(destination)) {
 					RegularMove yourPiece = new RegularMove(this.currentBoard, ownerPiece, destination,
-							this.getOwner());
+							this.getOwner(), this.numMoves);
 					RegularMove theirPiece = new RegularMove(this.currentBoard, opponentPiece, ownerPiece,
-							this.getOwner());
+							this.getOwner(), this.numMoves);
 					pushOrPullMove(yourPiece, theirPiece);
 					return true;
 					// Or is it next to their piece?
 				} else if (opponentPiece.isOrthogonallyAdjacentTo(destination)) {
 					RegularMove theirPiece = new RegularMove(this.currentBoard, opponentPiece, destination,
-							this.getOwner());
+							this.getOwner(), this.numMoves);
 					RegularMove yourPiece = new RegularMove(this.currentBoard, ownerPiece, opponentPiece,
-							this.getOwner());
+							this.getOwner(), this.numMoves);
 					pushOrPullMove(theirPiece, yourPiece);
 					return true;
 				} else

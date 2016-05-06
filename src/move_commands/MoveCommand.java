@@ -10,7 +10,7 @@ import piece.Owner;
 
 public abstract class MoveCommand implements Serializable {
 	private static final long serialVersionUID = -1176514408247586630L;
-	protected static int NUMBER_OF_MOVES = 1;
+	public static final int NUMBER_OF_MOVES = 1;
 	protected BoardState originalBoard;
 	protected BoardState newBoard;
 
@@ -18,8 +18,10 @@ public abstract class MoveCommand implements Serializable {
 	protected Coordinate newPosition;
 
 	protected Owner turn;
+	protected int movesLeft;
 
-	protected MoveCommand(BoardState board, Coordinate originalPosition, Coordinate newPosition, Owner turn) {
+	protected MoveCommand(BoardState board, Coordinate originalPosition, Coordinate newPosition, Owner turn,
+			int movesLeft) {
 		this.originalBoard = new BoardState(board);
 		this.newBoard = board;
 
@@ -27,6 +29,7 @@ public abstract class MoveCommand implements Serializable {
 		this.newPosition = newPosition;
 
 		this.turn = turn;
+		this.movesLeft = movesLeft;
 	}
 
 	abstract public BoardState execute();
@@ -51,6 +54,10 @@ public abstract class MoveCommand implements Serializable {
 
 	public int getNumberOfMoves() {
 		return NUMBER_OF_MOVES;
+	}
+
+	public int getMovesLeft() {
+		return this.movesLeft;
 	}
 
 	protected boolean isFrozen(Coordinate pieceToMove) {
@@ -92,7 +99,7 @@ public abstract class MoveCommand implements Serializable {
 	protected boolean eq(MoveCommand moveCommand) {
 		return this.originalPosition.equals(moveCommand.getOriginalPosition())
 				&& this.newPosition.equals(moveCommand.getNewPosition()) && this.turn.equals(moveCommand.getTurn())
-				&& NUMBER_OF_MOVES == moveCommand.getNumberOfMoves()
+				&& NUMBER_OF_MOVES == moveCommand.getNumberOfMoves() && this.movesLeft == moveCommand.getMovesLeft()
 				&& this.originalBoard.equals(moveCommand.getOriginalBoard())
 				&& this.newBoard.equals(moveCommand.newBoard);
 	}
@@ -101,6 +108,7 @@ public abstract class MoveCommand implements Serializable {
 	public int hashCode() {
 		return this.originalBoard.hashCode() + this.newBoard.hashCode() + this.originalPosition.hashCode()
 				+ this.newPosition.hashCode() + this.turn.hashCode()
-				+ Integer.rotateLeft(NUMBER_OF_MOVES, Integer.BYTES / 2);
+				+ Integer.rotateLeft(NUMBER_OF_MOVES, Integer.BYTES / 2)
+				+ Integer.rotateLeft(this.movesLeft, Integer.BYTES / 2);
 	}
 }

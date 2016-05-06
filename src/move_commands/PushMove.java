@@ -9,11 +9,12 @@ import piece.Owner;
  */
 public class PushMove extends MoveCommand {
 	private static final long serialVersionUID = -4958510415349881730L;
+	public static final int NUMBER_OF_MOVES = 2;
 	private Coordinate pushPiecePosition;
 
 	public PushMove(BoardState board, Coordinate originalPosition, Coordinate newPosition, Coordinate pushPiecePosition,
-			Owner turn) {
-		super(board, originalPosition, newPosition, turn);
+			Owner turn, int movesLeft) {
+		super(board, originalPosition, newPosition, turn, movesLeft);
 		this.turn = turn;
 		this.originalBoard = board.clone();
 		this.newBoard = board;

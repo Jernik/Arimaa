@@ -51,8 +51,12 @@ public class Ai {
 				// can't dislodge a friendly piece, try again
 				return this.generateMove();
 			}
-			if (!shouldGeneratePull()) {
+			if (!shouldGeneratePushOrPull()) {
 				// tryed to do a regular move and it didn't work
+				return this.generateMove();
+			}
+			if (this.game.getNumMoves() < PushMove.NUMBER_OF_MOVES) {
+				// don't have enought moves to pull, try again
 				return this.generateMove();
 			}
 			// enemy piece is here, generate a push
@@ -62,7 +66,7 @@ public class Ai {
 				pushPiecePlace = this.generateRandomDirection(randomDirection);
 			}
 			MoveCommand pushMove = new PushMove(this.game.getBoardState(), pieceCoor, randomDirection, pushPiecePlace,
-					this.owner);
+					this.owner, this.game.getNumMoves());
 			if (pushMove.isValidMove()) {
 				return pushMove;
 			}
@@ -70,14 +74,18 @@ public class Ai {
 			return this.generateMove();
 		}
 		// free space, generate a pull or regular move
-		if (shouldGeneratePull()) {
+		if (shouldGeneratePushOrPull()) {
+			if (this.game.getNumMoves() < PullMove.NUMBER_OF_MOVES) {
+				// don't have enought moves to pull, try again
+				return this.generateMove();
+			}
 			Coordinate pullPiecePlace = this.generateRandomDirection(randomDirection);
 			while (pieceCoor.equals(pullPiecePlace)) {
 				// you can't swap
 				pullPiecePlace = this.generateRandomDirection(randomDirection);
 			}
 			MoveCommand pullMove = new PullMove(this.game.getBoardState(), pieceCoor, randomDirection, pullPiecePlace,
-					this.owner);
+					this.owner, this.game.getNumMoves());
 			if (pullMove.isValidMove()) {
 				return pullMove;
 			}
@@ -85,7 +93,8 @@ public class Ai {
 			return this.generateMove();
 		}
 		// use regular method
-		MoveCommand regularMove = new RegularMove(this.game.getBoardState(), pieceCoor, randomDirection, this.owner);
+		MoveCommand regularMove = new RegularMove(this.game.getBoardState(), pieceCoor, randomDirection, this.owner,
+				this.game.getNumMoves());
 		if (regularMove.isValidMove()) {
 			return regularMove;
 		}
@@ -94,7 +103,7 @@ public class Ai {
 	}
 
 	// 1 / 4 chance of generating pull, 3 possible pull moves, and 1 regular move
-	private boolean shouldGeneratePull() {
+	private boolean shouldGeneratePushOrPull() {
 		return 0 != new Random().nextInt(4);
 	}
 

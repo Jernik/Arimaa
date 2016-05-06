@@ -12,6 +12,7 @@ import game.Coordinate;
 import piece.Owner;
 
 public class TestMoveCommandEquality {
+	private static final int NUMBER_OF_MOVES = 4;
 	private Owner owner;
 	private Owner otherOwner;
 	private BoardState board;
@@ -29,11 +30,12 @@ public class TestMoveCommandEquality {
 		this.board.movePiece(new Coordinate(3, 6), new Coordinate(3, 4));
 		this.board.movePiece(new Coordinate(2, 6), new Coordinate(2, 3));
 
-		this.regularMove = new RegularMove(this.board.clone(), new Coordinate(3, 3), new Coordinate(4, 3), this.owner);
+		this.regularMove = new RegularMove(this.board.clone(), new Coordinate(3, 3), new Coordinate(4, 3), this.owner,
+				NUMBER_OF_MOVES);
 		this.pullMove = new PullMove(this.board.clone(), new Coordinate(3, 3), new Coordinate(4, 3),
-				new Coordinate(3, 4), this.owner);
+				new Coordinate(3, 4), this.owner, NUMBER_OF_MOVES);
 		this.pushMove = new PushMove(this.board.clone(), new Coordinate(3, 3), new Coordinate(3, 4),
-				new Coordinate(4, 4), this.owner);
+				new Coordinate(4, 4), this.owner, NUMBER_OF_MOVES);
 	}
 
 	@Test
@@ -42,16 +44,16 @@ public class TestMoveCommandEquality {
 
 		assertEquals(this.regularMove, this.regularMove);
 		assertEquals(this.regularMove,
-				new RegularMove(this.board, new Coordinate(3, 3), new Coordinate(4, 3), this.owner));
+				new RegularMove(this.board, new Coordinate(3, 3), new Coordinate(4, 3), this.owner, NUMBER_OF_MOVES));
 
+		assertNotEquals(this.regularMove, new RegularMove(new BoardState(), new Coordinate(3, 3), new Coordinate(4, 3),
+				this.owner, NUMBER_OF_MOVES));
 		assertNotEquals(this.regularMove,
-				new RegularMove(new BoardState(), new Coordinate(3, 3), new Coordinate(4, 3), this.owner));
+				new RegularMove(this.board, new Coordinate(5, 3), new Coordinate(4, 3), this.owner, NUMBER_OF_MOVES));
 		assertNotEquals(this.regularMove,
-				new RegularMove(this.board, new Coordinate(5, 3), new Coordinate(4, 3), this.owner));
-		assertNotEquals(this.regularMove,
-				new RegularMove(this.board, new Coordinate(3, 3), new Coordinate(3, 2), this.owner));
-		assertNotEquals(this.regularMove,
-				new RegularMove(this.board, new Coordinate(3, 3), new Coordinate(4, 3), this.otherOwner));
+				new RegularMove(this.board, new Coordinate(3, 3), new Coordinate(3, 2), this.owner, NUMBER_OF_MOVES));
+		assertNotEquals(this.regularMove, new RegularMove(this.board, new Coordinate(3, 3), new Coordinate(4, 3),
+				this.otherOwner, NUMBER_OF_MOVES));
 
 		assertNotEquals(this.regularMove, this.pullMove);
 		assertNotEquals(this.regularMove, this.pushMove);
@@ -62,19 +64,19 @@ public class TestMoveCommandEquality {
 		assertNotEquals(this.pullMove, null);
 
 		assertEquals(this.pullMove, this.pullMove);
-		assertEquals(this.pullMove,
-				new PullMove(this.board, new Coordinate(3, 3), new Coordinate(4, 3), new Coordinate(3, 4), this.owner));
+		assertEquals(this.pullMove, new PullMove(this.board, new Coordinate(3, 3), new Coordinate(4, 3),
+				new Coordinate(3, 4), this.owner, NUMBER_OF_MOVES));
 
 		assertNotEquals(this.pullMove, new PullMove(new BoardState(), new Coordinate(3, 3), new Coordinate(4, 3),
-				new Coordinate(3, 4), this.owner));
-		assertNotEquals(this.pullMove,
-				new PullMove(this.board, new Coordinate(5, 3), new Coordinate(4, 3), new Coordinate(3, 4), this.owner));
-		assertNotEquals(this.pullMove,
-				new PullMove(this.board, new Coordinate(3, 3), new Coordinate(3, 2), new Coordinate(3, 4), this.owner));
-		assertNotEquals(this.pullMove,
-				new PullMove(this.board, new Coordinate(3, 3), new Coordinate(4, 3), new Coordinate(2, 3), this.owner));
+				new Coordinate(3, 4), this.owner, NUMBER_OF_MOVES));
+		assertNotEquals(this.pullMove, new PullMove(this.board, new Coordinate(5, 3), new Coordinate(4, 3),
+				new Coordinate(3, 4), this.owner, NUMBER_OF_MOVES));
+		assertNotEquals(this.pullMove, new PullMove(this.board, new Coordinate(3, 3), new Coordinate(3, 2),
+				new Coordinate(3, 4), this.owner, NUMBER_OF_MOVES));
 		assertNotEquals(this.pullMove, new PullMove(this.board, new Coordinate(3, 3), new Coordinate(4, 3),
-				new Coordinate(3, 4), this.otherOwner));
+				new Coordinate(2, 3), this.owner, NUMBER_OF_MOVES));
+		assertNotEquals(this.pullMove, new PullMove(this.board, new Coordinate(3, 3), new Coordinate(4, 3),
+				new Coordinate(3, 4), this.otherOwner, NUMBER_OF_MOVES));
 
 		assertNotEquals(this.pullMove, this.regularMove);
 		assertNotEquals(this.pullMove, this.pushMove);
@@ -85,19 +87,19 @@ public class TestMoveCommandEquality {
 		assertNotEquals(this.pushMove, null);
 
 		assertEquals(this.pushMove, this.pushMove);
-		assertEquals(this.pushMove,
-				new PushMove(this.board, new Coordinate(3, 3), new Coordinate(3, 4), new Coordinate(4, 4), this.owner));
+		assertEquals(this.pushMove, new PushMove(this.board, new Coordinate(3, 3), new Coordinate(3, 4),
+				new Coordinate(4, 4), this.owner, NUMBER_OF_MOVES));
 
 		assertNotEquals(this.pushMove, new PushMove(new BoardState(), new Coordinate(3, 3), new Coordinate(3, 4),
-				new Coordinate(4, 4), this.owner));
-		assertNotEquals(this.pushMove,
-				new PushMove(this.board, new Coordinate(4, 4), new Coordinate(3, 4), new Coordinate(4, 4), this.owner));
-		assertNotEquals(this.pushMove,
-				new PushMove(this.board, new Coordinate(3, 3), new Coordinate(2, 3), new Coordinate(4, 4), this.owner));
-		assertNotEquals(this.pushMove,
-				new PushMove(this.board, new Coordinate(3, 3), new Coordinate(3, 4), new Coordinate(2, 4), this.owner));
+				new Coordinate(4, 4), this.owner, NUMBER_OF_MOVES));
+		assertNotEquals(this.pushMove, new PushMove(this.board, new Coordinate(4, 4), new Coordinate(3, 4),
+				new Coordinate(4, 4), this.owner, NUMBER_OF_MOVES));
+		assertNotEquals(this.pushMove, new PushMove(this.board, new Coordinate(3, 3), new Coordinate(2, 3),
+				new Coordinate(4, 4), this.owner, NUMBER_OF_MOVES));
 		assertNotEquals(this.pushMove, new PushMove(this.board, new Coordinate(3, 3), new Coordinate(3, 4),
-				new Coordinate(4, 4), this.otherOwner));
+				new Coordinate(2, 4), this.owner, NUMBER_OF_MOVES));
+		assertNotEquals(this.pushMove, new PushMove(this.board, new Coordinate(3, 3), new Coordinate(3, 4),
+				new Coordinate(4, 4), this.otherOwner, NUMBER_OF_MOVES));
 
 		assertNotEquals(this.pushMove, this.regularMove);
 		assertNotEquals(this.pushMove, this.pullMove);
@@ -109,16 +111,19 @@ public class TestMoveCommandEquality {
 
 		assertEquals(this.regularMove.hashCode(), this.regularMove.hashCode());
 		assertEquals(this.regularMove.hashCode(),
-				new RegularMove(this.board, new Coordinate(3, 3), new Coordinate(4, 3), this.owner).hashCode());
+				new RegularMove(this.board, new Coordinate(3, 3), new Coordinate(4, 3), this.owner, NUMBER_OF_MOVES)
+						.hashCode());
 
+		assertNotEquals(this.regularMove.hashCode(), new RegularMove(new BoardState(), new Coordinate(3, 3),
+				new Coordinate(4, 3), this.owner, NUMBER_OF_MOVES).hashCode());
 		assertNotEquals(this.regularMove.hashCode(),
-				new RegularMove(new BoardState(), new Coordinate(3, 3), new Coordinate(4, 3), this.owner).hashCode());
+				new RegularMove(this.board, new Coordinate(5, 3), new Coordinate(4, 3), this.owner, NUMBER_OF_MOVES)
+						.hashCode());
 		assertNotEquals(this.regularMove.hashCode(),
-				new RegularMove(this.board, new Coordinate(5, 3), new Coordinate(4, 3), this.owner).hashCode());
-		assertNotEquals(this.regularMove.hashCode(),
-				new RegularMove(this.board, new Coordinate(3, 3), new Coordinate(3, 2), this.owner).hashCode());
-		assertNotEquals(this.regularMove.hashCode(),
-				new RegularMove(this.board, new Coordinate(3, 3), new Coordinate(4, 3), this.otherOwner).hashCode());
+				new RegularMove(this.board, new Coordinate(3, 3), new Coordinate(3, 2), this.owner, NUMBER_OF_MOVES)
+						.hashCode());
+		assertNotEquals(this.regularMove.hashCode(), new RegularMove(this.board, new Coordinate(3, 3),
+				new Coordinate(4, 3), this.otherOwner, NUMBER_OF_MOVES).hashCode());
 
 		assertNotEquals(this.regularMove.hashCode(), this.pullMove.hashCode());
 		assertNotEquals(this.regularMove.hashCode(), this.pushMove.hashCode());
@@ -129,23 +134,19 @@ public class TestMoveCommandEquality {
 		assertNotNull(this.pullMove.hashCode());
 
 		assertEquals(this.pullMove.hashCode(), this.pullMove.hashCode());
-		assertEquals(this.pullMove.hashCode(),
-				new PullMove(this.board, new Coordinate(3, 3), new Coordinate(4, 3), new Coordinate(3, 4), this.owner)
-						.hashCode());
+		assertEquals(this.pullMove.hashCode(), new PullMove(this.board, new Coordinate(3, 3), new Coordinate(4, 3),
+				new Coordinate(3, 4), this.owner, NUMBER_OF_MOVES).hashCode());
 
 		assertNotEquals(this.pullMove.hashCode(), new PullMove(new BoardState(), new Coordinate(3, 3),
-				new Coordinate(4, 3), new Coordinate(3, 4), this.owner).hashCode());
-		assertNotEquals(this.pullMove.hashCode(),
-				new PullMove(this.board, new Coordinate(5, 3), new Coordinate(4, 3), new Coordinate(3, 4), this.owner)
-						.hashCode());
-		assertNotEquals(this.pullMove.hashCode(),
-				new PullMove(this.board, new Coordinate(3, 3), new Coordinate(3, 2), new Coordinate(3, 4), this.owner)
-						.hashCode());
-		assertNotEquals(this.pullMove.hashCode(),
-				new PullMove(this.board, new Coordinate(3, 3), new Coordinate(4, 3), new Coordinate(2, 3), this.owner)
-						.hashCode());
+				new Coordinate(4, 3), new Coordinate(3, 4), this.owner, NUMBER_OF_MOVES).hashCode());
+		assertNotEquals(this.pullMove.hashCode(), new PullMove(this.board, new Coordinate(5, 3), new Coordinate(4, 3),
+				new Coordinate(3, 4), this.owner, NUMBER_OF_MOVES).hashCode());
+		assertNotEquals(this.pullMove.hashCode(), new PullMove(this.board, new Coordinate(3, 3), new Coordinate(3, 2),
+				new Coordinate(3, 4), this.owner, NUMBER_OF_MOVES).hashCode());
 		assertNotEquals(this.pullMove.hashCode(), new PullMove(this.board, new Coordinate(3, 3), new Coordinate(4, 3),
-				new Coordinate(3, 4), this.otherOwner).hashCode());
+				new Coordinate(2, 3), this.owner, NUMBER_OF_MOVES).hashCode());
+		assertNotEquals(this.pullMove.hashCode(), new PullMove(this.board, new Coordinate(3, 3), new Coordinate(4, 3),
+				new Coordinate(3, 4), this.otherOwner, NUMBER_OF_MOVES).hashCode());
 
 		assertNotEquals(this.pullMove.hashCode(), this.regularMove);
 		assertNotEquals(this.pullMove.hashCode(), this.pushMove.hashCode());
@@ -156,23 +157,19 @@ public class TestMoveCommandEquality {
 		assertNotEquals(this.pushMove.hashCode(), null);
 
 		assertEquals(this.pushMove.hashCode(), this.pushMove.hashCode());
-		assertEquals(this.pushMove.hashCode(),
-				new PushMove(this.board, new Coordinate(3, 3), new Coordinate(3, 4), new Coordinate(4, 4), this.owner)
-						.hashCode());
+		assertEquals(this.pushMove.hashCode(), new PushMove(this.board, new Coordinate(3, 3), new Coordinate(3, 4),
+				new Coordinate(4, 4), this.owner, NUMBER_OF_MOVES).hashCode());
 
 		assertNotEquals(this.pushMove.hashCode(), new PushMove(new BoardState(), new Coordinate(3, 3),
-				new Coordinate(3, 4), new Coordinate(4, 4), this.owner).hashCode());
-		assertNotEquals(this.pushMove.hashCode(),
-				new PushMove(this.board, new Coordinate(4, 4), new Coordinate(3, 4), new Coordinate(4, 4), this.owner)
-						.hashCode());
-		assertNotEquals(this.pushMove.hashCode(),
-				new PushMove(this.board, new Coordinate(3, 3), new Coordinate(2, 3), new Coordinate(4, 4), this.owner)
-						.hashCode());
-		assertNotEquals(this.pushMove.hashCode(),
-				new PushMove(this.board, new Coordinate(3, 3), new Coordinate(3, 4), new Coordinate(2, 4), this.owner)
-						.hashCode());
+				new Coordinate(3, 4), new Coordinate(4, 4), this.owner, NUMBER_OF_MOVES).hashCode());
+		assertNotEquals(this.pushMove.hashCode(), new PushMove(this.board, new Coordinate(4, 4), new Coordinate(3, 4),
+				new Coordinate(4, 4), this.owner, NUMBER_OF_MOVES).hashCode());
+		assertNotEquals(this.pushMove.hashCode(), new PushMove(this.board, new Coordinate(3, 3), new Coordinate(2, 3),
+				new Coordinate(4, 4), this.owner, NUMBER_OF_MOVES).hashCode());
 		assertNotEquals(this.pushMove.hashCode(), new PushMove(this.board, new Coordinate(3, 3), new Coordinate(3, 4),
-				new Coordinate(4, 4), this.otherOwner).hashCode());
+				new Coordinate(2, 4), this.owner, NUMBER_OF_MOVES).hashCode());
+		assertNotEquals(this.pushMove.hashCode(), new PushMove(this.board, new Coordinate(3, 3), new Coordinate(3, 4),
+				new Coordinate(4, 4), this.otherOwner, NUMBER_OF_MOVES).hashCode());
 
 		assertNotEquals(this.pushMove.hashCode(), this.regularMove);
 		assertNotEquals(this.pushMove.hashCode(), this.pullMove.hashCode());

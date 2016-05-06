@@ -7,11 +7,12 @@ import piece.Owner;
 import piece.Rabbit;
 
 public class RegularMove extends MoveCommand {
-	protected final int NUMBER_OF_MOVES = 1;
+	public static final int NUMBER_OF_MOVES = 1;
 	private static final long serialVersionUID = 4434841689278271636L;
 
-	public RegularMove(BoardState board, Coordinate originalPosition, Coordinate newPosition, Owner turn) {
-		super(board, originalPosition, newPosition, turn);
+	public RegularMove(BoardState board, Coordinate originalPosition, Coordinate newPosition, Owner turn,
+			int movesLeft) {
+		super(board, originalPosition, newPosition, turn, movesLeft);
 	}
 
 	@Override
