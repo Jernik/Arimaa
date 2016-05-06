@@ -64,7 +64,7 @@ public class MovementListener implements MouseListener {
 			else if (isSelectedPieceAndEmptySpaceClicked(coor)) {
 				// Using move to check for valid move
 				RegularMove m = new RegularMove(game.getBoardState(), this.selectedPieceCoord, coor,
-						this.game.getOwner());
+						this.game.getOwner(), game.getNumMoves());
 				if (game.move(m)) {
 					gui.renderBoard();
 				}
