@@ -9,19 +9,12 @@ import piece.Owner;
  */
 public class PullMove extends MoveCommand {
 	private static final long serialVersionUID = -2023708661926206228L;
-	private BoardState newBoard;
-	private Coordinate originalPlace;
-	private Coordinate newPlace;
-	private Coordinate pullPiecePlace;
+	private Coordinate pullPiecePosition;
 
-	public PullMove(BoardState board, Coordinate originalPlace, Coordinate newPlace, Coordinate pullPiecePlace,
+	public PullMove(BoardState board, Coordinate originalPosition, Coordinate newPosition, Coordinate pullPiecePosition,
 			Owner turn) {
-		this.turn = turn;
-		this.originalBoard = board.clone();
-		this.newBoard = board;
-		this.originalPlace = originalPlace;
-		this.newPlace = newPlace;
-		this.pullPiecePlace = pullPiecePlace;
+		super(board, originalPosition, newPosition, turn);
+		this.pullPiecePosition = pullPiecePosition;
 	}
 
 	@Override
@@ -34,33 +27,34 @@ public class PullMove extends MoveCommand {
 	}
 
 	public Coordinate getOriginalPlace() {
-		return this.originalPlace;
+		return this.originalPosition;
 	}
 
 	public Coordinate getNewPlace() {
-		return this.newPlace;
+		return this.newPosition;
 	}
 
 	public Coordinate getPullPiecePlace() {
-		return this.pullPiecePlace;
+		return this.pullPiecePosition;
 	}
 
 	// you should assume that you are given 3 random coordinates, that might or might not be valid
 	@Override
 	public boolean isValidMove() {
-		if (!this.originalPlace.isValid() || !this.newPlace.isValid() || !this.pullPiecePlace.isValid()) {
+		if (!this.originalPosition.isValid() || !this.newPosition.isValid() || !this.pullPiecePosition.isValid()) {
 			return false;
 		}
-		if (this.originalPlace.equals(this.newPlace) || this.originalPlace.equals(this.pullPiecePlace)
-				|| this.newPlace.equals(this.pullPiecePlace)) {
+		if (this.originalPosition.equals(this.newPosition) || this.originalPosition.equals(this.pullPiecePosition)
+				|| this.newPosition.equals(this.pullPiecePosition)) {
 			return false;
 		}
 		BoardState board = this.originalBoard;
-		if (!board.isPieceAt(this.originalPlace) || board.isPieceAt(this.newPlace) || !board.isPieceAt(this.pullPiecePlace)) {
+		if (!board.isPieceAt(this.originalPosition) || board.isPieceAt(this.newPosition)
+				|| !board.isPieceAt(this.pullPiecePosition)) {
 			return false;
 		}
-		if (!board.getPieceAt(this.originalPlace).getOwner().equals(this.turn)
-				|| board.getPieceAt(this.pullPiecePlace).getOwner().equals(this.turn)) {
+		if (!board.getPieceAt(this.originalPosition).getOwner().equals(this.turn)
+				|| board.getPieceAt(this.pullPiecePosition).getOwner().equals(this.turn)) {
 			return false;
 		}
 
@@ -74,15 +68,11 @@ public class PullMove extends MoveCommand {
 			return false;
 		}
 		PullMove pullMove = (PullMove) moveCommand;
-		return super.eq(pullMove) && this.newBoard.equals(pullMove.getNewBoard())
-				&& this.originalPlace.equals(pullMove.getOriginalPlace())
-				&& this.newPlace.equals(pullMove.getNewPlace())
-				&& this.pullPiecePlace.equals(pullMove.getPullPiecePlace());
+		return super.eq(pullMove) && this.pullPiecePosition.equals(pullMove.getPullPiecePlace());
 	}
 
 	@Override
 	public int hashCode() {
-		return super.hashCode() + this.newBoard.hashCode() + this.originalPlace.hashCode() + this.newPlace.hashCode()
-				+ this.pullPiecePlace.hashCode();
+		return super.hashCode() + this.pullPiecePosition.hashCode();
 	}
 }

@@ -7,29 +7,11 @@ import piece.Owner;
 import piece.Rabbit;
 
 public class RegularMove extends MoveCommand {
+	protected final int NUMBER_OF_MOVES = 1;
 	private static final long serialVersionUID = 4434841689278271636L;
-	private BoardState newBoard;
-	private Coordinate originalPlace;
-	private Coordinate newPlace;
 
-	public RegularMove(BoardState board, Coordinate originalPlace, Coordinate newPlace, Owner turn) {
-		this.turn = turn;
-		this.originalBoard = board.clone();
-		this.newBoard = board;
-		this.originalPlace = originalPlace;
-		this.newPlace = newPlace;
-	}
-
-	public Coordinate getOriginalPlace() {
-		return this.originalPlace;
-	}
-
-	public Coordinate getNewPlace() {
-		return this.newPlace;
-	}
-
-	public BoardState getNewBoard() {
-		return this.newBoard;
+	public RegularMove(BoardState board, Coordinate originalPosition, Coordinate newPosition, Owner turn) {
+		super(board, originalPosition, newPosition, turn);
 	}
 
 	@Override
@@ -37,31 +19,31 @@ public class RegularMove extends MoveCommand {
 		if (!isValidMove()) {
 			return this.originalBoard;
 		}
-		this.newBoard.movePiece(originalPlace, newPlace);
+		this.newBoard.movePiece(originalPosition, newPosition);
 		return newBoard;
 	}
 
 	@Override
 	public boolean isValidMove() {
-		if (!this.originalBoard.isPieceAt(this.originalPlace) || this.originalBoard.isPieceAt(this.newPlace)) {
+		if (!this.originalBoard.isPieceAt(this.originalPosition) || this.originalBoard.isPieceAt(this.newPosition)) {
 			return false;
 		}
-		AbstractPiece piece = this.originalBoard.getPieceAt(originalPlace);
-		if (isFrozen(originalPlace)) {
+		AbstractPiece piece = this.originalBoard.getPieceAt(originalPosition);
+		if (isFrozen(originalPosition)) {
 			return false;
 		}
-		if (this.originalBoard.isPieceAt(newPlace)) {
+		if (this.originalBoard.isPieceAt(newPosition)) {
 			return false;
 		}
 		if ((piece instanceof Rabbit)) {
-			if (((piece.getOwner() == Owner.values()[0]) && (newPlace.equals(originalPlace.up())))
-					|| ((piece.getOwner() == Owner.values()[1]) && (newPlace.equals(originalPlace.down())))) {
+			if (((piece.getOwner() == Owner.values()[0]) && (newPosition.equals(originalPosition.up())))
+					|| ((piece.getOwner() == Owner.values()[1]) && (newPosition.equals(originalPosition.down())))) {
 				// Cannot move a Rabbit backwards unless it has been dragged
 				return false;
 			}
 		}
-		if (!(originalPlace.isOrthogonallyAdjacentTo(newPlace)
-				&& this.originalBoard.getPieceAt(originalPlace).getOwner() == this.turn)) {
+		if (!(originalPosition.isOrthogonallyAdjacentTo(newPosition)
+				&& this.originalBoard.getPieceAt(originalPosition).getOwner() == this.turn)) {
 			return false;
 		}
 		return true;
@@ -73,13 +55,11 @@ public class RegularMove extends MoveCommand {
 			return false;
 		}
 		RegularMove regularMove = (RegularMove) moveCommand;
-		return super.eq(regularMove) && this.newBoard.equals(regularMove.getNewBoard())
-				&& this.originalPlace.equals(regularMove.getOriginalPlace())
-				&& this.newPlace.equals(regularMove.getNewPlace());
+		return super.eq(regularMove);
 	}
 
 	@Override
 	public int hashCode() {
-		return super.hashCode() + this.newBoard.hashCode() + this.originalPlace.hashCode() + this.newPlace.hashCode();
+		return super.hashCode();
 	}
 }
