@@ -40,7 +40,7 @@ public abstract class MoveCommand implements Serializable{
 		checkList.add(pieceToMove.left());
 		checkList.add(pieceToMove.right());
 		for (Coordinate coor : checkList) {
-			if (this.originalBoard.pieceAt(coor)) {
+			if (this.originalBoard.isPieceAt(coor)) {
 				if (coor.isValid() && !coor.equals(pieceToMove)
 						&& this.originalBoard.getPieceAt(coor).getOwner() == player && this.originalBoard
 								.getPieceAt(coor).isStrongerThan(this.originalBoard.getPieceAt(pieceToMove))) {

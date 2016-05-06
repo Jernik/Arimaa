@@ -55,7 +55,7 @@ public class PullMove extends MoveCommand {
 			return false;
 		}
 		BoardState board = this.originalBoard;
-		if (!board.pieceAt(this.originalPlace) || board.pieceAt(this.newPlace) || !board.pieceAt(this.pullPiecePlace)) {
+		if (!board.isPieceAt(this.originalPlace) || board.isPieceAt(this.newPlace) || !board.isPieceAt(this.pullPiecePlace)) {
 			return false;
 		}
 		if (!board.getPieceAt(this.originalPlace).getOwner().equals(this.turn)

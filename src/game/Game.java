@@ -157,7 +157,7 @@ public class Game implements Serializable {
 	}
 
 	public boolean checkCoor(Coordinate coor) {
-		return this.currentBoard.pieceAt(coor);
+		return this.currentBoard.isPieceAt(coor);
 	}
 
 	public boolean move(MoveCommand m) {
@@ -257,7 +257,7 @@ public class Game implements Serializable {
 		}
 		Owner playerTwo = Owner.Player2;
 		for (int i = 0; i < 8; i++) {
-			if (this.currentBoard.pieceAt(new Coordinate(i, 0))) {
+			if (this.currentBoard.isPieceAt(new Coordinate(i, 0))) {
 				if (this.currentBoard.getPieceAt(new Coordinate(i, 0)).equals(new Rabbit(playerTwo))) {
 					winner = 2;
 					return;
@@ -266,7 +266,7 @@ public class Game implements Serializable {
 		}
 		Owner playerOne = Owner.Player1;
 		for (int i = 0; i < 8; i++) {
-			if (this.currentBoard.pieceAt(new Coordinate(i, 7))) {
+			if (this.currentBoard.isPieceAt(new Coordinate(i, 7))) {
 				if (this.currentBoard.getPieceAt(new Coordinate(i, 7)).equals(new Rabbit(playerOne))) {
 					winner = 1;
 					return;
@@ -303,7 +303,7 @@ public class Game implements Serializable {
 	 * to it
 	 */
 	private void checkDeaths(Coordinate toCheck) {
-		if (!this.currentBoard.pieceAt((toCheck)))
+		if (!this.currentBoard.isPieceAt((toCheck)))
 			return;// an empty piece doesn't need to be checked
 
 		if (checkFriendlyAdjacent(toCheck)) {
