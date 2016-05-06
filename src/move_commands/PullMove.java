@@ -23,18 +23,6 @@ public class PullMove extends MoveCommand {
 		return this.originalBoard;
 	}
 
-	public BoardState getNewBoard() {
-		return this.newBoard;
-	}
-
-	public Coordinate getOriginalPlace() {
-		return this.originalPosition;
-	}
-
-	public Coordinate getNewPlace() {
-		return this.newPosition;
-	}
-
 	public Coordinate getPullPiecePlace() {
 		return this.pullPiecePosition;
 	}
