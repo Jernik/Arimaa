@@ -6,15 +6,11 @@ public class Coordinate implements Serializable {
 	private static final long serialVersionUID = 1938906095938960188L;
 	private int x;
 	private int y;
-	private boolean valid;
 
 	public Coordinate(int x, int y) {
-		if (isValidValue(x) && isValidValue(y)) {
-			this.valid = true;
-			this.x = x;
-			this.y = y;
-		} else {
-			this.valid = false;
+		this.x = x;
+		this.y = y;
+		if (!this.isValid()) {
 			this.x = -1;
 			this.y = -1;
 		}
@@ -23,7 +19,6 @@ public class Coordinate implements Serializable {
 	public Coordinate(Coordinate coor) {
 		this.x = coor.getX();
 		this.y = coor.getY();
-		this.valid = coor.isValid();
 	}
 
 	private boolean isValidValue(int value) {
@@ -39,7 +34,7 @@ public class Coordinate implements Serializable {
 	}
 
 	public boolean isValid() {
-		return this.valid;
+		return isValidValue(this.x) && isValidValue(this.y);
 	}
 
 	public Coordinate down() {
@@ -81,13 +76,13 @@ public class Coordinate implements Serializable {
 	public boolean equals(Object obj) {
 		if (obj instanceof Coordinate) {
 			Coordinate other = (Coordinate) obj;
-			return this.valid == other.isValid() && this.x == other.getX() && this.y == other.getY();
+			return this.isValid() == other.isValid() && this.x == other.getX() && this.y == other.getY();
 		}
 		return false;
 	}
 
 	public int hashCode() {
-		return Integer.hashCode(this.x) * 1000 + Integer.hashCode(this.y) * 10000 + Boolean.hashCode(this.valid);
+		return Integer.hashCode(this.x) * 1000 + Integer.hashCode(this.y) * 10000;
 	}
 
 	public String toString() {
