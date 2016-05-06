@@ -25,7 +25,7 @@ public class PushMove extends MoveCommand {
 
 	@Override
 	public BoardState execute() {
-		return null;
+		return this.originalBoard;
 	}
 
 	public BoardState getNewBoard() {

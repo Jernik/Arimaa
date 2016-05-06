@@ -238,9 +238,10 @@ public class GUI {
 			return false;
 		}
 		ObjectInputStream in = null;
+		Game newGame = null;
 		try {
 			in = this.createInputStream(f);
-			this.game = (Game) in.readObject();
+			newGame = (Game) in.readObject();
 		} catch (IOException e) {
 			System.out.println("Could not load game. Please try again");
 			e.printStackTrace();
@@ -258,6 +259,7 @@ public class GUI {
 				}
 			}
 		}
+		this.game = newGame;
 		return true;
 	}
 

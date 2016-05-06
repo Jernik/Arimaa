@@ -79,7 +79,6 @@ public class TestLoad extends EasyMockSupport {
 
 		assertFalse(gui.loadFile(f));
 		assertEquals(afterMove, gui.game);
-		System.out.println(gui.game);
 		verifyAll();
 	}
 	
