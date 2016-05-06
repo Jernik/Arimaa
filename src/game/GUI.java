@@ -239,17 +239,14 @@ public class GUI {
 		}
 		ObjectInputStream in = null;
 		Game newGame = null;
-		boolean error = false;
 		try {
 			in = this.createInputStream(f);
 			newGame = (Game) in.readObject();
 		} catch (IOException e) {
-			error = true;
 			System.out.println("Could not load game. Please try again");
 			e.printStackTrace();
 			return false;
 		} catch (ClassNotFoundException | ClassCastException e) {
-			error = true;
 			System.out.println("Corrupted save file");
 			e.printStackTrace();
 			return false;
@@ -258,14 +255,11 @@ public class GUI {
 				try {
 					in.close();
 				} catch (IOException e) {
-					error = true;
 					return false;
 				}
 			}
 		}
-		if (!error) {
-			this.game = newGame;
-		}
+		this.game = newGame;
 		return true;
 	}
 
