@@ -7,7 +7,6 @@ import game.Coordinate;
 import game.GUI;
 import game.Game;
 import game.ImagePanel;
-import move_commands.MoveCommand;
 import move_commands.RegularMove;
 
 public class MovementListener implements MouseListener {
@@ -19,7 +18,7 @@ public class MovementListener implements MouseListener {
 	private GUI gui;
 
 	public MovementListener(GUI gui) {
-		this.game = gui.game;
+		this.game = gui.getGame();
 		this.gui = gui;
 		this.selectedPiece = null;
 		this.secondSelectedPiece = null;
@@ -56,7 +55,7 @@ public class MovementListener implements MouseListener {
 		if (clickOnBoard(coor)) {
 			// No piece has been selected yet
 			if (noPieceSelectedAndPieceClicked(coor)) {
-				this.selectedPiece = gui.boardPieces[coor.getX()][coor.getY()];
+				this.selectedPiece = gui.getBoardPieces()[coor.getX()][coor.getY()];
 				this.selectedPieceCoord = new Coordinate(coor);
 			}
 
@@ -64,7 +63,8 @@ public class MovementListener implements MouseListener {
 			// AKA move
 			else if (isSelectedPieceAndEmptySpaceClicked(coor)) {
 				// Using move to check for valid move
-				RegularMove m = new RegularMove(game.getBoardState(),this.selectedPieceCoord, coor, this.game.getOwner());
+				RegularMove m = new RegularMove(game.getBoardState(), this.selectedPieceCoord, coor,
+						this.game.getOwner());
 				if (game.move(m)) {
 					gui.renderBoard();
 				}
@@ -77,7 +77,7 @@ public class MovementListener implements MouseListener {
 
 			// Piece already selected, clicked a second piece
 			else if (pieceSelectedAndSecondPieceClicked(coor)) {
-				this.secondSelectedPiece = gui.boardPieces[coor.getX()][coor.getY()];
+				this.secondSelectedPiece = gui.getBoardPieces()[coor.getX()][coor.getY()];
 				this.secondSelectedPieceCoord = new Coordinate(coor);
 
 				// Piece selected, Second piece selected, empty square
@@ -105,22 +105,22 @@ public class MovementListener implements MouseListener {
 
 	private boolean twoPieceSelectedAndEmptySpaceClicked(Coordinate coor) {
 		return this.selectedPiece != null && this.secondSelectedPiece != null
-				&& gui.boardPieces[coor.getX()][coor.getY()] == null;
+				&& gui.getBoardPieces()[coor.getX()][coor.getY()] == null;
 	}
 
 	private boolean pieceSelectedAndSecondPieceClicked(Coordinate coor) {
 		return this.selectedPiece != null && this.secondSelectedPiece == null
-				&& gui.boardPieces[coor.getX()][coor.getY()] != null
-				&& this.selectedPiece != gui.boardPieces[coor.getX()][coor.getY()];
+				&& gui.getBoardPieces()[coor.getX()][coor.getY()] != null
+				&& this.selectedPiece != gui.getBoardPieces()[coor.getX()][coor.getY()];
 	}
 
 	private boolean isSelectedPieceAndEmptySpaceClicked(Coordinate coor) {
 		return this.selectedPiece != null && this.secondSelectedPiece == null
-				&& gui.boardPieces[coor.getX()][coor.getY()] == null;
+				&& gui.getBoardPieces()[coor.getX()][coor.getY()] == null;
 	}
 
 	private boolean noPieceSelectedAndPieceClicked(Coordinate coor) {
-		return gui.boardPieces[coor.getX()][coor.getY()] != null && this.selectedPiece == null
+		return gui.getBoardPieces()[coor.getX()][coor.getY()] != null && this.selectedPiece == null
 				&& this.secondSelectedPiece == null;
 	}
 

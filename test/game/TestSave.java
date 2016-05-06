@@ -64,8 +64,8 @@ public class TestSave extends EasyMockSupport {
 			gui.saveFile();
 			byte[] before = Files.readAllBytes(Paths.get(GUI.SAVE_PATH));
 
-			Ai ai = new Ai(Owner.Player1, gui.game);
-			gui.game.move(ai.generateMove());
+			Ai ai = new Ai(Owner.Player1, gui.getGame());
+			gui.getGame().move(ai.generateMove());
 			assertTrue(gui.saveFile());
 			byte[] after = Files.readAllBytes(Paths.get(GUI.SAVE_PATH));
 
