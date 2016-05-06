@@ -55,7 +55,7 @@ public class PushMove extends MoveCommand {
 			return false;
 		}
 		BoardState board = this.originalBoard;
-		if (!board.pieceAt(this.originalPlace) || !board.pieceAt(this.newPlace) || board.pieceAt(this.pushPiecePlace)) {
+		if (!board.isPieceAt(this.originalPlace) || !board.isPieceAt(this.newPlace) || board.isPieceAt(this.pushPiecePlace)) {
 			return false;
 		}
 		if (!board.getPieceAt(this.originalPlace).getOwner().equals(this.turn)

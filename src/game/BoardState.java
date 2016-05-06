@@ -84,7 +84,7 @@ public class BoardState implements Serializable {
 	// this method will only move the piece if there is a piece at the old coor, and no piece at the new coor
 	// it will return true if it made a move and false if it did not
 	public boolean movePiece(Coordinate oldCoor, Coordinate newCoor) {
-		if (oldCoor.isValid() && newCoor.isValid() && this.pieceAt(oldCoor) && !this.pieceAt(newCoor)) {
+		if (oldCoor.isValid() && newCoor.isValid() && this.isPieceAt(oldCoor) && !this.isPieceAt(newCoor)) {
 			this.pieces.put(newCoor, this.getPieceAt(oldCoor));
 			this.pieces.remove(oldCoor);
 			return true;
@@ -92,7 +92,7 @@ public class BoardState implements Serializable {
 		return false;
 	}
 
-	public boolean pieceAt(Coordinate coor) {
+	public boolean isPieceAt(Coordinate coor) {
 		if (!coor.isValid()) {
 			return false;
 		}

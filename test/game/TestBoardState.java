@@ -32,7 +32,7 @@ public class TestBoardState {
 		int[] ys = new int[] { 0, 1, 6, 7 };
 		for (int y : ys) {
 			for (int x = 0; x < BoardState.MAX_BOARD_SIZE; x++) {
-				assertTrue(b.pieceAt(new Coordinate(x, y)));
+				assertTrue(b.isPieceAt(new Coordinate(x, y)));
 			}
 		}
 
@@ -55,16 +55,16 @@ public class TestBoardState {
 
 		BoardState b = new BoardState(pieces);
 
-		assertTrue(b.pieceAt(new Coordinate(0, 0)));
-		assertTrue(b.pieceAt(new Coordinate(1, 1)));
-		assertTrue(b.pieceAt(new Coordinate(2, 2)));
-		assertTrue(b.pieceAt(new Coordinate(3, 3)));
+		assertTrue(b.isPieceAt(new Coordinate(0, 0)));
+		assertTrue(b.isPieceAt(new Coordinate(1, 1)));
+		assertTrue(b.isPieceAt(new Coordinate(2, 2)));
+		assertTrue(b.isPieceAt(new Coordinate(3, 3)));
 
-		assertFalse(b.pieceAt(new Coordinate(0, 1)));
-		assertFalse(b.pieceAt(new Coordinate(4, 2)));
-		assertFalse(b.pieceAt(new Coordinate(7, 3)));
-		assertFalse(b.pieceAt(new Coordinate(10, 1)));
-		assertFalse(b.pieceAt(new Coordinate(-2, -2)));
+		assertFalse(b.isPieceAt(new Coordinate(0, 1)));
+		assertFalse(b.isPieceAt(new Coordinate(4, 2)));
+		assertFalse(b.isPieceAt(new Coordinate(7, 3)));
+		assertFalse(b.isPieceAt(new Coordinate(10, 1)));
+		assertFalse(b.isPieceAt(new Coordinate(-2, -2)));
 	}
 
 	@Test
@@ -105,7 +105,7 @@ public class TestBoardState {
 		BoardState b = new BoardState(pieces);
 		assertTrue(b.movePiece(new Coordinate(0, 0), new Coordinate(1, 0)));
 
-		assertFalse(b.pieceAt(new Coordinate(0, 0)));
+		assertFalse(b.isPieceAt(new Coordinate(0, 0)));
 		assertEquals(p1, b.getPieceAt(new Coordinate(1, 0)));
 
 		assertEquals(p2, b.getPieceAt(new Coordinate(1, 1)));
@@ -127,12 +127,12 @@ public class TestBoardState {
 		pieces.put(new Coordinate(3, 3), p4);
 
 		BoardState b = new BoardState(pieces);
-		assertFalse(b.pieceAt(new Coordinate(1, 0)));
+		assertFalse(b.isPieceAt(new Coordinate(1, 0)));
 
 		assertFalse(b.movePiece(new Coordinate(1, 0), new Coordinate(2, 0)));
 
-		assertTrue(b.pieceAt(new Coordinate(0, 0)));
-		assertFalse(b.pieceAt(new Coordinate(2, 0)));
+		assertTrue(b.isPieceAt(new Coordinate(0, 0)));
+		assertFalse(b.isPieceAt(new Coordinate(2, 0)));
 
 		assertEquals(p1, b.getPieceAt(new Coordinate(0, 0)));
 		assertEquals(p2, b.getPieceAt(new Coordinate(1, 1)));
@@ -179,7 +179,7 @@ public class TestBoardState {
 		BoardState b = new BoardState(pieces);
 
 		assertTrue(b.removePiece(new Coordinate(0, 0)));
-		assertFalse(b.pieceAt(new Coordinate(0, 0)));
+		assertFalse(b.isPieceAt(new Coordinate(0, 0)));
 	}
 
 	@Test
@@ -198,7 +198,7 @@ public class TestBoardState {
 		BoardState b = new BoardState(pieces);
 
 		assertFalse(b.removePiece(new Coordinate(1, 0)));
-		assertFalse(b.pieceAt(new Coordinate(1, 0)));
+		assertFalse(b.isPieceAt(new Coordinate(1, 0)));
 	}
 
 	@Test
@@ -220,7 +220,7 @@ public class TestBoardState {
 		b.movePiece(new Coordinate(0, 0), new Coordinate(1, 0));
 
 		assertEquals(p1, cloned.getPieceAt(new Coordinate(0, 0)));
-		assertFalse(b.pieceAt(new Coordinate(0, 0)));
+		assertFalse(b.isPieceAt(new Coordinate(0, 0)));
 		assertEquals(p1, b.getPieceAt(new Coordinate(1, 0)));
 	}
 

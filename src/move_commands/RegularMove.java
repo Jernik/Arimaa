@@ -43,11 +43,14 @@ public class RegularMove extends MoveCommand {
 
 	@Override
 	public boolean isValidMove() {
+		if (!this.originalBoard.isPieceAt(this.originalPlace) || this.originalBoard.isPieceAt(this.newPlace)) {
+			return false;
+		}
 		AbstractPiece piece = this.originalBoard.getPieceAt(originalPlace);
 		if (isFrozen(originalPlace)) {
 			return false;
 		}
-		if (this.originalBoard.pieceAt(newPlace)) {
+		if (this.originalBoard.isPieceAt(newPlace)) {
 			return false;
 		}
 		if ((piece instanceof Rabbit)) {
