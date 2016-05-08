@@ -34,6 +34,9 @@ public abstract class AbstractPiece implements Serializable {
 	}
 
 	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
 		// this allows for subclassing of individual pieces
 		// can i treat the given object as this type of object != this.class == obj.class
 		if (obj.getClass().isAssignableFrom(this.getClass())) {
