@@ -59,7 +59,7 @@ public class TestMove {
 
 		assertTrue(g1.move(move));
 		assertEquals(new Cat(Owner.Player1), g1.getPieceAt(new Coordinate(6, 7)));
-		assertFalse(g1.checkCoor(7, 7));
+		assertFalse(g1.isPieceAt(new Coordinate(7, 7)));
 	}
 
 	@Test
