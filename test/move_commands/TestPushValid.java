@@ -34,12 +34,6 @@ public class TestPushValid extends PushSetup {
 		assertEquals(p1, g2.getPieceAt(new Coordinate(4, 3)));
 		assertEquals(p2, g2.getPieceAt(new Coordinate(4, 2)));
 		assertFalse(g2.isPieceAt(new Coordinate(4, 4)));
-
-		// assertTrue(g2.push(4, 4, 0, 0));
-		// assertTrue(g2.push(3, 4, 0, 0));
-		// g2.setPlayerTurn(1);
-		// assertTrue(g2.push(2, 4, 0, 0));
-		// assertFalse(g2.push(1, 4, 0, 0));
 	}
 
 	@Test
@@ -55,11 +49,6 @@ public class TestPushValid extends PushSetup {
 		assertEquals(p1, g2.getPieceAt(new Coordinate(4, 5)));
 		assertEquals(p2, g2.getPieceAt(new Coordinate(4, 6)));
 		assertFalse(g2.isPieceAt(new Coordinate(4, 4)));
-
-		// assertTrue(g2.push(4, 4, 2, 2));
-		// assertTrue(g2.push(5, 4, 2, 2));
-		// assertFalse(g2.push(6, 4, 2, 2));
-		// assertFalse(g2.push(7, 4, 2, 2));
 	}
 
 	@Test
@@ -75,11 +64,6 @@ public class TestPushValid extends PushSetup {
 		assertEquals(p1, g2.getPieceAt(new Coordinate(5, 4)));
 		assertEquals(p2, g2.getPieceAt(new Coordinate(6, 4)));
 		assertFalse(g2.isPieceAt(new Coordinate(4, 4)));
-
-		// assertTrue(g2.push(4, 4, 1, 1));
-		// assertTrue(g2.push(4, 5, 1, 1));
-		// assertFalse(g2.push(4, 6, 1, 1));
-		// assertFalse(g2.push(4, 7, 1, 1));
 	}
 
 	@Test
@@ -95,15 +79,6 @@ public class TestPushValid extends PushSetup {
 		assertEquals(p1, g2.getPieceAt(new Coordinate(5, 7)));
 		assertEquals(p2, g2.getPieceAt(new Coordinate(4, 7)));
 		assertFalse(g2.isPieceAt(new Coordinate(6, 7)));
-
-		// assertTrue(g2.push(7, 6, 3, 3));
-		// assertTrue(g2.push(7, 5, 3, 3));
-		// g2.setPlayerTurn(1);
-		// assertTrue(g2.push(7, 4, 3, 3));
-		// assertTrue(g2.push(7, 3, 3, 3));
-		// g2.setPlayerTurn(1);
-		// assertTrue(g2.push(7, 2, 3, 3));
-		// assertFalse(g2.push(7, 1, 3, 3));
 	}
 
 	@Test
@@ -112,7 +87,6 @@ public class TestPushValid extends PushSetup {
 				new Coordinate(6, 3), pushingGame.getOwner(), pushingGame.getNumMoves());
 		assertTrue(move.isValidMove());
 		assertTrue(pushingGame.move(move));
-		// assertTrue(pushingGame.push(4, 5, 1, 0));
 
 		assertEquals(new Elephant(Owner.Player1), pushingGame.getPieceAt(new Coordinate(6, 4)));
 		assertEquals(new Camel(Owner.Player2), pushingGame.getPieceAt(new Coordinate(6, 3)));

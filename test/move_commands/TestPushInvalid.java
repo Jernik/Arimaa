@@ -117,10 +117,6 @@ public class TestPushInvalid extends PushSetup {
 		MoveCommand move = new PushMove(pushingGame.getBoardState(), new Coordinate(2, 2), new Coordinate(2, 1),
 				new Coordinate(2, 0), pushingGame.getOwner(), pushingGame.getNumMoves());
 		testInvalidPush(move);
-
-		// assertFalse(pushingGame.push(2, 2, 0, 0));
-		// assertEquals(new Elephant(Owner.Player1), pushingGame.getPieceAt(new Coordinate(2, 2)));
-		// assertEquals(new Rabbit(Owner.Player1), pushingGame.getPieceAt(new Coordinate(1, 2)));
 	}
 
 	@Test
@@ -128,10 +124,6 @@ public class TestPushInvalid extends PushSetup {
 		MoveCommand move = new PushMove(pushingGame.getBoardState(), new Coordinate(2, 2), new Coordinate(3, 2),
 				new Coordinate(4, 2), pushingGame.getOwner(), pushingGame.getNumMoves());
 		testInvalidPush(move);
-
-		// assertFalse(pushingGame.push(2, 2, 1, 1));
-		// assertEquals(new Elephant(Owner.Player1), pushingGame.getPieceAt(new Coordinate(2, 2)));
-		// assertEquals(new Rabbit(Owner.Player1), pushingGame.getPieceAt(new Coordinate(2, 3)));
 	}
 
 	@Test
@@ -139,10 +131,6 @@ public class TestPushInvalid extends PushSetup {
 		MoveCommand move = new PushMove(pushingGame.getBoardState(), new Coordinate(2, 2), new Coordinate(2, 3),
 				new Coordinate(2, 4), pushingGame.getOwner(), pushingGame.getNumMoves());
 		testInvalidPush(move);
-
-		// assertFalse(pushingGame.push(2, 2, 2, 2));
-		// assertEquals(new Elephant(Owner.Player1), pushingGame.getPieceAt(new Coordinate(2, 2)));
-		// assertEquals(new Rabbit(Owner.Player1), pushingGame.getPieceAt(new Coordinate(3, 2)));
 	}
 
 	@Test
@@ -150,10 +138,6 @@ public class TestPushInvalid extends PushSetup {
 		MoveCommand move = new PushMove(pushingGame.getBoardState(), new Coordinate(2, 2), new Coordinate(1, 2),
 				new Coordinate(0, 2), pushingGame.getOwner(), pushingGame.getNumMoves());
 		testInvalidPush(move);
-
-		// assertFalse(pushingGame.push(2, 2, 3, 3));
-		// assertEquals(new Elephant(Owner.Player1), pushingGame.getPieceAt(new Coordinate(2, 2)));
-		// assertEquals(new Rabbit(Owner.Player1), pushingGame.getPieceAt(new Coordinate(2, 1)));
 	}
 
 	@Test
@@ -162,10 +146,6 @@ public class TestPushInvalid extends PushSetup {
 		MoveCommand move = new PushMove(pushingGame.getBoardState(), new Coordinate(3, 6), new Coordinate(3, 5),
 				new Coordinate(3, 4), pushingGame.getOwner(), pushingGame.getNumMoves());
 		testInvalidPush(move);
-
-		// assertFalse(pushingGame.push(6, 3, 0, 0));
-		// assertEquals(new Rabbit(Owner.Player2), pushingGame.getPieceAt(new Coordinate(6, 3)));
-		// assertEquals(new Camel(Owner.Player1), pushingGame.getPieceAt(new Coordinate(5, 3)));
 	}
 
 	@Test
@@ -176,12 +156,9 @@ public class TestPushInvalid extends PushSetup {
 				new Coordinate(7, 3), pushingGame.getOwner(), pushingGame.getNumMoves())));
 		assertTrue(pushingGame.move(new RegularMove(pushingGame.getBoardState(), new Coordinate(7, 3),
 				new Coordinate(7, 4), pushingGame.getOwner(), pushingGame.getNumMoves())));
-		// assertTrue(pushingGame.move(1, 7, 2));
-		// assertTrue(pushingGame.move(2, 7, 2));
-		// assertTrue(pushingGame.move(3, 7, 2));
+
 		MoveCommand move = new PushMove(pushingGame.getBoardState(), new Coordinate(5, 4), new Coordinate(5, 3),
 				new Coordinate(5, 2), pushingGame.getOwner(), pushingGame.getNumMoves());
 		testInvalidPush(move);
-		// assertFalse(pushingGame.push(4, 5, 0, 0));
 	}
 }

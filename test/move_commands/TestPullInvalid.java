@@ -41,7 +41,6 @@ public class TestPullInvalid extends PullSetup {
 		MoveCommand move = new PullMove(pullingGame.getBoardState(), new Coordinate(7, 0), new Coordinate(7, -1),
 				new Coordinate(7, 1), pullingGame.getOwner(), pullingGame.getNumMoves());
 		testInvalidPull(move);
-		// assertFalse(pullingGame.pull(0, 7, 1, 7, 0));
 	}
 
 	@Test
@@ -91,7 +90,6 @@ public class TestPullInvalid extends PullSetup {
 		MoveCommand move = new PullMove(pullingGame.getBoardState(), new Coordinate(7, 5), new Coordinate(7, 6),
 				new Coordinate(6, 5), pullingGame.getOwner(), pullingGame.getNumMoves());
 		testInvalidPull(move);
-		// assertFalse(pullingGame.pull(0, 4, 0, 5, 3));
 	}
 
 	@Test
@@ -106,7 +104,6 @@ public class TestPullInvalid extends PullSetup {
 		MoveCommand move = new PullMove(pullingGame.getBoardState(), new Coordinate(2, 2), new Coordinate(2, 1),
 				new Coordinate(2, 3), pullingGame.getOwner(), pullingGame.getNumMoves());
 		testInvalidPull(move);
-		// assertFalse(pullingGame.pull(2, 2, 3, 2, 0));
 	}
 
 	@Test
@@ -114,8 +111,6 @@ public class TestPullInvalid extends PullSetup {
 		MoveCommand move = new PullMove(pullingGame.getBoardState(), new Coordinate(1, 6), new Coordinate(2, 6),
 				new Coordinate(0, 6), pullingGame.getOwner(), pullingGame.getNumMoves());
 		testInvalidPull(move);
-		// assertFalse(pullingGame.pull(6, 1, 6, 0, 1));
-		// assertFalse(pullingGame.checkCoor(6, 2));
 	}
 
 	@Test
@@ -123,8 +118,6 @@ public class TestPullInvalid extends PullSetup {
 		MoveCommand move = new PullMove(pullingGame.getBoardState(), new Coordinate(1, 2), new Coordinate(1, 3),
 				new Coordinate(2, 2), pullingGame.getOwner(), pullingGame.getNumMoves());
 		testInvalidPull(move);
-		// assertFalse(pullingGame.pull(6, 1, 7, 1, 0));
-		// assertFalse(pullingGame.checkCoor(5, 1));
 	}
 
 	@Test
@@ -132,7 +125,6 @@ public class TestPullInvalid extends PullSetup {
 		MoveCommand move = new PullMove(pullingGame.getBoardState(), new Coordinate(3, 7), new Coordinate(6, 3),
 				new Coordinate(4, 7), pullingGame.getOwner(), pullingGame.getNumMoves());
 		testInvalidPull(move);
-		// assertFalse(pullingGame.pull(7, 3, 7, 4, 3));
 	}
 
 	@Test
