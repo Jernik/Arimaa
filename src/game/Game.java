@@ -151,12 +151,7 @@ public class Game implements Serializable {
 		return this.currentBoard.getPieceAt(coor);
 	}
 
-	// refactor for future pull request
-	public boolean checkCoor(int row, int column) {
-		return this.checkCoor(new Coordinate(row, column));
-	}
-
-	public boolean checkCoor(Coordinate coor) {
+	public boolean isPieceAt(Coordinate coor) {
 		return this.currentBoard.isPieceAt(coor);
 	}
 
