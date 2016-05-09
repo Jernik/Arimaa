@@ -32,9 +32,10 @@ public class RegularMove extends MoveCommand {
 		if (this.originalPosition.equals(this.newPosition)) {
 			return false;
 		}
-		if (!originalPosition.isOrthogonallyAdjacentTo(newPosition)) {
+		if (!this.originalPosition.isOrthogonallyAdjacentTo(this.newPosition)) {
 			return false;
 		}
+		
 		BoardState board = this.originalBoard;
 		if (!board.isPieceAt(this.originalPosition) || board.isPieceAt(this.newPosition)) {
 			return false;

@@ -122,7 +122,7 @@ public class TestPullInvalid extends PullSetup {
 
 	@Test
 	public void testCantPullPieceOfGreaterStrength() {
-		MoveCommand move = new PullMove(pullingGame.getBoardState(), new Coordinate(3, 7), new Coordinate(6, 3),
+		MoveCommand move = new PullMove(pullingGame.getBoardState(), new Coordinate(3, 7), new Coordinate(2, 7),
 				new Coordinate(4, 7), pullingGame.getOwner(), pullingGame.getNumMoves());
 		testInvalidPull(move);
 	}

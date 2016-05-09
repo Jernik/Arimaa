@@ -42,6 +42,11 @@ public class PushMove extends MoveCommand {
 				|| this.newPosition.equals(this.pushPiecePosition)) {
 			return false;
 		}
+		if (!this.originalPosition.isOrthogonallyAdjacentTo(this.newPosition)
+				|| !this.newPosition.isOrthogonallyAdjacentTo(this.pushPiecePosition)) {
+			return false;
+		}
+
 		BoardState board = this.originalBoard;
 		if (!board.isPieceAt(this.originalPosition) || !board.isPieceAt(this.newPosition)
 				|| board.isPieceAt(this.pushPiecePosition)) {

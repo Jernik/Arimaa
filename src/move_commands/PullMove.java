@@ -37,6 +37,11 @@ public class PullMove extends MoveCommand {
 				|| this.newPosition.equals(this.pullPiecePosition)) {
 			return false;
 		}
+		if (!this.originalPosition.isOrthogonallyAdjacentTo(this.newPosition)
+				|| !this.originalPosition.isOrthogonallyAdjacentTo(this.pullPiecePosition)) {
+			return false;
+		}
+
 		BoardState board = this.originalBoard;
 		if (!board.isPieceAt(this.originalPosition) || board.isPieceAt(this.newPosition)
 				|| !board.isPieceAt(this.pullPiecePosition)) {
