@@ -32,6 +32,14 @@ public class TestPullInvalid extends PullSetup {
 	}
 
 	@Test
+	public void testPushExecutingAnInvalidMoveReturnsTheOriginalBoard() {
+		MoveCommand move = new PullMove(pullingGame.getBoardState(), new Coordinate(5, -1), new Coordinate(5, 0),
+				new Coordinate(5, -2), pullingGame.getOwner(), pullingGame.getNumMoves());
+		BoardState board = new BoardState(pullingGame.getBoardState());
+		assertEquals(board, move.execute());
+	}
+
+	@Test
 	public void testPullOffBoard1() {
 		MoveCommand move = new PullMove(pullingGame.getBoardState(), new Coordinate(5, -1), new Coordinate(5, 0),
 				new Coordinate(5, -2), pullingGame.getOwner(), pullingGame.getNumMoves());
@@ -95,6 +103,20 @@ public class TestPullInvalid extends PullSetup {
 	public void testPullCantPullSelf() {
 		MoveCommand move = new PullMove(pullingGame.getBoardState(), new Coordinate(5, 5), new Coordinate(5, 4),
 				new Coordinate(5, 5), pullingGame.getOwner(), pullingGame.getNumMoves());
+		testInvalidPull(move);
+	}
+
+	@Test
+	public void testPullMustBeToAdjacentCoordinate() {
+		MoveCommand move = new PullMove(pullingGame.getBoardState(), new Coordinate(4, 4), new Coordinate(5, 2),
+				new Coordinate(3, 4), pullingGame.getOwner(), pullingGame.getNumMoves());
+		testInvalidPull(move);
+	}
+
+	@Test
+	public void testPullPieceMustBeAdjacent() {
+		MoveCommand move = new PullMove(pullingGame.getBoardState(), new Coordinate(4, 4), new Coordinate(5, 4),
+				new Coordinate(3, 2), pullingGame.getOwner(), pullingGame.getNumMoves());
 		testInvalidPull(move);
 	}
 

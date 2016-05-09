@@ -22,7 +22,8 @@ public class TestRegularInvalid extends RegularSetup {
 	public void testMoveExecutingAnInvalidMoveReturnsTheOriginalBoard() {
 		MoveCommand move = new RegularMove(g.getBoardState(), new Coordinate(0, 0), new Coordinate(0, -1), g.getOwner(),
 				g.getNumMoves());
-		assertEquals(g.getBoardState(), move.execute());
+		BoardState board = new BoardState(g.getBoardState());
+		assertEquals(board, move.execute());
 	}
 
 	@Test
