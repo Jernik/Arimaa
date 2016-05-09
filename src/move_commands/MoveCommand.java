@@ -10,7 +10,7 @@ import piece.Owner;
 
 public abstract class MoveCommand implements Serializable {
 	private static final long serialVersionUID = -1176514408247586630L;
-	public static final int NUMBER_OF_MOVES = 1;
+	public int NUMBER_OF_MOVES;
 	protected BoardState originalBoard;
 	protected BoardState newBoard;
 
@@ -30,6 +30,8 @@ public abstract class MoveCommand implements Serializable {
 
 		this.turn = turn;
 		this.movesLeft = movesLeft;
+		
+		NUMBER_OF_MOVES = 1;
 	}
 
 	abstract public BoardState execute();

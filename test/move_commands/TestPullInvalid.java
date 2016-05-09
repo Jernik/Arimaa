@@ -136,7 +136,8 @@ public class TestPullInvalid extends PullSetup {
 		assertTrue(pullingGame.move(new RegularMove(pullingGame.getBoardState(), new Coordinate(6, 0),
 				new Coordinate(5, 0), pullingGame.getOwner(), pullingGame.getNumMoves())));
 		MoveCommand move = new PullMove(pullingGame.getBoardState(), new Coordinate(5, 5), new Coordinate(5, 4),
-				new Coordinate(5, 6), pullingGame.getOwner(), pullingGame.getNumMoves());
+				new Coordinate(5, 4), pullingGame.getOwner(), pullingGame.getNumMoves());
+		System.out.println(pullingGame.getNumMoves());
 		testInvalidPull(move);
 	}
 }

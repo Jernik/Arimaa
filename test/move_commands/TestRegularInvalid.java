@@ -3,6 +3,8 @@ package move_commands;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
+import java.lang.reflect.Field;
+
 import org.junit.Test;
 
 import game.BoardState;
@@ -23,6 +25,16 @@ public class TestRegularInvalid extends RegularSetup {
 				g.getNumMoves());
 		BoardState board = new BoardState(g.getBoardState());
 		assertEquals(board, move.execute());
+	}
+	
+	@Test
+	public void testCantMoveWith0MovesLeft() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		Field field = this.g.getClass().getDeclaredField("numMoves");
+		field.setAccessible(true);
+		field.setInt(g, 0);
+		MoveCommand move = new RegularMove(this.g.getBoardState(), new Coordinate(0, 1), new Coordinate(0, 2), this.g.getOwner(),
+				this.g.getNumMoves());
+		testInvalidMove(this.g, move);
 	}
 
 	@Test

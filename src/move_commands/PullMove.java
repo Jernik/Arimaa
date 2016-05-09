@@ -9,13 +9,13 @@ import piece.Owner;
  */
 public class PullMove extends MoveCommand {
 	private static final long serialVersionUID = -2023708661926206228L;
-	public static final int NUMBER_OF_MOVES = 2;
 	private Coordinate pullPiecePosition;
 
 	public PullMove(BoardState board, Coordinate originalPosition, Coordinate newPosition, Coordinate pullPiecePosition,
 			Owner turn, int movesLeft) {
 		super(board, originalPosition, newPosition, turn, movesLeft);
 		this.pullPiecePosition = pullPiecePosition;
+		NUMBER_OF_MOVES = 2;
 	}
 
 	@Override
@@ -30,6 +30,9 @@ public class PullMove extends MoveCommand {
 	// you should assume that you are given 3 random coordinates, that might or might not be valid
 	@Override
 	public boolean isValidMove() {
+		if (this.movesLeft < this.getNumberOfMoves()) {
+			return false;
+		}
 		if (!this.originalPosition.isValid() || !this.newPosition.isValid() || !this.pullPiecePosition.isValid()) {
 			return false;
 		}

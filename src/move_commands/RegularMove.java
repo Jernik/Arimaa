@@ -7,7 +7,6 @@ import piece.Owner;
 import piece.Rabbit;
 
 public class RegularMove extends MoveCommand {
-	public static final int NUMBER_OF_MOVES = 1;
 	private static final long serialVersionUID = 4434841689278271636L;
 
 	public RegularMove(BoardState board, Coordinate originalPosition, Coordinate newPosition, Owner turn,
@@ -26,6 +25,9 @@ public class RegularMove extends MoveCommand {
 
 	@Override
 	public boolean isValidMove() {
+		if (this.movesLeft < this.getNumberOfMoves()) {
+			return false;
+		}
 		if (!this.originalPosition.isValid() || !this.newPosition.isValid()) {
 			return false;
 		}

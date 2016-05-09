@@ -9,18 +9,13 @@ import piece.Owner;
  */
 public class PushMove extends MoveCommand {
 	private static final long serialVersionUID = -4958510415349881730L;
-	public static final int NUMBER_OF_MOVES = 2;
 	private Coordinate pushPiecePosition;
 
 	public PushMove(BoardState board, Coordinate originalPosition, Coordinate newPosition, Coordinate pushPiecePosition,
 			Owner turn, int movesLeft) {
 		super(board, originalPosition, newPosition, turn, movesLeft);
-		this.turn = turn;
-		this.originalBoard = board.clone();
-		this.newBoard = board;
-		this.originalPosition = originalPosition;
-		this.newPosition = newPosition;
 		this.pushPiecePosition = pushPiecePosition;
+		NUMBER_OF_MOVES = 2;
 	}
 
 	@Override
@@ -35,6 +30,9 @@ public class PushMove extends MoveCommand {
 	// you should assume that you are given 3 random coordinates, that might or might not be valid
 	@Override
 	public boolean isValidMove() {
+		if (this.movesLeft < this.getNumberOfMoves()) {
+			return false;
+		}
 		if (!this.originalPosition.isValid() || !this.newPosition.isValid() || !this.pushPiecePosition.isValid()) {
 			return false;
 		}
