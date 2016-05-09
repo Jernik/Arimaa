@@ -12,7 +12,7 @@ import piece.Camel;
 import piece.Elephant;
 import piece.Owner;
 
-public class TestPush extends PushSetup{	
+public class TestPushValid extends PushSetup{	
 	@Test
 	public void testBasicPushUp() {
 		AbstractPiece p1 = g2.getPieceAt(new Coordinate(4, 4));
