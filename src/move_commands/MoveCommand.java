@@ -30,7 +30,7 @@ public abstract class MoveCommand implements Serializable {
 
 		this.turn = turn;
 		this.movesLeft = movesLeft;
-		
+
 		NUMBER_OF_MOVES = 1;
 	}
 
@@ -78,9 +78,8 @@ public abstract class MoveCommand implements Serializable {
 		checkList.add(pieceToMove.right());
 		for (Coordinate coor : checkList) {
 			if (this.originalBoard.isPieceAt(coor)) {
-				if (coor.isValid() && !coor.equals(pieceToMove)
-						&& this.originalBoard.getPieceAt(coor).getOwner() == player && this.originalBoard
-								.getPieceAt(coor).isStrongerThan(this.originalBoard.getPieceAt(pieceToMove))) {
+				if (coor.isValid() && this.originalBoard.getPieceAt(coor).getOwner() == player && this.originalBoard
+						.getPieceAt(coor).isStrongerThan(this.originalBoard.getPieceAt(pieceToMove))) {
 					return true;
 				}
 			}
