@@ -69,19 +69,48 @@ public class TestPush {
 		pushingGame = new Game(new BoardState(pp));
 	}
 
+	public void testPushInvalid(MoveCommand move) {
+		BoardState board = new BoardState(pushingGame.getBoardState());
+
+		assertFalse(move.isValidMove());
+		assertFalse(pushingGame.move(move));
+
+		assertEquals(board, pushingGame.getBoardState());
+	}
+
 	@Test
 	public void testPushNotEnoughMoves() {
-		assertTrue(pushingGame.move(1, 7, 2));
-		assertTrue(pushingGame.move(2, 7, 2));
-		assertTrue(pushingGame.move(3, 7, 2));
-		assertFalse(pushingGame.push(4, 5, 0, 0));
+		assertTrue(pushingGame.move(new RegularMove(pushingGame.getBoardState(), new Coordinate(7, 1),
+				new Coordinate(7, 2), pushingGame.getOwner(), pushingGame.getNumMoves())));
+		assertTrue(pushingGame.move(new RegularMove(pushingGame.getBoardState(), new Coordinate(7, 2),
+				new Coordinate(7, 3), pushingGame.getOwner(), pushingGame.getNumMoves())));
+		assertTrue(pushingGame.move(new RegularMove(pushingGame.getBoardState(), new Coordinate(7, 3),
+				new Coordinate(7, 4), pushingGame.getOwner(), pushingGame.getNumMoves())));
+		// assertTrue(pushingGame.move(1, 7, 2));
+		// assertTrue(pushingGame.move(2, 7, 2));
+		// assertTrue(pushingGame.move(3, 7, 2));
+		MoveCommand move = new PushMove(pushingGame.getBoardState(), new Coordinate(5, 4), new Coordinate(5, 3),
+				new Coordinate(5, 2), pushingGame.getOwner(), pushingGame.getNumMoves());
+		testPushInvalid(move);
+		// assertFalse(pushingGame.push(4, 5, 0, 0));
 	}
 
 	@Test
 	public void testPushInvalid() {
-		assertFalse(g2.push(3, 3, 0, 0));
-		assertFalse(g2.push(4, 3, 1, 1));
-		assertFalse(g2.push(4, 3, 1, 0));
+		MoveCommand move = new PushMove(pushingGame.getBoardState(), new Coordinate(3, 3), new Coordinate(3, 2),
+				new Coordinate(3, 1), pushingGame.getOwner(), pushingGame.getNumMoves());
+		testPushInvalid(move);
+
+		move = new PushMove(pushingGame.getBoardState(), new Coordinate(3, 4), new Coordinate(4, 4),
+				new Coordinate(5, 4), pushingGame.getOwner(), pushingGame.getNumMoves());
+		testPushInvalid(move);
+
+		move = new PushMove(pushingGame.getBoardState(), new Coordinate(3, 4), new Coordinate(4, 4),
+				new Coordinate(4, 3), pushingGame.getOwner(), pushingGame.getNumMoves());
+		testPushInvalid(move);
+		// assertFalse(g2.push(3, 3, 0, 0));
+		// assertFalse(g2.push(4, 3, 1, 1));
+		// assertFalse(g2.push(4, 3, 1, 0));
 	}
 
 	@Test
