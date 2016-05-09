@@ -8,6 +8,7 @@ import piece.Rabbit;
 
 public class RegularMove extends MoveCommand {
 	private static final long serialVersionUID = 4434841689278271636L;
+	public static final int NUMBER_OF_MOVES = 1;
 
 	public RegularMove(BoardState board, Coordinate originalPosition, Coordinate newPosition, Owner turn,
 			int movesLeft) {
@@ -21,6 +22,10 @@ public class RegularMove extends MoveCommand {
 		}
 		this.newBoard.movePiece(originalPosition, newPosition);
 		return newBoard;
+	}
+
+	public int getNumberOfMoves() {
+		return NUMBER_OF_MOVES;
 	}
 
 	@Override

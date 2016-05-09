@@ -10,7 +10,6 @@ import piece.Owner;
 
 public abstract class MoveCommand implements Serializable {
 	private static final long serialVersionUID = -1176514408247586630L;
-	public int NUMBER_OF_MOVES;
 	protected BoardState originalBoard;
 	protected BoardState newBoard;
 
@@ -30,13 +29,12 @@ public abstract class MoveCommand implements Serializable {
 
 		this.turn = turn;
 		this.movesLeft = movesLeft;
-
-		NUMBER_OF_MOVES = 1;
 	}
 
 	abstract public BoardState execute();
 
 	abstract public boolean isValidMove();
+	abstract public int getNumberOfMoves();
 
 	public BoardState getOriginalBoard() {
 		return this.originalBoard;
@@ -53,10 +51,7 @@ public abstract class MoveCommand implements Serializable {
 	public Owner getTurn() {
 		return turn;
 	}
-
-	public int getNumberOfMoves() {
-		return NUMBER_OF_MOVES;
-	}
+	
 
 	public int getMovesLeft() {
 		return this.movesLeft;
@@ -100,7 +95,7 @@ public abstract class MoveCommand implements Serializable {
 	protected boolean eq(MoveCommand moveCommand) {
 		return this.originalPosition.equals(moveCommand.getOriginalPosition())
 				&& this.newPosition.equals(moveCommand.getNewPosition()) && this.turn.equals(moveCommand.getTurn())
-				&& NUMBER_OF_MOVES == moveCommand.getNumberOfMoves() && this.movesLeft == moveCommand.getMovesLeft()
+				&& this.getNumberOfMoves() == moveCommand.getNumberOfMoves() && this.movesLeft == moveCommand.getMovesLeft()
 				&& this.originalBoard.equals(moveCommand.getOriginalBoard())
 				&& this.newBoard.equals(moveCommand.newBoard);
 	}
@@ -109,7 +104,7 @@ public abstract class MoveCommand implements Serializable {
 	public int hashCode() {
 		return this.originalBoard.hashCode() + this.newBoard.hashCode() + this.originalPosition.hashCode()
 				+ this.newPosition.hashCode() + this.turn.hashCode()
-				+ Integer.rotateLeft(NUMBER_OF_MOVES, Integer.BYTES / 2)
+				+ Integer.rotateLeft(this.getNumberOfMoves(), Integer.BYTES / 2)
 				+ Integer.rotateLeft(this.movesLeft, Integer.BYTES / 2);
 	}
 }
