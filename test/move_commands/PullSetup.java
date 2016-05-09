@@ -52,6 +52,4 @@ public class PullSetup {
 		pullp.put(new Coordinate(7, 0), new Elephant(Owner.Player2));
 		pullingGame = new Game(new BoardState(pullp));
 	}
-
-
 }

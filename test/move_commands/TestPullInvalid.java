@@ -120,7 +120,7 @@ public class TestPullInvalid extends PullSetup {
 				new Coordinate(4, 3), pullingGame.getOwner(), pullingGame.getNumMoves());
 		testInvalidPull(move);
 	}
-	
+
 	@Test
 	public void testPullUpIntoOccupiedSpace() {
 		MoveCommand move = new PullMove(pullingGame.getBoardState(), new Coordinate(2, 2), new Coordinate(2, 1),

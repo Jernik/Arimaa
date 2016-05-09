@@ -17,6 +17,14 @@ import piece.Rabbit;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestPullValid extends PullSetup {
 	@Test
+	public void testCanGetPullPiece() {
+		Coordinate coor = new Coordinate(5, 6);
+		PullMove move = new PullMove(pullingGame.getBoardState(), new Coordinate(5, 5), new Coordinate(5, 4), coor,
+				pullingGame.getOwner(), pullingGame.getNumMoves());
+		assertEquals(coor, move.getPullPiecePlace());
+	}
+
+	@Test
 	public void testBasicPullUp() {
 		MoveCommand move = new PullMove(pullingGame.getBoardState(), new Coordinate(5, 5), new Coordinate(5, 4),
 				new Coordinate(5, 6), pullingGame.getOwner(), pullingGame.getNumMoves());
