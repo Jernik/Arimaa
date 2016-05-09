@@ -2,6 +2,7 @@ package move_commands;
 
 import game.BoardState;
 import game.Coordinate;
+import piece.AbstractPiece;
 import piece.Owner;
 
 /**
@@ -54,7 +55,14 @@ public class PushMove extends MoveCommand {
 				|| board.getPieceAt(this.newPosition).getOwner().equals(this.turn)) {
 			return false;
 		}
-		// TODO finish
+		AbstractPiece piece = board.getPieceAt(this.originalPosition);
+		AbstractPiece pushedPiece = board.getPieceAt(this.newPosition);
+		if (!piece.isStrongerThan(pushedPiece)) {
+			return false;
+		}
+		if (this.isFrozen(this.originalPosition)) {
+			return false;
+		}
 		return true;
 	}
 

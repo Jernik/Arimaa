@@ -2,6 +2,7 @@ package move_commands;
 
 import game.BoardState;
 import game.Coordinate;
+import piece.AbstractPiece;
 import piece.Owner;
 
 /**
@@ -54,8 +55,14 @@ public class PullMove extends MoveCommand {
 				|| board.getPieceAt(this.pullPiecePosition).getOwner().equals(this.turn)) {
 			return false;
 		}
-
-		// TODO finish this
+		AbstractPiece piece = board.getPieceAt(this.originalPosition);
+		AbstractPiece pulledPiece = board.getPieceAt(this.pullPiecePosition);
+		if (!piece.isStrongerThan(pulledPiece)) {
+			return false;
+		}
+		if (this.isFrozen(this.originalPosition)) {
+			return false;
+		}
 		return true;
 	}
 
