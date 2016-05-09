@@ -17,7 +17,7 @@ import game.TestSave;
 import game.TestTimePanel;
 import game.TestUndo;
 import move_commands.TestMove;
-import move_commands.TestPullInValid;
+import move_commands.TestPullInvalid;
 import move_commands.TestPullValid;
 import move_commands.TestPush;
 import piece.TestPiece;
@@ -26,7 +26,7 @@ import piece.TestPiece;
 @Suite.SuiteClasses({ AiSetup.class, TestAi.class, TestGenerateRandomMoveIsUniform.class,
 		TestGenerateRandomMoveIsValid.class, TestGenerateRandomMovePerformance.class, TestBoardState.class,
 		TestBoardState.class, TestCoordinate.class, TestEndGame.class, TestGame.class, TestSave.class, TestLoad.class,
-		TestTimePanel.class, TestUndo.class, TestMove.class, TestPullInValid.class, TestPullValid.class, TestPush.class, TestPiece.class })
+		TestTimePanel.class, TestUndo.class, TestMove.class, TestPullInvalid.class, TestPullValid.class, TestPush.class, TestPiece.class })
 public class AllTests {
 	public static void main(String args[]) {
 		org.junit.runner.JUnitCore.main("test_runner.AllTests");

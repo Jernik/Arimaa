@@ -22,7 +22,7 @@ import piece.Owner;
 import piece.Rabbit;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TestPullInValid extends PullSetup {
+public class TestPullInvalid extends PullSetup {
 	public void testInvalidPull(MoveCommand move) {
 		BoardState board = new BoardState(pullingGame.getBoardState());
 		assertFalse(move.isValidMove());
@@ -33,8 +33,8 @@ public class TestPullInValid extends PullSetup {
 
 	@Test
 	public void testPullWithNullPiece() {
-		MoveCommand move = new PullMove(pullingGame.getBoardState(), new Coordinate(4, 0), new Coordinate(3, 0),
-				new Coordinate(5, 0), pullingGame.getOwner(), pullingGame.getNumMoves());
+		MoveCommand move = new PullMove(pullingGame.getBoardState(), new Coordinate(1, 6), new Coordinate(1, 7),
+				new Coordinate(2, 7), pullingGame.getOwner(), pullingGame.getNumMoves());
 		testInvalidPull(move);
 		// assertFalse(pullingGame.pull(0, 4, 0, 5, 3));
 	}
