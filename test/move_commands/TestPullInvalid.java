@@ -144,7 +144,6 @@ public class TestPullInvalid extends PullSetup {
 				new Coordinate(5, 0), pullingGame.getOwner(), pullingGame.getNumMoves())));
 		MoveCommand move = new PullMove(pullingGame.getBoardState(), new Coordinate(5, 5), new Coordinate(5, 4),
 				new Coordinate(5, 4), pullingGame.getOwner(), pullingGame.getNumMoves());
-		System.out.println(pullingGame.getNumMoves());
 		testInvalidPull(move);
 	}
 }

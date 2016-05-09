@@ -69,7 +69,7 @@ public class TestPushValid extends PushSetup {
 	@Test
 	public void testBasicPushLeft() {
 		AbstractPiece p1 = g2.getPieceAt(new Coordinate(6, 7));
-		AbstractPiece p2 = g2.getPieceAt(new Coordinate(6, 6));
+		AbstractPiece p2 = g2.getPieceAt(new Coordinate(5, 7));
 
 		MoveCommand move = new PushMove(g2.getBoardState(), new Coordinate(6, 7), new Coordinate(5, 7),
 				new Coordinate(4, 7), g2.getOwner(), g2.getNumMoves());
@@ -96,8 +96,8 @@ public class TestPushValid extends PushSetup {
 	@Test
 	public void testCanPushIfFrozenButThawed() {
 		pushingGame.setPlayerTurn(2);
-		AbstractPiece p1 = g2.getPieceAt(new Coordinate(5, 5));
-		AbstractPiece p2 = g2.getPieceAt(new Coordinate(6, 5));
+		AbstractPiece p1 = pushingGame.getPieceAt(new Coordinate(5, 5));
+		AbstractPiece p2 = pushingGame.getPieceAt(new Coordinate(6, 5));
 		pushingGame.getBoardState().movePiece(new Coordinate(4, 4), new Coordinate(4, 5));
 
 		MoveCommand move = new PushMove(pushingGame.getBoardState(), new Coordinate(5, 5), new Coordinate(6, 5),
@@ -108,6 +108,6 @@ public class TestPushValid extends PushSetup {
 
 		assertEquals(p1, pushingGame.getPieceAt(new Coordinate(6, 5)));
 		assertEquals(p2, pushingGame.getPieceAt(new Coordinate(7, 5)));
-		assertFalse(pushingGame.isPieceAt(new Coordinate(5, 4)));
+		assertFalse(pushingGame.isPieceAt(new Coordinate(5, 5)));
 	}
 }
