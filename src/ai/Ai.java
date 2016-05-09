@@ -46,7 +46,7 @@ public class Ai {
 			// can't move here because its off the board, try again
 			return this.generateMove();
 		}
-		if (this.game.checkCoor(randomDirection)) {
+		if (this.game.isPieceAt(randomDirection)) {
 			if (this.game.getPieceAt(randomDirection).getOwner() == this.owner) {
 				// can't dislodge a friendly piece, try again
 				return this.generateMove();

@@ -158,13 +158,13 @@ public class TestPull {
 	@Test
 	public void testPullOwnPieceUp() {
 		assertFalse(pullingGame.pull(6, 1, 7, 1, 0));
-		assertFalse(pullingGame.checkCoor(5, 1));
+		assertFalse(pullingGame.isPieceAt(5, 1));
 	}
 
 	@Test
 	public void testPullOwnPieceRight() {
 		assertFalse(pullingGame.pull(6, 1, 6, 0, 1));
-		assertFalse(pullingGame.checkCoor(6, 2));
+		assertFalse(pullingGame.isPieceAt(6, 2));
 	}
 
 	@Test
@@ -172,13 +172,13 @@ public class TestPull {
 		// pullingGame.currentBoard.printBoard();
 		assertFalse(pullingGame.pull(1, 6, 0, 6, 2));
 		// pullingGame.currentBoard.printBoard();
-		assertTrue(pullingGame.checkCoor(2, 6));
+		assertTrue(pullingGame.isPieceAt(2, 6));
 	}
 
 	@Test
 	public void testPullOwnPieceLeft() {
 		assertFalse(pullingGame.pull(1, 6, 1, 7, 3));
-		assertFalse(pullingGame.checkCoor(1, 5));
+		assertFalse(pullingGame.isPieceAt(1, 5));
 	}
 
 	@Test

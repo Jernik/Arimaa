@@ -109,13 +109,13 @@ public class TestGame {
 
 	@Test
 	public void testGetPieceExists() {
-		assertTrue(g1.checkCoor(3, 4));
+		assertTrue(g1.isPieceAt(new Coordinate(3, 4)));
 		assertEquals(new Camel(Owner.Player1), g1.getPieceAt(new Coordinate(3, 4)));
 	}
 
 	@Test
 	public void testGetPieceNotExists() {
-		assertFalse(g1.checkCoor(0, 0));
+		assertFalse(g1.isPieceAt(new Coordinate(0,0)));
 		assertNull(g1.getPieceAt(new Coordinate(0, 0)));
 	}
 
@@ -142,7 +142,7 @@ public class TestGame {
 		MoveCommand move = new RegularMove(game.getBoardState(), start, end, owner, game.getNumMoves());
 		assertTrue(game.move(move));
 		// g.currentBoard.printBoard();
-		assertFalse(game.checkCoor(2, 2));
+		assertFalse(game.isPieceAt(new Coordinate(2, 2)));
 	}
 
 	@Test
@@ -172,6 +172,6 @@ public class TestGame {
 		owner = game.getOwner();
 		move = new RegularMove(game.getBoardState(), start, end, owner, game.getNumMoves());
 		game.move(move);
-		assertFalse(game.checkCoor(5, 1));
+		assertFalse(game.isPieceAt(new Coordinate(5, 1)));
 	}
 }
