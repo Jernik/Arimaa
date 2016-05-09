@@ -32,11 +32,17 @@ public class TestPullInvalid extends PullSetup {
 	}
 
 	@Test
-	public void testPullWithNullPiece() {
-		MoveCommand move = new PullMove(pullingGame.getBoardState(), new Coordinate(1, 6), new Coordinate(1, 7),
-				new Coordinate(2, 7), pullingGame.getOwner(), pullingGame.getNumMoves());
+	public void testPullOffBoard1() {
+		MoveCommand move = new PullMove(pullingGame.getBoardState(), new Coordinate(5, -1), new Coordinate(5, 0),
+				new Coordinate(5, -2), pullingGame.getOwner(), pullingGame.getNumMoves());
 		testInvalidPull(move);
-		// assertFalse(pullingGame.pull(0, 4, 0, 5, 3));
+	}
+
+	@Test
+	public void testPullOffBoard2() {
+		MoveCommand move = new PullMove(pullingGame.getBoardState(), new Coordinate(3, 0), new Coordinate(4, 0),
+				new Coordinate(3, -1), pullingGame.getOwner(), pullingGame.getNumMoves());
+		testInvalidPull(move);
 	}
 
 	@Test
@@ -71,6 +77,50 @@ public class TestPullInvalid extends PullSetup {
 		// assertFalse(pullingGame.pull(7, 0, 7, 1, 3));
 	}
 
+	@Test
+	public void testPullCantSwap() {
+		MoveCommand move = new PullMove(pullingGame.getBoardState(), new Coordinate(5, 5), new Coordinate(5, 4),
+				new Coordinate(5, 4), pullingGame.getOwner(), pullingGame.getNumMoves());
+		testInvalidPull(move);
+	}
+
+	@Test
+	public void testPullMustMove() {
+		MoveCommand move = new PullMove(pullingGame.getBoardState(), new Coordinate(5, 5), new Coordinate(5, 5),
+				new Coordinate(5, 6), pullingGame.getOwner(), pullingGame.getNumMoves());
+		testInvalidPull(move);
+	}
+
+	@Test
+	public void testPullCantPullSelf() {
+		MoveCommand move = new PullMove(pullingGame.getBoardState(), new Coordinate(5, 5), new Coordinate(5, 4),
+				new Coordinate(5, 5), pullingGame.getOwner(), pullingGame.getNumMoves());
+		testInvalidPull(move);
+	}
+
+	@Test
+	public void testPullMustPullPiece() {
+		MoveCommand move = new PullMove(pullingGame.getBoardState(), new Coordinate(1, 6), new Coordinate(1, 5),
+				new Coordinate(2, 7), pullingGame.getOwner(), pullingGame.getNumMoves());
+		testInvalidPull(move);
+		// assertFalse(pullingGame.pull(0, 4, 0, 5, 3));
+	}
+
+	@Test
+	public void testPullNullPiece() {
+		MoveCommand move = new PullMove(pullingGame.getBoardState(), new Coordinate(7, 5), new Coordinate(7, 6),
+				new Coordinate(6, 5), pullingGame.getOwner(), pullingGame.getNumMoves());
+		testInvalidPull(move);
+		// assertFalse(pullingGame.pull(0, 4, 0, 5, 3));
+	}
+
+	@Test
+	public void testPullCantPullNothing() {
+		MoveCommand move = new PullMove(pullingGame.getBoardState(), new Coordinate(5, 3), new Coordinate(5, 4),
+				new Coordinate(4, 3), pullingGame.getOwner(), pullingGame.getNumMoves());
+		testInvalidPull(move);
+	}
+	
 	@Test
 	public void testPullUpIntoOccupiedSpace() {
 		MoveCommand move = new PullMove(pullingGame.getBoardState(), new Coordinate(2, 2), new Coordinate(2, 1),
