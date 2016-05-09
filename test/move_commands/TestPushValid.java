@@ -92,4 +92,22 @@ public class TestPushValid extends PushSetup {
 		assertEquals(new Camel(Owner.Player2), pushingGame.getPieceAt(new Coordinate(6, 3)));
 		assertFalse(pushingGame.isPieceAt(new Coordinate(5, 4)));
 	}
+
+	@Test
+	public void testCanPushIfFrozenButThawed() {
+		pushingGame.setPlayerTurn(2);
+		AbstractPiece p1 = g2.getPieceAt(new Coordinate(5, 5));
+		AbstractPiece p2 = g2.getPieceAt(new Coordinate(6, 5));
+		pushingGame.getBoardState().movePiece(new Coordinate(4, 4), new Coordinate(4, 5));
+
+		MoveCommand move = new PushMove(pushingGame.getBoardState(), new Coordinate(5, 5), new Coordinate(6, 5),
+				new Coordinate(7, 5), pushingGame.getOwner(), pushingGame.getNumMoves());
+
+		assertTrue(move.isValidMove());
+		assertTrue(pushingGame.move(move));
+
+		assertEquals(p1, pushingGame.getPieceAt(new Coordinate(6, 5)));
+		assertEquals(p2, pushingGame.getPieceAt(new Coordinate(7, 5)));
+		assertFalse(pushingGame.isPieceAt(new Coordinate(5, 4)));
+	}
 }

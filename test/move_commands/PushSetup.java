@@ -45,6 +45,7 @@ public class PushSetup {
 		pp.put(new Coordinate(4, 6), new Camel(Owner.Player1));
 		pp.put(new Coordinate(3, 5), new Camel(Owner.Player1));
 		pp.put(new Coordinate(5, 5), new Cat(Owner.Player2));
+		pp.put(new Coordinate(6, 5), new Rabbit(Owner.Player1));
 		pp.put(new Coordinate(4, 4), new Cat(Owner.Player2));
 		pp.put(new Coordinate(5, 4), new Elephant(Owner.Player1));
 		pp.put(new Coordinate(6, 4), new Camel(Owner.Player2));

@@ -8,6 +8,7 @@ import game.BoardState;
 import game.Coordinate;
 import game.Game;
 import piece.AbstractPiece;
+import piece.Dog;
 import piece.Elephant;
 import piece.Owner;
 import piece.Rabbit;
@@ -27,6 +28,8 @@ public class PullSetup {
 		pullp.put(new Coordinate(3, 6), new Elephant(Owner.Player1));
 		pullp.put(new Coordinate(4, 6), new Elephant(Owner.Player2));
 		pullp.put(new Coordinate(5, 6), new Rabbit(Owner.Player2));
+		pullp.put(new Coordinate(1, 5), new Dog(Owner.Player1));
+		pullp.put(new Coordinate(2, 5), new Rabbit(Owner.Player2));
 		pullp.put(new Coordinate(5, 5), new Elephant(Owner.Player1));
 		pullp.put(new Coordinate(6, 5), new Rabbit(Owner.Player2));
 		pullp.put(new Coordinate(3, 4), new Rabbit(Owner.Player2));

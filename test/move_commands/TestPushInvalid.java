@@ -149,6 +149,14 @@ public class TestPushInvalid extends PushSetup {
 	}
 
 	@Test
+	public void testCantPushIfFrozen() {
+		pushingGame.setPlayerTurn(2);
+		MoveCommand move = new PushMove(pushingGame.getBoardState(), new Coordinate(5, 5), new Coordinate(6, 5),
+				new Coordinate(7, 5), pushingGame.getOwner(), pushingGame.getNumMoves());
+		testInvalidPush(move);
+	}
+
+	@Test
 	public void testNotEnoughMoves() {
 		assertTrue(pushingGame.move(new RegularMove(pushingGame.getBoardState(), new Coordinate(7, 1),
 				new Coordinate(7, 2), pushingGame.getOwner(), pushingGame.getNumMoves())));

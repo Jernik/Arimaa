@@ -128,6 +128,13 @@ public class TestPullInvalid extends PullSetup {
 	}
 
 	@Test
+	public void testCantPullIfFrozen() {
+		MoveCommand move = new PullMove(pullingGame.getBoardState(), new Coordinate(1, 5), new Coordinate(1, 4),
+				new Coordinate(2, 5), pullingGame.getOwner(), pullingGame.getNumMoves());
+		testInvalidPull(move);
+	}
+
+	@Test
 	public void testCantPullWith1Move() {
 		assertTrue(pullingGame.move(new RegularMove(pullingGame.getBoardState(), new Coordinate(6, 0),
 				new Coordinate(5, 0), pullingGame.getOwner(), pullingGame.getNumMoves())));

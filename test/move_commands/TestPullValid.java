@@ -127,4 +127,21 @@ public class TestPullValid extends PullSetup {
 		assertEquals(p2, pullingGame.getPieceAt(new Coordinate(5, 5)));
 		assertFalse(pullingGame.isPieceAt(new Coordinate(5, 6)));
 	}
+
+	@Test
+	public void testCanPullIfFrozenButThawed() {
+		pullingGame.getBoardState().movePiece(new Coordinate(0, 7), new Coordinate(0, 5));
+		AbstractPiece p1 = pullingGame.getPieceAt(new Coordinate(1, 5));
+		AbstractPiece p2 = pullingGame.getPieceAt(new Coordinate(2, 5));
+
+		MoveCommand move = new PullMove(pullingGame.getBoardState(), new Coordinate(1, 5), new Coordinate(1, 4),
+				new Coordinate(2, 5), pullingGame.getOwner(), pullingGame.getNumMoves());
+
+		assertTrue(move.isValidMove());
+		assertTrue(pullingGame.move(move));
+
+		assertEquals(p1, pullingGame.getPieceAt(new Coordinate(1, 4)));
+		assertEquals(p2, pullingGame.getPieceAt(new Coordinate(1, 5)));
+		assertFalse(pullingGame.isPieceAt(new Coordinate(2, 5)));
+	}
 }
