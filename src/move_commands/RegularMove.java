@@ -26,25 +26,31 @@ public class RegularMove extends MoveCommand {
 
 	@Override
 	public boolean isValidMove() {
-		if (!this.originalBoard.isPieceAt(this.originalPosition) || this.originalBoard.isPieceAt(this.newPosition)) {
+		if (!this.originalPosition.isValid() || !this.newPosition.isValid()) {
 			return false;
 		}
-		AbstractPiece piece = this.originalBoard.getPieceAt(originalPosition);
-		if (isFrozen(originalPosition)) {
+		if (this.originalPosition.equals(this.newPosition)) {
 			return false;
 		}
-		if (this.originalBoard.isPieceAt(newPosition)) {
+		if (!originalPosition.isOrthogonallyAdjacentTo(newPosition)) {
 			return false;
 		}
+		BoardState board = this.originalBoard;
+		if (!board.isPieceAt(this.originalPosition) || board.isPieceAt(this.newPosition)) {
+			return false;
+		}
+		if (board.getPieceAt(this.originalPosition).getOwner() != this.turn) {
+			return false;
+		}
+		AbstractPiece piece = board.getPieceAt(originalPosition);
 		if ((piece instanceof Rabbit)) {
-			if (((piece.getOwner() == Owner.values()[0]) && (newPosition.equals(originalPosition.up())))
-					|| ((piece.getOwner() == Owner.values()[1]) && (newPosition.equals(originalPosition.down())))) {
+			if (((piece.getOwner() == Owner.Player1) && (newPosition.equals(originalPosition.up())))
+					|| ((piece.getOwner() == Owner.Player2) && (newPosition.equals(originalPosition.down())))) {
 				// Cannot move a Rabbit backwards unless it has been dragged
 				return false;
 			}
 		}
-		if (!(originalPosition.isOrthogonallyAdjacentTo(newPosition)
-				&& this.originalBoard.getPieceAt(originalPosition).getOwner() == this.turn)) {
+		if (isFrozen(originalPosition)) {
 			return false;
 		}
 		return true;
