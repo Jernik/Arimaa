@@ -20,11 +20,32 @@ public class TestPushInvalid extends PushSetup {
 	}
 
 	@Test
-	public void testPushExecutingAnInvalidMoveReturnsTheOriginalBoard() {
+	public void testExecutingAnInvalidPushReturnsTheOriginalBoard() {
 		MoveCommand move = new PushMove(g2.getBoardState(), new Coordinate(1, 1), new Coordinate(1, 0),
 				new Coordinate(1, -1), g2.getOwner(), g2.getNumMoves());
 		BoardState board = new BoardState(g2.getBoardState());
 		assertEquals(board, move.execute());
+	}
+
+	@Test
+	public void testOffBoard1() {
+		MoveCommand move = new PushMove(g2.getBoardState(), new Coordinate(-1, 6), new Coordinate(0, 6),
+				new Coordinate(1, 6), g2.getOwner(), g2.getNumMoves());
+		testInvalidPush(move);
+	}
+
+	@Test
+	public void testOffBoard2() {
+		MoveCommand move = new PushMove(g2.getBoardState(), new Coordinate(0, 7), new Coordinate(0, 8),
+				new Coordinate(0, 9), g2.getOwner(), g2.getNumMoves());
+		testInvalidPush(move);
+	}
+
+	@Test
+	public void testOffBoard3() {
+		MoveCommand move = new PushMove(g2.getBoardState(), new Coordinate(1, 1), new Coordinate(1, 0),
+				new Coordinate(1, -1), g2.getOwner(), g2.getNumMoves());
+		testInvalidPush(move);
 	}
 
 	@Test
@@ -35,35 +56,14 @@ public class TestPushInvalid extends PushSetup {
 	}
 
 	@Test
-	public void testPushOffBoard1() {
-		MoveCommand move = new PushMove(g2.getBoardState(), new Coordinate(1, 1), new Coordinate(1, 0),
-				new Coordinate(1, -1), g2.getOwner(), g2.getNumMoves());
-		testInvalidPush(move);
-	}
-
-	@Test
-	public void testPushOffBoard2() {
-		MoveCommand move = new PushMove(g2.getBoardState(), new Coordinate(0, 7), new Coordinate(0, 8),
-				new Coordinate(0, 9), g2.getOwner(), g2.getNumMoves());
-		testInvalidPush(move);
-	}
-
-	@Test
-	public void testPushOffBoard3() {
-		MoveCommand move = new PushMove(g2.getBoardState(), new Coordinate(-1, 6), new Coordinate(0, 6),
-				new Coordinate(1, 6), g2.getOwner(), g2.getNumMoves());
-		testInvalidPush(move);
-	}
-
-	@Test
-	public void testPushToEmptySpace() {
+	public void testCantPushToEmptySpace() {
 		MoveCommand move = new PushMove(pushingGame.getBoardState(), new Coordinate(4, 6), new Coordinate(5, 6),
 				new Coordinate(6, 6), pushingGame.getOwner(), pushingGame.getNumMoves());
 		testInvalidPush(move);
 	}
 
 	@Test
-	public void testPushCantPushIntoOccupiedPiece() {
+	public void testCantPushIntoOccupiedPiece() {
 		MoveCommand move = new PushMove(pushingGame.getBoardState(), new Coordinate(2, 6), new Coordinate(3, 6),
 				new Coordinate(4, 6), pushingGame.getOwner(), pushingGame.getNumMoves());
 		testInvalidPush(move);
@@ -71,73 +71,49 @@ public class TestPushInvalid extends PushSetup {
 	}
 
 	@Test
-	public void testPushCantSwap() {
+	public void testCantSwap() {
 		MoveCommand move = new PushMove(pushingGame.getBoardState(), new Coordinate(5, 4), new Coordinate(6, 4),
 				new Coordinate(5, 4), pushingGame.getOwner(), pushingGame.getNumMoves());
 		testInvalidPush(move);
 	}
 
 	@Test
-	public void testPushCantNotMove() {
+	public void testCantNotMove() {
 		MoveCommand move = new PushMove(pushingGame.getBoardState(), new Coordinate(2, 6), new Coordinate(2, 6),
 				new Coordinate(4, 6), pushingGame.getOwner(), pushingGame.getNumMoves());
 		testInvalidPush(move);
 	}
 
 	@Test
-	public void testPushCantNotMoveOtherPiece() {
+	public void testCantNotMoveOtherPiece() {
 		MoveCommand move = new PushMove(pushingGame.getBoardState(), new Coordinate(5, 4), new Coordinate(6, 4),
 				new Coordinate(6, 4), pushingGame.getOwner(), pushingGame.getNumMoves());
 		testInvalidPush(move);
 	}
 
 	@Test
-	public void testPushMustBeToAdjacentCoordinate() {
+	public void testMustBeToAdjacentCoordinate() {
 		MoveCommand move = new PushMove(pushingGame.getBoardState(), new Coordinate(5, 4), new Coordinate(0, 1),
 				new Coordinate(0, 2), pushingGame.getOwner(), pushingGame.getNumMoves());
 		testInvalidPush(move);
 	}
 
 	@Test
-	public void testPushPieceMustBeAdjacent() {
+	public void testPieceMustBeAdjacent() {
 		MoveCommand move = new PushMove(pushingGame.getBoardState(), new Coordinate(5, 4), new Coordinate(4, 4),
 				new Coordinate(2, 7), pushingGame.getOwner(), pushingGame.getNumMoves());
 		testInvalidPush(move);
 	}
 
 	@Test
-	public void testPushInvalid1() {
-		MoveCommand move = new PushMove(g2.getBoardState(), new Coordinate(3, 3), new Coordinate(3, 2),
-				new Coordinate(3, 1), g2.getOwner(), g2.getNumMoves());
-		testInvalidPush(move);
-		// assertFalse(g2.push(3, 3, 0, 0));
-	}
-
-	@Test
-	public void testPushInvalid2() {
-		MoveCommand move = new PushMove(g2.getBoardState(), new Coordinate(3, 4), new Coordinate(4, 4),
-				new Coordinate(5, 4), g2.getOwner(), g2.getNumMoves());
-		testInvalidPush(move);
-		// assertFalse(g2.push(4, 3, 1, 1));
-	}
-
-	@Test
-	public void testPushInvalid3() {
-		MoveCommand move = new PushMove(g2.getBoardState(), new Coordinate(3, 4), new Coordinate(4, 4),
-				new Coordinate(4, 3), g2.getOwner(), g2.getNumMoves());
-		testInvalidPush(move);
-		// assertFalse(g2.push(4, 3, 1, 0));
-	}
-
-	@Test
-	public void testPushWithOtherOwnerPiece() {
+	public void testCantMoveEnemyPiece() {
 		MoveCommand move = new PushMove(pushingGame.getBoardState(), new Coordinate(7, 0), new Coordinate(6, 0),
 				new Coordinate(5, 0), pushingGame.getOwner(), pushingGame.getNumMoves());
 		testInvalidPush(move);
 	}
 
 	@Test
-	public void testPushUpWithSamePlayersPieces() {
+	public void testCantPushUpOwnPiece() {
 		MoveCommand move = new PushMove(pushingGame.getBoardState(), new Coordinate(2, 2), new Coordinate(2, 1),
 				new Coordinate(2, 0), pushingGame.getOwner(), pushingGame.getNumMoves());
 		testInvalidPush(move);
@@ -148,7 +124,7 @@ public class TestPushInvalid extends PushSetup {
 	}
 
 	@Test
-	public void testPushRightWithSamePlayersPieces() {
+	public void testCantPushRightOwnPiece() {
 		MoveCommand move = new PushMove(pushingGame.getBoardState(), new Coordinate(2, 2), new Coordinate(3, 2),
 				new Coordinate(4, 2), pushingGame.getOwner(), pushingGame.getNumMoves());
 		testInvalidPush(move);
@@ -159,7 +135,7 @@ public class TestPushInvalid extends PushSetup {
 	}
 
 	@Test
-	public void testPushDownWithSamePlayersPieces() {
+	public void testCantPushDownOwnPiece() {
 		MoveCommand move = new PushMove(pushingGame.getBoardState(), new Coordinate(2, 2), new Coordinate(2, 3),
 				new Coordinate(2, 4), pushingGame.getOwner(), pushingGame.getNumMoves());
 		testInvalidPush(move);
@@ -170,7 +146,7 @@ public class TestPushInvalid extends PushSetup {
 	}
 
 	@Test
-	public void testPushLeftWithSamePlayersPieces() {
+	public void testCantPushLeftOwnPiece() {
 		MoveCommand move = new PushMove(pushingGame.getBoardState(), new Coordinate(2, 2), new Coordinate(1, 2),
 				new Coordinate(0, 2), pushingGame.getOwner(), pushingGame.getNumMoves());
 		testInvalidPush(move);
@@ -193,7 +169,7 @@ public class TestPushInvalid extends PushSetup {
 	}
 
 	@Test
-	public void testPushNotEnoughMoves() {
+	public void testNotEnoughMoves() {
 		assertTrue(pushingGame.move(new RegularMove(pushingGame.getBoardState(), new Coordinate(7, 1),
 				new Coordinate(7, 2), pushingGame.getOwner(), pushingGame.getNumMoves())));
 		assertTrue(pushingGame.move(new RegularMove(pushingGame.getBoardState(), new Coordinate(7, 2),

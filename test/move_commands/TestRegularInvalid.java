@@ -2,7 +2,6 @@ package move_commands;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -19,7 +18,7 @@ public class TestRegularInvalid extends RegularSetup {
 	}
 
 	@Test
-	public void testMoveExecutingAnInvalidMoveReturnsTheOriginalBoard() {
+	public void testExecutingAnInvalidMoveReturnsTheOriginalBoard() {
 		MoveCommand move = new RegularMove(g.getBoardState(), new Coordinate(0, 0), new Coordinate(0, -1), g.getOwner(),
 				g.getNumMoves());
 		BoardState board = new BoardState(g.getBoardState());
@@ -27,49 +26,49 @@ public class TestRegularInvalid extends RegularSetup {
 	}
 
 	@Test
-	public void testMoveOffBoard() {
+	public void testDestinationOffBoard() {
 		MoveCommand move = new RegularMove(g.getBoardState(), new Coordinate(0, 0), new Coordinate(0, -1), g.getOwner(),
 				g.getNumMoves());
 		testInvalidMove(g, move);
 	}
 
 	@Test
-	public void testMoveOffBoardPiece() {
+	public void testOffBoardPiece() {
 		MoveCommand move = new RegularMove(freezingGame.getBoardState(), new Coordinate(0, -1), new Coordinate(0, 0),
 				freezingGame.getOwner(), freezingGame.getNumMoves());
 		testInvalidMove(freezingGame, move);
 	}
 
 	@Test
-	public void testMoveMustMoveToDifferentCoordinate() {
+	public void testMustMoveToDifferentCoordinate() {
 		MoveCommand move = new RegularMove(g.getBoardState(), new Coordinate(0, 1), new Coordinate(0, 1), g.getOwner(),
 				g.getNumMoves());
 		testInvalidMove(g, move);
 	}
 
 	@Test
-	public void testMoveMustBeAdjacent() {
+	public void testMustBeAdjacent() {
 		MoveCommand move = new RegularMove(g.getBoardState(), new Coordinate(0, 1), new Coordinate(0, 3), g.getOwner(),
 				g.getNumMoves());
 		testInvalidMove(g, move);
 	}
 
 	@Test
-	public void testMoveCantMoveNothing() {
+	public void testCantMoveNothing() {
 		MoveCommand move = new RegularMove(g.getBoardState(), new Coordinate(0, 2), new Coordinate(0, 3), g.getOwner(),
 				g.getNumMoves());
 		testInvalidMove(g, move);
 	}
 
 	@Test
-	public void testCannotMoveIntoOccupiedSpace() {
+	public void testCantMoveIntoOccupiedSpace() {
 		MoveCommand move = new RegularMove(g.getBoardState(), new Coordinate(1, 7), new Coordinate(1, 6), g.getOwner(),
 				g.getNumMoves());
 		testInvalidMove(g, move);
 	}
 
 	@Test
-	public void testMoveCantMoveEnemyPiece() {
+	public void testCantMoveEnemyPiece() {
 		MoveCommand move = new RegularMove(g.getBoardState(), new Coordinate(7, 6), new Coordinate(7, 5), g.getOwner(),
 				g.getNumMoves());
 		testInvalidMove(g, move);
@@ -97,12 +96,5 @@ public class TestRegularInvalid extends RegularSetup {
 		MoveCommand move = new RegularMove(freezingGame.getBoardState(), new Coordinate(3, 4), new Coordinate(2, 4),
 				freezingGame.getOwner(), freezingGame.getNumMoves());
 		testInvalidMove(freezingGame, move);
-	}
-
-	@Test
-	public void testCanMoveIfFrozenByStrongerOpposingPieceButThawedByFriendlyPiece() {
-		MoveCommand move = new RegularMove(freezingGame.getBoardState(), new Coordinate(4, 3), new Coordinate(3, 3),
-				freezingGame.getOwner(), freezingGame.getNumMoves());
-		assertTrue(freezingGame.move(move));
 	}
 }

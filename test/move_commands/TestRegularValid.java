@@ -67,4 +67,16 @@ public class TestRegularValid extends RegularSetup {
 		assertEquals(new Rabbit(Owner.Player2), g.getPieceAt(new Coordinate(0, 5)));
 		assertFalse(g.isPieceAt(new Coordinate(0, 6)));
 	}
+
+	@Test
+	public void testCanMoveIfFrozenByStrongerOpposingPieceButThawedByFriendlyPiece() {
+		MoveCommand move = new RegularMove(freezingGame.getBoardState(), new Coordinate(4, 3), new Coordinate(3, 3),
+				freezingGame.getOwner(), freezingGame.getNumMoves());
+
+		assertTrue(move.isValidMove());
+		assertTrue(freezingGame.move(move));
+
+		assertEquals(new Rabbit(Owner.Player1), freezingGame.getPieceAt(new Coordinate(3, 3)));
+		assertFalse(freezingGame.isPieceAt(new Coordinate(4, 3)));
+	}
 }
