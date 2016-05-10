@@ -8,6 +8,7 @@ import java.util.Set;
 import board.BoardState;
 import board.Coordinate;
 import move_commands.MoveCommand;
+import move_commands.PushMove;
 import piece.AbstractPiece;
 import piece.Owner;
 import piece.Rabbit;
@@ -170,14 +171,66 @@ public class Game implements Serializable {
 		BoardState board = this.getBoardState();
 		for (Coordinate coor : board.getAllCoordinates()) {
 			if (board.getPieceAt(coor).getOwner() == player) {
-				this.hasMove(coor);
+				if (this.hasMove(coor)) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
+	public boolean hasMove(Coordinate coor) {
+		BoardState board = this.getBoardState();
+		if (board.isFrozen(coor)) {
+			return false;
+		}
+		// check regular moves
+		if (hasRegularMove(coor)) {
+			return true;
+		}
+		// only need to check push because if you can pull you can do a regular move
+		if (this.numMoves < PushMove.NUMBER_OF_MOVES) {
+			if (hasPushMove(coor)) {
+				return true;
 			}
 		}
 		return false;
 	}
 
-	private boolean hasMove(Coordinate coor) {
-		return true;
+	public boolean hasRegularMove(Coordinate coor) {
+		if (!coor.isValid()) {
+			return false;
+		}
+		BoardState board = this.getBoardState();
+		AbstractPiece piece = board.getPieceAt(coor);
+		Owner player = piece.getOwner();
+		HashSet<Coordinate> validCoors = new HashSet<Coordinate>();
+		validCoors.add(coor.up());
+		validCoors.add(coor.right());
+		validCoors.add(coor.down());
+		validCoors.add(coor.left());
+		if (piece instanceof Rabbit) {
+			if (player == Owner.Player1) {
+				validCoors.remove(coor.up());
+			}
+			if (player == Owner.Player2) {
+				validCoors.remove(coor.down());
+			}
+		}
+		for (Coordinate c : validCoors) {
+			if (c.isValid()) {
+				if (!board.isPieceAt(c)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	public boolean hasPushMove(Coordinate coor) {
+		// assume cant make regular move
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 	/**
