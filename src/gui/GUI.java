@@ -1,4 +1,4 @@
-package game;
+package gui;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -19,6 +19,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
+import board.BoardState;
+import board.Coordinate;
+import game.Game;
 import listeners.LoadGameListener;
 import listeners.NewGameListener;
 import piece.AbstractPiece;

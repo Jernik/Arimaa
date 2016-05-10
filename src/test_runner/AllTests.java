@@ -3,20 +3,22 @@ package test_runner;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
-import ai.AiSetup;
 import ai.TestAi;
 import ai.TestGenerateRandomMoveIsUniform;
 import ai.TestGenerateRandomMoveIsValid;
 import ai.TestGenerateRandomMoveOnlyIfEnoughMoves;
 import ai.TestGenerateRandomMovePerformance;
-import game.TestBoardState;
-import game.TestCoordinate;
+import board.TestBoardState;
+import board.TestCoordinate;
 import game.TestEndGame;
 import game.TestGame;
-import game.TestLoad;
-import game.TestSave;
-import game.TestTimePanel;
+import game.TestGameEquality;
+import game.TestGameHashCodeEquality;
 import game.TestUndo;
+import gui.TestLoad;
+import gui.TestSave;
+import gui.TestTimePanel;
+import move_commands.TestMoveCommandEquality;
 import move_commands.TestPullInvalid;
 import move_commands.TestPullValid;
 import move_commands.TestPushInvalid;
@@ -24,14 +26,15 @@ import move_commands.TestPushValid;
 import move_commands.TestRegularInvalid;
 import move_commands.TestRegularValid;
 import piece.TestPiece;
+import piece.TestPieceEquality;
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses({ AiSetup.class, TestAi.class, TestGenerateRandomMoveIsUniform.class,
-		TestGenerateRandomMoveIsValid.class, TestGenerateRandomMovePerformance.class,
-		TestGenerateRandomMoveOnlyIfEnoughMoves.class, TestBoardState.class, TestBoardState.class, TestCoordinate.class,
-		TestEndGame.class, TestGame.class, TestSave.class, TestLoad.class, TestTimePanel.class, TestUndo.class,
-		TestRegularValid.class, TestRegularInvalid.class, TestPullInvalid.class, TestPullValid.class,
-		TestPushValid.class, TestPushInvalid.class, TestPiece.class })
+@Suite.SuiteClasses({ TestAi.class, TestGenerateRandomMoveIsUniform.class, TestGenerateRandomMoveIsValid.class,
+		TestGenerateRandomMoveOnlyIfEnoughMoves.class, TestGenerateRandomMovePerformance.class, TestBoardState.class,
+		TestCoordinate.class, TestEndGame.class, TestGame.class, TestGameEquality.class, TestGameHashCodeEquality.class,
+		TestUndo.class, TestLoad.class, TestSave.class, TestTimePanel.class, TestMoveCommandEquality.class,
+		TestPullInvalid.class, TestPullValid.class, TestPushValid.class, TestPushInvalid.class,
+		TestRegularInvalid.class, TestRegularValid.class, TestPiece.class, TestPieceEquality.class })
 public class AllTests {
 	public static void main(String args[]) {
 		org.junit.runner.JUnitCore.main("test_runner.AllTests");

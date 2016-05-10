@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
+import board.Coordinate;
 import move_commands.MoveCommand;
 import move_commands.RegularMove;
 import piece.Owner;

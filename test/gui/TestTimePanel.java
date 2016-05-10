@@ -1,4 +1,4 @@
-package game;
+package gui;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -9,6 +9,9 @@ import javax.swing.JLabel;
 
 import org.junit.Test;
 
+import game.Game;
+import gui.GUI;
+import gui.TimePanel;
 import piece.Owner;
 
 public class TestTimePanel {

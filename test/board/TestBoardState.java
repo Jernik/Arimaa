@@ -1,4 +1,4 @@
-package game;
+package board;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -11,6 +11,8 @@ import java.util.HashMap;
 
 import org.junit.Test;
 
+import board.BoardState;
+import board.Coordinate;
 import piece.AbstractPiece;
 import piece.Camel;
 import piece.Cat;

@@ -7,8 +7,8 @@ import static org.junit.Assert.assertNotNull;
 import org.junit.Before;
 import org.junit.Test;
 
-import game.BoardState;
-import game.Coordinate;
+import board.BoardState;
+import board.Coordinate;
 import piece.Owner;
 
 public class TestMoveCommandEquality {

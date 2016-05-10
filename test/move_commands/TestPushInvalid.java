@@ -6,8 +6,8 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import game.BoardState;
-import game.Coordinate;
+import board.BoardState;
+import board.Coordinate;
 
 public class TestPushInvalid extends PushSetup {
 	public void testInvalidPush(MoveCommand move) {

@@ -7,8 +7,8 @@ import java.lang.reflect.Field;
 
 import org.junit.Test;
 
-import game.BoardState;
-import game.Coordinate;
+import board.BoardState;
+import board.Coordinate;
 import game.Game;
 
 public class TestRegularInvalid extends RegularSetup {

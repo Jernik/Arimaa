@@ -12,8 +12,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-import game.GUI;
-import game.ImagePanel;
+import gui.GUI;
+import gui.ImagePanel;
 
 public class NewGameListener implements ActionListener {
 	private GUI gui;

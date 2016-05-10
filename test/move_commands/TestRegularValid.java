@@ -8,8 +8,8 @@ import java.util.HashMap;
 
 import org.junit.Test;
 
-import game.BoardState;
-import game.Coordinate;
+import board.BoardState;
+import board.Coordinate;
 import game.Game;
 import piece.AbstractPiece;
 import piece.Camel;

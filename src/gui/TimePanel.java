@@ -1,12 +1,13 @@
 /**
  * Adopted from code provided at http://stackoverflow.com/questions/18926839/timer-stopwatch-gui/18926890#18926890
  */
-package game;
+package gui;
 
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.JLabel;
 
+import game.Game;
 import piece.Owner;
 
 public class TimePanel {

@@ -6,7 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import game.Coordinate;
+import board.Coordinate;
 import piece.AbstractPiece;
 import piece.Camel;
 import piece.Elephant;

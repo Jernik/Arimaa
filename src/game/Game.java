@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Set;
 
+import board.BoardState;
+import board.Coordinate;
 import move_commands.MoveCommand;
 import piece.AbstractPiece;
 import piece.Owner;

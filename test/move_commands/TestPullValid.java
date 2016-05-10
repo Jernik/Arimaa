@@ -8,7 +8,7 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
-import game.Coordinate;
+import board.Coordinate;
 import piece.AbstractPiece;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
