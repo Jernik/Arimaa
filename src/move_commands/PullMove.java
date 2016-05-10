@@ -1,7 +1,7 @@
 package move_commands;
 
-import game.BoardState;
-import game.Coordinate;
+import board.BoardState;
+import board.Coordinate;
 import piece.AbstractPiece;
 import piece.Owner;
 

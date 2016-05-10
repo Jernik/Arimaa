@@ -8,8 +8,8 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
-import game.BoardState;
-import game.Coordinate;
+import board.BoardState;
+import board.Coordinate;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestPullInvalid extends PullSetup {

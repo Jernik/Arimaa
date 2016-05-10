@@ -7,7 +7,7 @@ import java.util.Iterator;
 import java.util.Random;
 import java.util.Set;
 
-import game.Coordinate;
+import board.Coordinate;
 import game.Game;
 import move_commands.MoveCommand;
 import move_commands.PullMove;

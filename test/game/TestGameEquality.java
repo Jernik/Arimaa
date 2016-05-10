@@ -7,6 +7,7 @@ import static org.junit.Assert.assertNotEquals;
 import org.junit.Before;
 import org.junit.Test;
 
+import board.Coordinate;
 import move_commands.RegularMove;
 import piece.Owner;
 

@@ -1,4 +1,4 @@
-package game;
+package gui;
 
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
@@ -16,6 +16,8 @@ import org.easymock.EasyMockSupport;
 import org.junit.Test;
 
 import ai.Ai;
+import game.Game;
+import gui.GUI;
 import piece.Owner;
 
 public class TestLoad extends EasyMockSupport {

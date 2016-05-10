@@ -1,4 +1,4 @@
-package game;
+package gui;
 
 import static org.easymock.EasyMock.expect;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -17,6 +17,7 @@ import org.easymock.EasyMockSupport;
 import org.junit.Test;
 
 import ai.Ai;
+import gui.GUI;
 import piece.Owner;
 
 public class TestSave extends EasyMockSupport {

@@ -11,7 +11,7 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
-import game.Coordinate;
+import board.Coordinate;
 import game.Game;
 import piece.AbstractPiece;
 import piece.Camel;

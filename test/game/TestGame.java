@@ -13,6 +13,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import ai.Ai;
+import board.BoardState;
+import board.Coordinate;
 import move_commands.MoveCommand;
 import move_commands.RegularMove;
 import piece.AbstractPiece;

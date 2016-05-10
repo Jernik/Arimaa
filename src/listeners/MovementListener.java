@@ -3,10 +3,10 @@ package listeners;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import game.Coordinate;
-import game.GUI;
+import board.Coordinate;
 import game.Game;
-import game.ImagePanel;
+import gui.GUI;
+import gui.ImagePanel;
 import move_commands.MoveCommand;
 import move_commands.PullMove;
 import move_commands.PushMove;

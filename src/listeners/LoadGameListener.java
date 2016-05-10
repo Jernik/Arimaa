@@ -14,10 +14,10 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-import game.GUI;
 import game.Game;
-import game.ImagePanel;
-import game.TimePanel;
+import gui.GUI;
+import gui.ImagePanel;
+import gui.TimePanel;
 import piece.Owner;
 
 public class LoadGameListener implements ActionListener {

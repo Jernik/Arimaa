@@ -12,8 +12,8 @@ import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.runners.MethodSorters;
 
-import game.BoardState;
-import game.Coordinate;
+import board.BoardState;
+import board.Coordinate;
 import game.Game;
 import piece.AbstractPiece;
 import piece.Camel;

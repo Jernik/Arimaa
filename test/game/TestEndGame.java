@@ -8,6 +8,8 @@ import java.util.HashMap;
 import org.junit.Before;
 import org.junit.Test;
 
+import board.BoardState;
+import board.Coordinate;
 import move_commands.MoveCommand;
 import move_commands.RegularMove;
 import piece.AbstractPiece;
