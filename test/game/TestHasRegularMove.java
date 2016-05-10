@@ -5,7 +5,9 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.HashMap;
 
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 
 import ai.Ai;
 import board.BoardState;
@@ -17,6 +19,7 @@ import piece.Elephant;
 import piece.Owner;
 import piece.Rabbit;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestHasRegularMove {
 	public static final int ITERATION_SIZE = 1000;
 
@@ -35,12 +38,12 @@ public class TestHasRegularMove {
 	}
 
 	@Test
-	public void testInvalidCoordinateCantMakeRegularMove() {
+	public void testHasRegularMoveReturnsFalseForInvalidCoordinate() {
 		assertFalse(new Game().hasRegularMove(new Coordinate(-1, 0)));
 	}
 
 	@Test
-	public void testRabbitHasNoRegularMovesIfBlocked1() {
+	public void testHasRegularMovesReturnsFalseIfRabbitBlocked1() {
 		HashMap<Coordinate, AbstractPiece> p = new HashMap<Coordinate, AbstractPiece>();
 		p.put(new Coordinate(4, 4), new Rabbit(Owner.Player1));
 
@@ -56,7 +59,7 @@ public class TestHasRegularMove {
 	}
 
 	@Test
-	public void testRabbitHasNoRegularMovesIfBlocked2() {
+	public void testHasRegularMovesReturnsFalseIfRabbitBlocked2() {
 		HashMap<Coordinate, AbstractPiece> p = new HashMap<Coordinate, AbstractPiece>();
 		p.put(new Coordinate(4, 4), new Rabbit(Owner.Player2));
 
@@ -72,7 +75,7 @@ public class TestHasRegularMove {
 	}
 
 	@Test
-	public void testRabbitHasNoRegularMovesIfBlockedAtEdge1() {
+	public void testHasRegularMovesReturnsFalseIfRabbitBlockedAtEdge1() {
 		HashMap<Coordinate, AbstractPiece> p = new HashMap<Coordinate, AbstractPiece>();
 		p.put(new Coordinate(0, 4), new Rabbit(Owner.Player1));
 
@@ -86,7 +89,7 @@ public class TestHasRegularMove {
 	}
 
 	@Test
-	public void testRabbitHasNoRegularMovesIfBlockedAtEdge2() {
+	public void testHasRegularMovesReturnsFalseIfRabbitBlockedAtEdge2() {
 		HashMap<Coordinate, AbstractPiece> p = new HashMap<Coordinate, AbstractPiece>();
 		p.put(new Coordinate(7, 4), new Rabbit(Owner.Player2));
 
@@ -100,7 +103,7 @@ public class TestHasRegularMove {
 	}
 
 	@Test
-	public void testNonRabbitHasNoRegularMovesIfBlocked1() {
+	public void testHasRegularMovesReturnsFalseIfNonRabbitBlocked1() {
 		HashMap<Coordinate, AbstractPiece> p = new HashMap<Coordinate, AbstractPiece>();
 		p.put(new Coordinate(4, 4), new Dog(Owner.Player1));
 
@@ -118,7 +121,7 @@ public class TestHasRegularMove {
 	}
 
 	@Test
-	public void testNonRabbitHasNoRegularMovesIfBlocked2() {
+	public void testHasRegularMovesReturnsFalseIfNonRabbitBlocked2() {
 		HashMap<Coordinate, AbstractPiece> p = new HashMap<Coordinate, AbstractPiece>();
 		p.put(new Coordinate(4, 4), new Elephant(Owner.Player2));
 
