@@ -35,7 +35,7 @@ public class TestRegularValid extends RegularSetup {
 
 		Coordinate start = new Coordinate(7, 7);
 		Coordinate end = new Coordinate(7, 6);
-		Owner owner = g1.getOwner();
+		Owner owner = g1.getPlayerTurn();
 		MoveCommand move = new RegularMove(g1.getBoardState(), start, end, owner, g1.getNumMoves());
 
 		assertTrue(g1.move(move));
@@ -45,7 +45,7 @@ public class TestRegularValid extends RegularSetup {
 
 	@Test
 	public void testRabbitCanMoveForwards1() {
-		MoveCommand move = new RegularMove(g.getBoardState(), new Coordinate(0, 1), new Coordinate(0, 2), g.getOwner(),
+		MoveCommand move = new RegularMove(g.getBoardState(), new Coordinate(0, 1), new Coordinate(0, 2), g.getPlayerTurn(),
 				g.getNumMoves());
 
 		assertTrue(move.isValidMove());
@@ -57,8 +57,8 @@ public class TestRegularValid extends RegularSetup {
 
 	@Test
 	public void testRabbitCanMoveForwards2() {
-		g.setPlayerTurn(2);
-		MoveCommand move = new RegularMove(g.getBoardState(), new Coordinate(0, 6), new Coordinate(0, 5), g.getOwner(),
+		g.incrementTurn();
+		MoveCommand move = new RegularMove(g.getBoardState(), new Coordinate(0, 6), new Coordinate(0, 5), g.getPlayerTurn(),
 				g.getNumMoves());
 
 		assertTrue(move.isValidMove());
@@ -71,7 +71,7 @@ public class TestRegularValid extends RegularSetup {
 	@Test
 	public void testCanMoveIfFrozenByStrongerOpposingPieceButThawedByFriendlyPiece() {
 		MoveCommand move = new RegularMove(freezingGame.getBoardState(), new Coordinate(4, 3), new Coordinate(3, 3),
-				freezingGame.getOwner(), freezingGame.getNumMoves());
+				freezingGame.getPlayerTurn(), freezingGame.getNumMoves());
 
 		assertTrue(move.isValidMove());
 		assertTrue(freezingGame.move(move));

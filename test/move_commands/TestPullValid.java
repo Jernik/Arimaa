@@ -17,7 +17,7 @@ public class TestPullValid extends PullSetup {
 	public void testCanGetPullPiece() {
 		Coordinate coor = new Coordinate(5, 6);
 		PullMove move = new PullMove(pullingGame.getBoardState(), new Coordinate(5, 5), new Coordinate(5, 4), coor,
-				pullingGame.getOwner(), pullingGame.getNumMoves());
+				pullingGame.getPlayerTurn(), pullingGame.getNumMoves());
 		assertEquals(coor, move.getPullPiecePlace());
 	}
 
@@ -27,7 +27,7 @@ public class TestPullValid extends PullSetup {
 		AbstractPiece p2 = pullingGame.getPieceAt(new Coordinate(5, 6));
 
 		MoveCommand move = new PullMove(pullingGame.getBoardState(), new Coordinate(5, 5), new Coordinate(5, 4),
-				new Coordinate(5, 6), pullingGame.getOwner(), pullingGame.getNumMoves());
+				new Coordinate(5, 6), pullingGame.getPlayerTurn(), pullingGame.getNumMoves());
 		assertTrue(move.isValidMove());
 		assertTrue(pullingGame.move(move));
 
@@ -42,7 +42,7 @@ public class TestPullValid extends PullSetup {
 		AbstractPiece p2 = pullingGame.getPieceAt(new Coordinate(3, 4));
 
 		MoveCommand move = new PullMove(pullingGame.getBoardState(), new Coordinate(4, 4), new Coordinate(5, 4),
-				new Coordinate(3, 4), pullingGame.getOwner(), pullingGame.getNumMoves());
+				new Coordinate(3, 4), pullingGame.getPlayerTurn(), pullingGame.getNumMoves());
 		assertTrue(move.isValidMove());
 		assertTrue(pullingGame.move(move));
 
@@ -57,7 +57,7 @@ public class TestPullValid extends PullSetup {
 		AbstractPiece p2 = pullingGame.getPieceAt(new Coordinate(5, 2));
 
 		MoveCommand move = new PullMove(pullingGame.getBoardState(), new Coordinate(5, 3), new Coordinate(5, 4),
-				new Coordinate(5, 2), pullingGame.getOwner(), pullingGame.getNumMoves());
+				new Coordinate(5, 2), pullingGame.getPlayerTurn(), pullingGame.getNumMoves());
 		assertTrue(move.isValidMove());
 		assertTrue(pullingGame.move(move));
 
@@ -72,7 +72,7 @@ public class TestPullValid extends PullSetup {
 		AbstractPiece p2 = pullingGame.getPieceAt(new Coordinate(7, 4));
 
 		MoveCommand move = new PullMove(pullingGame.getBoardState(), new Coordinate(6, 4), new Coordinate(5, 4),
-				new Coordinate(7, 4), pullingGame.getOwner(), pullingGame.getNumMoves());
+				new Coordinate(7, 4), pullingGame.getPlayerTurn(), pullingGame.getNumMoves());
 		assertTrue(move.isValidMove());
 		assertTrue(pullingGame.move(move));
 
@@ -87,7 +87,7 @@ public class TestPullValid extends PullSetup {
 		AbstractPiece p2 = pullingGame.getPieceAt(new Coordinate(3, 4));
 
 		MoveCommand move = new PullMove(pullingGame.getBoardState(), new Coordinate(4, 4), new Coordinate(4, 3),
-				new Coordinate(3, 4), pullingGame.getOwner(), pullingGame.getNumMoves());
+				new Coordinate(3, 4), pullingGame.getPlayerTurn(), pullingGame.getNumMoves());
 		assertTrue(move.isValidMove());
 		assertTrue(pullingGame.move(move));
 
@@ -102,7 +102,7 @@ public class TestPullValid extends PullSetup {
 		AbstractPiece p2 = pullingGame.getPieceAt(new Coordinate(5, 2));
 
 		MoveCommand move = new PullMove(pullingGame.getBoardState(), new Coordinate(5, 3), new Coordinate(6, 3),
-				new Coordinate(5, 2), pullingGame.getOwner(), pullingGame.getNumMoves());
+				new Coordinate(5, 2), pullingGame.getPlayerTurn(), pullingGame.getNumMoves());
 		assertTrue(move.isValidMove());
 		assertTrue(pullingGame.move(move));
 
@@ -117,7 +117,7 @@ public class TestPullValid extends PullSetup {
 		AbstractPiece p2 = pullingGame.getPieceAt(new Coordinate(7, 4));
 
 		MoveCommand move = new PullMove(pullingGame.getBoardState(), new Coordinate(6, 4), new Coordinate(6, 3),
-				new Coordinate(7, 4), pullingGame.getOwner(), pullingGame.getNumMoves());
+				new Coordinate(7, 4), pullingGame.getPlayerTurn(), pullingGame.getNumMoves());
 		assertTrue(move.isValidMove());
 		assertTrue(pullingGame.move(move));
 
@@ -132,7 +132,7 @@ public class TestPullValid extends PullSetup {
 		AbstractPiece p2 = pullingGame.getPieceAt(new Coordinate(5, 6));
 
 		MoveCommand move = new PullMove(pullingGame.getBoardState(), new Coordinate(5, 5), new Coordinate(4, 5),
-				new Coordinate(5, 6), pullingGame.getOwner(), pullingGame.getNumMoves());
+				new Coordinate(5, 6), pullingGame.getPlayerTurn(), pullingGame.getNumMoves());
 		assertTrue(move.isValidMove());
 		assertTrue(pullingGame.move(move));
 
@@ -148,7 +148,7 @@ public class TestPullValid extends PullSetup {
 		AbstractPiece p2 = pullingGame.getPieceAt(new Coordinate(2, 5));
 
 		MoveCommand move = new PullMove(pullingGame.getBoardState(), new Coordinate(1, 5), new Coordinate(1, 4),
-				new Coordinate(2, 5), pullingGame.getOwner(), pullingGame.getNumMoves());
+				new Coordinate(2, 5), pullingGame.getPlayerTurn(), pullingGame.getNumMoves());
 
 		assertTrue(move.isValidMove());
 		assertTrue(pullingGame.move(move));
