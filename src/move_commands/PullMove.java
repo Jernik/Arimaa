@@ -69,7 +69,7 @@ public class PullMove extends MoveCommand {
 		if (!piece.isStrongerThan(pulledPiece)) {
 			return false;
 		}
-		if (this.isFrozen(this.originalPosition)) {
+		if (this.originalBoard.isFrozen(this.originalPosition)) {
 			return false;
 		}
 		return true;

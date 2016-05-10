@@ -1,8 +1,6 @@
 package move_commands;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 import board.BoardState;
 import board.Coordinate;
@@ -10,13 +8,13 @@ import piece.Owner;
 
 public abstract class MoveCommand implements Serializable {
 	private static final long serialVersionUID = -1176514408247586630L;
-	protected BoardState originalBoard;
+	public BoardState originalBoard;
 	protected BoardState newBoard;
 
 	protected Coordinate originalPosition;
 	protected Coordinate newPosition;
 
-	protected Owner turn;
+	public Owner turn;
 	protected int movesLeft;
 
 	protected MoveCommand(BoardState board, Coordinate originalPosition, Coordinate newPosition, Owner turn,
@@ -55,31 +53,6 @@ public abstract class MoveCommand implements Serializable {
 
 	public int getMovesLeft() {
 		return this.movesLeft;
-	}
-
-	protected boolean isFrozen(Coordinate pieceToMove) {
-		if (!isNextToStrongerPiece(pieceToMove, this.turn)
-				&& isNextToStrongerPiece(pieceToMove, this.turn.getOtherOwner())) {
-			return true;
-		}
-		return false;
-	}
-
-	private boolean isNextToStrongerPiece(Coordinate pieceToMove, Owner player) {
-		List<Coordinate> checkList = new ArrayList<>();
-		checkList.add(pieceToMove.up());
-		checkList.add(pieceToMove.down());
-		checkList.add(pieceToMove.left());
-		checkList.add(pieceToMove.right());
-		for (Coordinate coor : checkList) {
-			if (this.originalBoard.isPieceAt(coor)) {
-				if (coor.isValid() && this.originalBoard.getPieceAt(coor).getOwner() == player && this.originalBoard
-						.getPieceAt(coor).isStrongerThan(this.originalBoard.getPieceAt(pieceToMove))) {
-					return true;
-				}
-			}
-		}
-		return false;
 	}
 
 	@Override

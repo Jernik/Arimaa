@@ -2,6 +2,7 @@ package game;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
 
 import board.BoardState;
@@ -163,6 +164,20 @@ public class Game implements Serializable {
 			numMoves = 4;
 			this.incrementTurn();
 		}
+	}
+
+	public boolean hasNoMoves(Owner player) {
+		BoardState board = this.getBoardState();
+		for (Coordinate coor : board.getAllCoordinates()) {
+			if (board.getPieceAt(coor).getOwner() == player) {
+				this.hasMove(coor);
+			}
+		}
+		return false;
+	}
+
+	private boolean hasMove(Coordinate coor) {
+		return true;
 	}
 
 	/**

@@ -58,7 +58,7 @@ public class RegularMove extends MoveCommand {
 				return false;
 			}
 		}
-		if (isFrozen(originalPosition)) {
+		if (this.originalBoard.isFrozen(originalPosition)) {
 			return false;
 		}
 		return true;

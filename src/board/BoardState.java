@@ -1,7 +1,9 @@
 package board;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 
 import piece.AbstractPiece;
@@ -138,5 +140,30 @@ public class BoardState implements Serializable {
 	@Override
 	public int hashCode() {
 		return this.pieces.hashCode();
+	}
+
+	public boolean isFrozen(Coordinate pieceToMove) {
+		if (!this.isNextToStrongerPiece(pieceToMove, this.getPieceAt(pieceToMove).getOwner())
+				&& this.isNextToStrongerPiece(pieceToMove, this.getPieceAt(pieceToMove).getOwner().getOtherOwner())) {
+			return true;
+		}
+		return false;
+	}
+
+	private boolean isNextToStrongerPiece(Coordinate pieceToMove, Owner player) {
+		List<Coordinate> checkList = new ArrayList<>();
+		checkList.add(pieceToMove.up());
+		checkList.add(pieceToMove.down());
+		checkList.add(pieceToMove.left());
+		checkList.add(pieceToMove.right());
+		for (Coordinate coor : checkList) {
+			if (isPieceAt(coor)) {
+				if (coor.isValid() && getPieceAt(coor).getOwner() == player
+						&& getPieceAt(coor).isStrongerThan(getPieceAt(pieceToMove))) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 }

@@ -23,6 +23,7 @@ import piece.Rabbit;
 public class TestEndGame {
 	private Game game;
 	private Game game2;
+	private Game noMovesGame1;
 
 	@Before
 	public void setup() {
@@ -55,6 +56,23 @@ public class TestEndGame {
 		winP2.put(new Coordinate(4, 1), new Elephant(Owner.Player2));
 		winP2.put(new Coordinate(5, 1), new Dog(Owner.Player1));
 		game2 = new Game(new BoardState(winP2));
+
+		HashMap<Coordinate, AbstractPiece> noMovesP1 = new HashMap<Coordinate, AbstractPiece>();
+		noMovesP1.put(new Coordinate(4, 4), new Rabbit(Owner.Player1));
+		noMovesP1.put(new Coordinate(5, 4), new Rabbit(Owner.Player1));
+
+		noMovesP1.put(new Coordinate(4, 5), new Rabbit(Owner.Player2));
+		noMovesP1.put(new Coordinate(5, 6), new Rabbit(Owner.Player2));
+		noMovesGame1 = new Game(new BoardState(noMovesP1));
+	}
+
+	@Test
+	public void testLoseWithNoMoves1() {
+		noMovesGame1.incrementTurn();
+		assertTrue(noMovesGame1.move(new RegularMove(noMovesGame1.getBoardState(), new Coordinate(5, 6),
+				new Coordinate(5, 5), noMovesGame1.getPlayerTurn(), noMovesGame1.getNumMoves())));
+		assertTrue(noMovesGame1.hasNoMoves(noMovesGame1.getOtherPlayerTurn()));
+		assertEquals(Owner.Player1, noMovesGame1.getWinner());
 	}
 
 	// move(int, int, int) used to be row,col,dir. dir enum: 0 = up, 1 = right, 2 = down, 3 = left
