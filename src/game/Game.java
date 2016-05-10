@@ -16,17 +16,16 @@ public class Game implements Serializable {
 	private ArrayList<MoveCommand> moves = new ArrayList<MoveCommand>();
 	private BoardState currentBoard;
 	private int turnNumber;
-	private int turnCounter = 0;
 
 	// 0 is nobody, 1 is player1, 2 is player2
-	private int playerTurn = 1;
-	private int winner = 0;
-	private int numMoves = 4;
+	private Owner playerTurn;
+	private Owner winner;
+	private int numMoves;
 
 	private String p1Name = "Player1";
 	private String p2Name = "Player2";
 
-	private int moveTimer = 0;
+	private int moveTimer;
 
 	/**
 	 * Creates a board with a default starting layout
@@ -39,10 +38,9 @@ public class Game implements Serializable {
 		this.moves = new ArrayList<MoveCommand>();
 		this.currentBoard = b;
 		this.turnNumber = 0;
-		this.turnCounter = 0;
 
-		this.playerTurn = 1;
-		this.winner = 0;
+		this.playerTurn = Owner.Player1;
+		this.winner = Owner.Nobody;
 		this.numMoves = 4;
 
 		this.p1Name = "Player1";
@@ -64,7 +62,6 @@ public class Game implements Serializable {
 		this.p2Name = g.getP2Name();
 
 		this.moveTimer = g.getMoveTimer();
-		this.turnCounter = g.getTurnCounter();
 	}
 
 	public ArrayList<MoveCommand> getMoves() {
@@ -85,25 +82,22 @@ public class Game implements Serializable {
 
 	public void incrementTurn() {
 		this.turnNumber++;
+		this.playerTurn = this.playerTurn.getOtherOwner();
 	}
 
-	public int getTurnCounter() {
-		return this.turnCounter;
-	}
-
-	public int getPlayerTurn() {
+	public Owner getPlayerTurn() {
 		return playerTurn;
 	}
 
-	public void setPlayerTurn(int playerTurn) {
-		this.playerTurn = playerTurn;
+	public Owner getOtherPlayerTurn() {
+		return this.playerTurn.getOtherOwner();
 	}
 
-	public int getWinner() {
+	public Owner getWinner() {
 		return winner;
 	}
 
-	public void setWinner(int winner) {
+	public void setWinner(Owner winner) {
 		this.winner = winner;
 	}
 
@@ -133,18 +127,6 @@ public class Game implements Serializable {
 
 	public void setMoveTimer(int moveTimer) {
 		this.moveTimer = moveTimer;
-	}
-
-	public Owner getOwner() {
-		return Owner.values()[(getPlayerTurn() - 1)];
-	}
-
-	public Owner getOtherOwner() {
-		if (getPlayerTurn() == 1) {
-			return Owner.values()[1];
-		} else {
-			return Owner.values()[0];
-		}
 	}
 
 	public AbstractPiece getPieceAt(Coordinate coor) {
@@ -184,24 +166,24 @@ public class Game implements Serializable {
 			// Is the first piece yours, the second theirs, are they
 			// orthonally adjacent, and is your piece higher precedence than
 			// theirs?
-			if ((this.currentBoard.getPieceAt(ownerPiece)).getOwner() == this.getOwner()
-					&& (this.currentBoard.getPieceAt(opponentPiece).getOwner() != this.getOwner())
+			if ((this.currentBoard.getPieceAt(ownerPiece)).getOwner() == this.getPlayerTurn()
+					&& (this.currentBoard.getPieceAt(opponentPiece).getOwner() != this.getPlayerTurn())
 					&& (ownerPiece.isOrthogonallyAdjacentTo(opponentPiece))
 					&& (this.checkStrongerAdjacent(ownerPiece, opponentPiece))) {
 				// Is the destination next to your piece?
 				if (ownerPiece.isOrthogonallyAdjacentTo(destination)) {
-					RegularMove yourPiece = new RegularMove(this.currentBoard, ownerPiece, destination,
-							this.getOwner(), this.numMoves);
+					RegularMove yourPiece = new RegularMove(this.currentBoard, ownerPiece, destination, this.getPlayerTurn(),
+							this.numMoves);
 					RegularMove theirPiece = new RegularMove(this.currentBoard, opponentPiece, ownerPiece,
-							this.getOwner(), this.numMoves);
+							this.getPlayerTurn(), this.numMoves);
 					pushOrPullMove(yourPiece, theirPiece);
 					return true;
 					// Or is it next to their piece?
 				} else if (opponentPiece.isOrthogonallyAdjacentTo(destination)) {
 					RegularMove theirPiece = new RegularMove(this.currentBoard, opponentPiece, destination,
-							this.getOwner(), this.numMoves);
+							this.getPlayerTurn(), this.numMoves);
 					RegularMove yourPiece = new RegularMove(this.currentBoard, ownerPiece, opponentPiece,
-							this.getOwner(), this.numMoves);
+							this.getPlayerTurn(), this.numMoves);
 					pushOrPullMove(theirPiece, yourPiece);
 					return true;
 				} else
@@ -233,13 +215,8 @@ public class Game implements Serializable {
 		checkWin();
 		numMoves--;
 		if (numMoves <= 0) {
-			if (getPlayerTurn() == 1) {
-				setPlayerTurn(2);
-			} else {
-				setPlayerTurn(1);
-			}
 			numMoves = 4;
-			turnCounter++;
+			this.incrementTurn();
 		}
 	}
 
@@ -247,14 +224,11 @@ public class Game implements Serializable {
 	 * checks both rows for rabbits of the opposite side, top row first followed by the bottom row
 	 */
 	private void checkWin() {
-		if (this.getPlayerTurn() == 0) {
-			return;
-		}
 		Owner playerTwo = Owner.Player2;
 		for (int i = 0; i < 8; i++) {
 			if (this.currentBoard.isPieceAt(new Coordinate(i, 0))) {
 				if (this.currentBoard.getPieceAt(new Coordinate(i, 0)).equals(new Rabbit(playerTwo))) {
-					winner = 2;
+					winner = Owner.Player2;
 					return;
 				}
 			}
@@ -263,7 +237,7 @@ public class Game implements Serializable {
 		for (int i = 0; i < 8; i++) {
 			if (this.currentBoard.isPieceAt(new Coordinate(i, 7))) {
 				if (this.currentBoard.getPieceAt(new Coordinate(i, 7)).equals(new Rabbit(playerOne))) {
-					winner = 1;
+					winner = Owner.Player1;
 					return;
 				}
 			}
@@ -284,11 +258,11 @@ public class Game implements Serializable {
 			}
 		}
 		if (!player1Exists) {
-			winner = 2;
+			winner = Owner.Player2;
 			return;
 		}
 		if (!player2Exists) {
-			winner = 1;
+			winner = Owner.Player1;
 			return;
 		}
 	}
@@ -358,7 +332,7 @@ public class Game implements Serializable {
 		}
 		Game g = (Game) o;
 		boolean historyEqual = this.moves.equals(g.getMoves()) && this.currentBoard.equals(g.getBoardState())
-				&& this.turnNumber == g.getTurnNumber() && this.turnCounter == g.getTurnCounter();
+				&& this.turnNumber == g.getTurnNumber();
 		boolean p1Equal = this.p1Name.equals(g.getP1Name());
 		boolean p2Equal = this.p2Name.equals(g.getP2Name());
 		boolean turnEqual = this.playerTurn == g.getPlayerTurn() && this.numMoves == g.getNumMoves()
@@ -371,9 +345,8 @@ public class Game implements Serializable {
 	@Override
 	public int hashCode() {
 		return this.moves.hashCode() + this.currentBoard.hashCode() + getHashCode(this.turnNumber)
-				+ getHashCode(this.turnCounter) + this.p1Name.hashCode() + this.p2Name.hashCode()
-				+ getHashCode(this.playerTurn) + getHashCode(this.numMoves) + getHashCode(this.winner)
-				+ getHashCode(this.moveTimer);
+				+ this.p1Name.hashCode() + this.p2Name.hashCode() + this.playerTurn.hashCode()
+				+ getHashCode(this.numMoves) + this.winner.hashCode() + getHashCode(this.moveTimer);
 	}
 
 	// this prevents collisions better with serial numbers

@@ -110,23 +110,16 @@ public class TestGameEquality {
 	}
 
 	@Test
-	public void testGameNotEqualIfDifferentPlayerTurn() {
-		testNotEquals(() -> {
-			this.g1.setPlayerTurn(2);
-		});
-	}
-
-	@Test
 	public void testGameNotEqualIfDifferentWinner() {
 		testNotEquals(() -> {
-			this.g1.setWinner(1);
+			this.g1.setWinner(Owner.Player1);
 		});
 		testNotEquals(() -> {
-			this.g1.setWinner(2);
+			this.g1.setWinner(Owner.Player2);
 		});
 		testNotEquals(() -> {
-			this.g1.setWinner(1);
-			this.g2.setWinner(2);
+			this.g1.setWinner(Owner.Player1);
+			this.g2.setWinner(Owner.Player2);
 		});
 	}
 
