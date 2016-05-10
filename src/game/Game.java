@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Set;
 
 import move_commands.MoveCommand;
-import move_commands.RegularMove;
 import piece.AbstractPiece;
 import piece.Owner;
 import piece.Rabbit;
@@ -143,66 +142,10 @@ public class Game implements Serializable {
 		} else {
 			this.currentBoard = m.execute();
 			this.moves.add(m);
+			this.numMoves -= m.getNumberOfMoves();
 			endMove();
 			return true;
 		}
-	}
-
-	/**
-	 * 
-	 * @param ownerPiece
-	 *            Coordinate of the owner's piece
-	 * @param opponentPiece
-	 *            Coordinate of the opponent's piece
-	 * @param destination
-	 *            Coordinate of the position that either the opponent's piece will be pushed into or the position the
-	 *            owner's piece will be moved into.
-	 * @return Returns true when a push or pull with the given 3 Coordinate objects would result in a valid move.
-	 */
-	@Deprecated
-	public boolean pushOrPull(Coordinate ownerPiece, Coordinate opponentPiece, Coordinate destination) {
-		// Do you have enough moves?
-		if (this.numMoves >= 2) {
-			// Is the first piece yours, the second theirs, are they
-			// orthonally adjacent, and is your piece higher precedence than
-			// theirs?
-			if ((this.currentBoard.getPieceAt(ownerPiece)).getOwner() == this.getPlayerTurn()
-					&& (this.currentBoard.getPieceAt(opponentPiece).getOwner() != this.getPlayerTurn())
-					&& (ownerPiece.isOrthogonallyAdjacentTo(opponentPiece))
-					&& (this.checkStrongerAdjacent(ownerPiece, opponentPiece))) {
-				// Is the destination next to your piece?
-				if (ownerPiece.isOrthogonallyAdjacentTo(destination)) {
-					RegularMove yourPiece = new RegularMove(this.currentBoard, ownerPiece, destination, this.getPlayerTurn(),
-							this.numMoves);
-					RegularMove theirPiece = new RegularMove(this.currentBoard, opponentPiece, ownerPiece,
-							this.getPlayerTurn(), this.numMoves);
-					pushOrPullMove(yourPiece, theirPiece);
-					return true;
-					// Or is it next to their piece?
-				} else if (opponentPiece.isOrthogonallyAdjacentTo(destination)) {
-					RegularMove theirPiece = new RegularMove(this.currentBoard, opponentPiece, destination,
-							this.getPlayerTurn(), this.numMoves);
-					RegularMove yourPiece = new RegularMove(this.currentBoard, ownerPiece, opponentPiece,
-							this.getPlayerTurn(), this.numMoves);
-					pushOrPullMove(theirPiece, yourPiece);
-					return true;
-				} else
-					// Neither, so that isn't a legal move
-					return false;
-			}
-		}
-		// Not enough moves remaining
-		return false;
-	}
-	
-	@Deprecated
-	private void pushOrPullMove(MoveCommand m1, MoveCommand m2) {
-		this.currentBoard = m1.execute();
-		this.currentBoard = m2.execute();
-		this.moves.add(m1);
-		this.moves.add(m2);
-		this.numMoves--;
-		endMove();
 	}
 
 	/**
@@ -214,7 +157,6 @@ public class Game implements Serializable {
 		checkDeaths(new Coordinate(5, 2));
 		checkDeaths(new Coordinate(5, 5));
 		checkWin();
-		numMoves--;
 		if (numMoves <= 0) {
 			numMoves = 4;
 			this.incrementTurn();

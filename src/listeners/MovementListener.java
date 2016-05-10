@@ -7,6 +7,9 @@ import game.Coordinate;
 import game.GUI;
 import game.Game;
 import game.ImagePanel;
+import move_commands.MoveCommand;
+import move_commands.PullMove;
+import move_commands.PushMove;
 import move_commands.RegularMove;
 
 public class MovementListener implements MouseListener {
@@ -83,10 +86,18 @@ public class MovementListener implements MouseListener {
 				// Piece selected, Second piece selected, empty square
 				// selected
 			} else if (twoPieceSelectedAndEmptySpaceClicked(coor)) {
-
-				if (game.pushOrPull(this.selectedPieceCoord, this.secondSelectedPieceCoord, coor)) {
+				MoveCommand move = null;
+				if (this.secondSelectedPieceCoord.isOrthogonallyAdjacentTo(coor)) {
+					move = new PushMove(game.getBoardState(), this.selectedPieceCoord, this.secondSelectedPieceCoord,
+							coor, game.getPlayerTurn(), game.getNumMoves());
+				} else {
+					move = new PullMove(game.getBoardState(), this.selectedPieceCoord, coor,
+							this.secondSelectedPieceCoord, game.getPlayerTurn(), game.getNumMoves());
+				}
+				if (game.move(move)) {
 					gui.renderBoard();
 				}
+
 				this.selectedPiece = null;
 				this.selectedPieceCoord = null;
 				this.secondSelectedPiece = null;
