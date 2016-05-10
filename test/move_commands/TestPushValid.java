@@ -17,7 +17,7 @@ public class TestPushValid extends PushSetup {
 	public void testPushCanGetPushPiece() {
 		Coordinate coor = new Coordinate(4, 2);
 		PushMove move = new PushMove(g2.getBoardState(), new Coordinate(4, 4), new Coordinate(4, 3), coor,
-				g2.getOwner(), g2.getNumMoves());
+				g2.getPlayerTurn(), g2.getNumMoves());
 		assertEquals(coor, move.getPushPiecePlace());
 	}
 
@@ -27,7 +27,7 @@ public class TestPushValid extends PushSetup {
 		AbstractPiece p2 = g2.getPieceAt(new Coordinate(4, 3));
 
 		MoveCommand move = new PushMove(g2.getBoardState(), new Coordinate(4, 4), new Coordinate(4, 3),
-				new Coordinate(4, 2), g2.getOwner(), g2.getNumMoves());
+				new Coordinate(4, 2), g2.getPlayerTurn(), g2.getNumMoves());
 		assertTrue(move.isValidMove());
 		assertTrue(g2.move(move));
 
@@ -42,7 +42,7 @@ public class TestPushValid extends PushSetup {
 		AbstractPiece p2 = g2.getPieceAt(new Coordinate(4, 5));
 
 		MoveCommand move = new PushMove(g2.getBoardState(), new Coordinate(4, 4), new Coordinate(4, 5),
-				new Coordinate(4, 6), g2.getOwner(), g2.getNumMoves());
+				new Coordinate(4, 6), g2.getPlayerTurn(), g2.getNumMoves());
 		assertTrue(move.isValidMove());
 		assertTrue(g2.move(move));
 
@@ -57,7 +57,7 @@ public class TestPushValid extends PushSetup {
 		AbstractPiece p2 = g2.getPieceAt(new Coordinate(5, 4));
 
 		MoveCommand move = new PushMove(g2.getBoardState(), new Coordinate(4, 4), new Coordinate(5, 4),
-				new Coordinate(6, 4), g2.getOwner(), g2.getNumMoves());
+				new Coordinate(6, 4), g2.getPlayerTurn(), g2.getNumMoves());
 		assertTrue(move.isValidMove());
 		assertTrue(g2.move(move));
 
@@ -72,7 +72,7 @@ public class TestPushValid extends PushSetup {
 		AbstractPiece p2 = g2.getPieceAt(new Coordinate(5, 7));
 
 		MoveCommand move = new PushMove(g2.getBoardState(), new Coordinate(6, 7), new Coordinate(5, 7),
-				new Coordinate(4, 7), g2.getOwner(), g2.getNumMoves());
+				new Coordinate(4, 7), g2.getPlayerTurn(), g2.getNumMoves());
 		assertTrue(move.isValidMove());
 		assertTrue(g2.move(move));
 
@@ -84,7 +84,7 @@ public class TestPushValid extends PushSetup {
 	@Test
 	public void testPushWithDifferentDirections() {
 		MoveCommand move = new PushMove(pushingGame.getBoardState(), new Coordinate(5, 4), new Coordinate(6, 4),
-				new Coordinate(6, 3), pushingGame.getOwner(), pushingGame.getNumMoves());
+				new Coordinate(6, 3), pushingGame.getPlayerTurn(), pushingGame.getNumMoves());
 		assertTrue(move.isValidMove());
 		assertTrue(pushingGame.move(move));
 
@@ -95,13 +95,13 @@ public class TestPushValid extends PushSetup {
 
 	@Test
 	public void testCanPushIfFrozenButThawed() {
-		pushingGame.setPlayerTurn(2);
+		pushingGame.incrementTurn();
 		AbstractPiece p1 = pushingGame.getPieceAt(new Coordinate(5, 5));
 		AbstractPiece p2 = pushingGame.getPieceAt(new Coordinate(6, 5));
 		pushingGame.getBoardState().movePiece(new Coordinate(4, 4), new Coordinate(4, 5));
 
 		MoveCommand move = new PushMove(pushingGame.getBoardState(), new Coordinate(5, 5), new Coordinate(6, 5),
-				new Coordinate(7, 5), pushingGame.getOwner(), pushingGame.getNumMoves());
+				new Coordinate(7, 5), pushingGame.getPlayerTurn(), pushingGame.getNumMoves());
 
 		assertTrue(move.isValidMove());
 		assertTrue(pushingGame.move(move));

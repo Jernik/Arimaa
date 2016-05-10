@@ -159,7 +159,7 @@ public class Game implements Serializable {
 	 *            owner's piece will be moved into.
 	 * @return Returns true when a push or pull with the given 3 Coordinate objects would result in a valid move.
 	 */
-
+	@Deprecated
 	public boolean pushOrPull(Coordinate ownerPiece, Coordinate opponentPiece, Coordinate destination) {
 		// Do you have enough moves?
 		if (this.numMoves >= 2) {
@@ -194,7 +194,8 @@ public class Game implements Serializable {
 		// Not enough moves remaining
 		return false;
 	}
-
+	
+	@Deprecated
 	private void pushOrPullMove(MoveCommand m1, MoveCommand m2) {
 		this.currentBoard = m1.execute();
 		this.currentBoard = m2.execute();
