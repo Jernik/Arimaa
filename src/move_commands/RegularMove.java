@@ -7,8 +7,8 @@ import piece.Owner;
 import piece.Rabbit;
 
 public class RegularMove extends MoveCommand {
-	public static final int NUMBER_OF_MOVES = 1;
 	private static final long serialVersionUID = 4434841689278271636L;
+	public static final int NUMBER_OF_MOVES = 1;
 
 	public RegularMove(BoardState board, Coordinate originalPosition, Coordinate newPosition, Owner turn,
 			int movesLeft) {
@@ -24,27 +24,41 @@ public class RegularMove extends MoveCommand {
 		return newBoard;
 	}
 
+	public int getNumberOfMoves() {
+		return NUMBER_OF_MOVES;
+	}
+
 	@Override
 	public boolean isValidMove() {
-		if (!this.originalBoard.isPieceAt(this.originalPosition) || this.originalBoard.isPieceAt(this.newPosition)) {
+		if (this.movesLeft < this.getNumberOfMoves()) {
 			return false;
 		}
-		AbstractPiece piece = this.originalBoard.getPieceAt(originalPosition);
-		if (isFrozen(originalPosition)) {
+		if (!this.originalPosition.isValid() || !this.newPosition.isValid()) {
 			return false;
 		}
-		if (this.originalBoard.isPieceAt(newPosition)) {
+		if (this.originalPosition.equals(this.newPosition)) {
 			return false;
 		}
+		if (!this.originalPosition.isOrthogonallyAdjacentTo(this.newPosition)) {
+			return false;
+		}
+
+		BoardState board = this.originalBoard;
+		if (!board.isPieceAt(this.originalPosition) || board.isPieceAt(this.newPosition)) {
+			return false;
+		}
+		if (board.getPieceAt(this.originalPosition).getOwner() != this.turn) {
+			return false;
+		}
+		AbstractPiece piece = board.getPieceAt(originalPosition);
 		if ((piece instanceof Rabbit)) {
-			if (((piece.getOwner() == Owner.values()[0]) && (newPosition.equals(originalPosition.up())))
-					|| ((piece.getOwner() == Owner.values()[1]) && (newPosition.equals(originalPosition.down())))) {
+			if (((piece.getOwner() == Owner.Player1) && (newPosition.equals(originalPosition.up())))
+					|| ((piece.getOwner() == Owner.Player2) && (newPosition.equals(originalPosition.down())))) {
 				// Cannot move a Rabbit backwards unless it has been dragged
 				return false;
 			}
 		}
-		if (!(originalPosition.isOrthogonallyAdjacentTo(newPosition)
-				&& this.originalBoard.getPieceAt(originalPosition).getOwner() == this.turn)) {
+		if (isFrozen(originalPosition)) {
 			return false;
 		}
 		return true;

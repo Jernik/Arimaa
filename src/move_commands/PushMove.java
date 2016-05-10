@@ -2,6 +2,7 @@ package move_commands;
 
 import game.BoardState;
 import game.Coordinate;
+import piece.AbstractPiece;
 import piece.Owner;
 
 /**
@@ -15,26 +16,33 @@ public class PushMove extends MoveCommand {
 	public PushMove(BoardState board, Coordinate originalPosition, Coordinate newPosition, Coordinate pushPiecePosition,
 			Owner turn, int movesLeft) {
 		super(board, originalPosition, newPosition, turn, movesLeft);
-		this.turn = turn;
-		this.originalBoard = board.clone();
-		this.newBoard = board;
-		this.originalPosition = originalPosition;
-		this.newPosition = newPosition;
 		this.pushPiecePosition = pushPiecePosition;
 	}
 
 	@Override
 	public BoardState execute() {
-		return this.originalBoard;
+		if (!this.isValidMove()) {
+			return this.originalBoard;
+		}
+		this.newBoard.movePiece(this.newPosition, this.pushPiecePosition);
+		this.newBoard.movePiece(this.originalPosition, this.newPosition);
+		return this.newBoard;
 	}
 
 	public Coordinate getPushPiecePlace() {
 		return this.pushPiecePosition;
 	}
 
+	public int getNumberOfMoves() {
+		return NUMBER_OF_MOVES;
+	}
+	
 	// you should assume that you are given 3 random coordinates, that might or might not be valid
 	@Override
 	public boolean isValidMove() {
+		if (this.movesLeft < this.getNumberOfMoves()) {
+			return false;
+		}
 		if (!this.originalPosition.isValid() || !this.newPosition.isValid() || !this.pushPiecePosition.isValid()) {
 			return false;
 		}
@@ -42,6 +50,11 @@ public class PushMove extends MoveCommand {
 				|| this.newPosition.equals(this.pushPiecePosition)) {
 			return false;
 		}
+		if (!this.originalPosition.isOrthogonallyAdjacentTo(this.newPosition)
+				|| !this.newPosition.isOrthogonallyAdjacentTo(this.pushPiecePosition)) {
+			return false;
+		}
+
 		BoardState board = this.originalBoard;
 		if (!board.isPieceAt(this.originalPosition) || !board.isPieceAt(this.newPosition)
 				|| board.isPieceAt(this.pushPiecePosition)) {
@@ -51,7 +64,14 @@ public class PushMove extends MoveCommand {
 				|| board.getPieceAt(this.newPosition).getOwner().equals(this.turn)) {
 			return false;
 		}
-		// TODO finish
+		AbstractPiece piece = board.getPieceAt(this.originalPosition);
+		AbstractPiece pushedPiece = board.getPieceAt(this.newPosition);
+		if (!piece.isStrongerThan(pushedPiece)) {
+			return false;
+		}
+		if (this.isFrozen(this.originalPosition)) {
+			return false;
+		}
 		return true;
 	}
 
