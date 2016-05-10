@@ -17,9 +17,12 @@ import game.TestLoad;
 import game.TestSave;
 import game.TestTimePanel;
 import game.TestUndo;
-import move_commands.TestMove;
-import move_commands.TestPull;
-import move_commands.TestPush;
+import move_commands.TestPullInvalid;
+import move_commands.TestPullValid;
+import move_commands.TestPushInvalid;
+import move_commands.TestPushValid;
+import move_commands.TestRegularInvalid;
+import move_commands.TestRegularValid;
 import piece.TestPiece;
 
 @RunWith(Suite.class)
@@ -27,7 +30,8 @@ import piece.TestPiece;
 		TestGenerateRandomMoveIsValid.class, TestGenerateRandomMovePerformance.class,
 		TestGenerateRandomMoveOnlyIfEnoughMoves.class, TestBoardState.class, TestBoardState.class, TestCoordinate.class,
 		TestEndGame.class, TestGame.class, TestSave.class, TestLoad.class, TestTimePanel.class, TestUndo.class,
-		TestMove.class, TestPull.class, TestPush.class, TestPiece.class })
+		TestRegularValid.class, TestRegularInvalid.class, TestPullInvalid.class, TestPullValid.class,
+		TestPushValid.class, TestPushInvalid.class, TestPiece.class })
 public class AllTests {
 	public static void main(String args[]) {
 		org.junit.runner.JUnitCore.main("test_runner.AllTests");

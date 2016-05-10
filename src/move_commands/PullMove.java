@@ -2,6 +2,7 @@ package move_commands;
 
 import game.BoardState;
 import game.Coordinate;
+import piece.AbstractPiece;
 import piece.Owner;
 
 /**
@@ -20,16 +21,28 @@ public class PullMove extends MoveCommand {
 
 	@Override
 	public BoardState execute() {
-		return this.originalBoard;
+		if (!this.isValidMove()) {
+			return this.originalBoard;
+		}
+		this.newBoard.movePiece(this.originalPosition, this.newPosition);
+		this.newBoard.movePiece(this.pullPiecePosition, this.originalPosition);
+		return this.newBoard;
 	}
 
 	public Coordinate getPullPiecePlace() {
 		return this.pullPiecePosition;
 	}
+	
+	public int getNumberOfMoves() {
+		return NUMBER_OF_MOVES;
+	}
 
 	// you should assume that you are given 3 random coordinates, that might or might not be valid
 	@Override
 	public boolean isValidMove() {
+		if (this.movesLeft < this.getNumberOfMoves()) {
+			return false;
+		}
 		if (!this.originalPosition.isValid() || !this.newPosition.isValid() || !this.pullPiecePosition.isValid()) {
 			return false;
 		}
@@ -37,6 +50,11 @@ public class PullMove extends MoveCommand {
 				|| this.newPosition.equals(this.pullPiecePosition)) {
 			return false;
 		}
+		if (!this.originalPosition.isOrthogonallyAdjacentTo(this.newPosition)
+				|| !this.originalPosition.isOrthogonallyAdjacentTo(this.pullPiecePosition)) {
+			return false;
+		}
+
 		BoardState board = this.originalBoard;
 		if (!board.isPieceAt(this.originalPosition) || board.isPieceAt(this.newPosition)
 				|| !board.isPieceAt(this.pullPiecePosition)) {
@@ -46,8 +64,14 @@ public class PullMove extends MoveCommand {
 				|| board.getPieceAt(this.pullPiecePosition).getOwner().equals(this.turn)) {
 			return false;
 		}
-
-		// TODO finish this
+		AbstractPiece piece = board.getPieceAt(this.originalPosition);
+		AbstractPiece pulledPiece = board.getPieceAt(this.pullPiecePosition);
+		if (!piece.isStrongerThan(pulledPiece)) {
+			return false;
+		}
+		if (this.isFrozen(this.originalPosition)) {
+			return false;
+		}
 		return true;
 	}
 
