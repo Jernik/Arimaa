@@ -93,11 +93,37 @@ public class TestGame {
 	}
 
 	@Test
+	public void testGetBoardState() {
+		HashMap<Coordinate, AbstractPiece> p1 = new HashMap<Coordinate, AbstractPiece>();
+		p1.put(new Coordinate(6, 7), new Cat(Owner.Player1));
+		p1.put(new Coordinate(7, 7), new Rabbit(Owner.Player1));
+		p1.put(new Coordinate(3, 6), new Dog(Owner.Player1));
+		p1.put(new Coordinate(3, 4), new Camel(Owner.Player1));
+		p1.put(new Coordinate(4, 4), new Elephant(Owner.Player1));
+		BoardState b = new BoardState(p1);
+		Game game = new Game(b);
+		assertEquals(b, game.getBoardState());
+	}
+	
+	@Test
+	public void testTurnNumberStartsAt0() {
+		assertEquals(0, g.getTurnNumber());
+	}
+	
+	@Test
 	public void testTurnNumberIncrements() {
+		assertEquals(Owner.Player1, g.getPlayerTurn());
+		
 		g.incrementTurn();
+		assertEquals(Owner.Player2, g.getPlayerTurn());
 		assertEquals(1, g.getTurnNumber());
+		
 		g.incrementTurn();
+		assertEquals(Owner.Player1, g.getPlayerTurn());
+		assertEquals(2, g.getTurnNumber());
+		
 		g.incrementTurn();
+		assertEquals(Owner.Player2, g.getPlayerTurn());
 		assertEquals(3, g.getTurnNumber());
 	}
 
@@ -105,6 +131,74 @@ public class TestGame {
 	public void testSetTurnNumber() {
 		g.setTurnNumber(5);
 		assertEquals(5, g.getTurnNumber());
+	}
+	
+	@Test
+	public void testPlayer1GoesFirst() {
+		assertEquals(Owner.Player1, g.getPlayerTurn());
+	}
+	
+	@Test
+	public void testGetOtherOwner() {
+		assertEquals(Owner.Player1, g.getPlayerTurn());
+		assertEquals(Owner.Player2, g.getOtherPlayerTurn());
+		
+		g.incrementTurn();
+		assertEquals(Owner.Player2, g.getPlayerTurn());
+		assertEquals(Owner.Player1, g.getOtherPlayerTurn());
+	}
+		
+	@Test
+	public void testGetWinner() {
+		assertEquals(Owner.Nobody, g.getWinner());
+	}
+	
+	@Test
+	public void testSetWinner() {
+		Owner winner = Owner.Player1;
+		g.setWinner(winner);
+		assertEquals(winner, g.getWinner());
+	}
+	
+	@Test
+	public void testStartWith4Moves() {
+		assertEquals(4, g.getNumMoves());
+	}
+	
+	@Test
+	public void testDefaultPlayer1Name() {
+		assertEquals("Player1", g.getP1Name());
+	}
+	
+	@Test
+	public void testChangePlayer1Name() {
+		String newName = "new name";
+		g.setP1Name(newName);
+		assertEquals(newName, g.getP1Name());
+	}
+
+	@Test
+	public void testDefaultPlayer2Name() {
+		assertEquals("Player2", g.getP2Name());
+	}
+	
+	@Test
+	public void testChangePlayer2Name() {
+		String newName = "new name";
+		g.setP2Name(newName);
+		assertEquals(newName, g.getP2Name());
+	}
+	
+	@Test
+	public void testGetMoveTimer() {
+		assertEquals(0, g.getMoveTimer());
+	}
+	
+	@Test
+	public void testSetMoveTimer() {
+		int newTime = 30;
+		g.setMoveTimer(newTime);
+		assertEquals(newTime, g.getMoveTimer());
 	}
 
 	@Test
@@ -138,7 +232,7 @@ public class TestGame {
 		// g.currentBoard.printBoard();
 		Coordinate start = new Coordinate(3, 6);
 		Coordinate end = start.up();
-		Owner owner = game.getOwner();
+		Owner owner = game.getPlayerTurn();
 		MoveCommand move = new RegularMove(game.getBoardState(), start, end, owner, game.getNumMoves());
 		assertTrue(game.move(move));
 		// g.currentBoard.printBoard();
@@ -163,13 +257,13 @@ public class TestGame {
 		Game game = new Game(new BoardState(removeP));
 		Coordinate start = new Coordinate(2, 2);
 		Coordinate end = start.up();
-		Owner owner = game.getOwner();
+		Owner owner = game.getPlayerTurn();
 		MoveCommand move = new RegularMove(game.getBoardState(), start, end, owner, game.getNumMoves());
 		game.move(move);
 		assertEquals(game.getPieceAt(new Coordinate(2, 5)), game.getPieceAt(new Coordinate(2, 5)));
 		start = new Coordinate(5, 1);
 		end = start.up();
-		owner = game.getOwner();
+		owner = game.getPlayerTurn();
 		move = new RegularMove(game.getBoardState(), start, end, owner, game.getNumMoves());
 		game.move(move);
 		assertFalse(game.isPieceAt(new Coordinate(5, 1)));

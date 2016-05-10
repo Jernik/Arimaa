@@ -23,7 +23,7 @@ public class TestUndo {
 		Game standardStart = new Game();
 		Coordinate start = new Coordinate(0, 1);
 		Coordinate end = start.down();
-		Owner owner = standardStart.getOwner();
+		Owner owner = standardStart.getPlayerTurn();
 		MoveCommand move = new RegularMove(standardStart.getBoardState(), start, end, owner,
 				standardStart.getNumMoves());
 		standardStart.move(move);
@@ -36,7 +36,7 @@ public class TestUndo {
 	public void testUndoTwoMoves() {
 		Coordinate start = new Coordinate(0, 1);
 		Coordinate end = start.down();
-		Owner owner = g.getOwner();
+		Owner owner = g.getPlayerTurn();
 		MoveCommand move = new RegularMove(g.getBoardState(), start, end, owner, g.getNumMoves());
 		g.move(move);
 		start = new Coordinate(0, 2);
@@ -52,7 +52,7 @@ public class TestUndo {
 	public void testUndoThreeMoves() {
 		Coordinate start = new Coordinate(0, 1);
 		Coordinate end = start.down();
-		Owner owner = g.getOwner();
+		Owner owner = g.getPlayerTurn();
 		MoveCommand move = new RegularMove(g.getBoardState(), start, end, owner, g.getNumMoves());
 		g.move(move);
 		start = new Coordinate(0, 2);
@@ -72,7 +72,7 @@ public class TestUndo {
 	public void testThatUndoCantCrossTurns() {
 		Coordinate start = new Coordinate(0, 1);
 		Coordinate end = start.down();
-		Owner owner = g.getOwner();
+		Owner owner = g.getPlayerTurn();
 		MoveCommand move = new RegularMove(g.getBoardState(), start, end, owner, g.getNumMoves());
 		g.move(move);
 		start = new Coordinate(0, 2);
@@ -95,16 +95,10 @@ public class TestUndo {
 	public void testThatUndoGrantsMoves() {
 		Coordinate start = new Coordinate(0, 1);
 		Coordinate end = start.down();
-		Owner owner = g.getOwner();
+		Owner owner = g.getPlayerTurn();
 		MoveCommand move = new RegularMove(g.getBoardState(), start, end, owner, g.getNumMoves());
 		g.move(move);
 		g.undoMove();
 		assertEquals(4, g.getNumMoves());
-	}
-
-	@Test
-	public void testSetWinner() {
-		g.setWinner(1);
-		assertEquals(1, g.getWinner());
 	}
 }

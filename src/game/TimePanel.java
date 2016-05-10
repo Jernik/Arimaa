@@ -7,9 +7,11 @@ import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.JLabel;
 
+import piece.Owner;
+
 public class TimePanel {
 	private JLabel timerLabel;
-	int playerTurn;
+	Owner playerTurn;
 	private Timer updateTimer;
 
 	public TimePanel(GUI gui, Game game, int startTime, JLabel label) {
@@ -22,7 +24,7 @@ public class TimePanel {
 
 			@Override
 			public void run() {
-				if (game.getWinner() != 0) {
+				if (game.getWinner() != Owner.Nobody) {
 					updateTimer.cancel();
 					return;
 				}
@@ -34,10 +36,7 @@ public class TimePanel {
 					playerTurn = game.getPlayerTurn();
 				}
 				if (s == 0) {
-					int winner = 1;
-					if (game.getPlayerTurn() == 1)
-						winner = 2;
-					game.setWinner(winner);
+					game.setWinner(game.getOtherPlayerTurn());
 					gui.renderBoard();// to show winner pane
 				}
 				int displays, m;

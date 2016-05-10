@@ -9,6 +9,8 @@ import javax.swing.JLabel;
 
 import org.junit.Test;
 
+import piece.Owner;
+
 public class TestTimePanel {
 
 	@Test
@@ -37,14 +39,14 @@ public class TestTimePanel {
 		GUI gui=new GUI();
 		Game game=new Game();
 		TimePanel tp= new TimePanel(gui, game, 3, new JLabel());
-		game.setWinner(1);
+		game.setWinner(Owner.Player1);
 		try {
 			Thread.sleep(3500);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		assertEquals(1, game.getWinner());
+		assertEquals(Owner.Player1, game.getWinner());
 		tp.stopTimer();
 	}
 
@@ -54,7 +56,7 @@ public class TestTimePanel {
 		Game game=new Game();
 		TimePanel tp= new TimePanel(gui, game, 9, new JLabel());
 
-		game.setPlayerTurn(2);
+		game.incrementTurn();
 		try {
 			Thread.sleep(100);
 		} catch (InterruptedException e) {
@@ -75,14 +77,14 @@ public class TestTimePanel {
 			//e1.printStackTrace();
 		}
 		playerTurn.setAccessible(true);
-		int fieldValue = 0;
+		Owner fieldValue = Owner.Nobody;
 		try {
-			fieldValue = (int)playerTurn.get(tp);
+			fieldValue = (Owner)playerTurn.get(tp);
 		} catch (IllegalArgumentException | IllegalAccessException e) {
 			// TODO Auto-generated catch block
 			//e.printStackTrace();
 		}
-		assertEquals(2,  fieldValue);
+		assertEquals(Owner.Player2,  fieldValue);
 		tp.stopTimer();
 	}
 }

@@ -110,23 +110,16 @@ public class TestGameHashCodeEquality {
 	}
 
 	@Test
-	public void testGameNotEqualIfDifferentPlayerTurn() {
-		testHashCodeNotEquals(() -> {
-			this.g1.setPlayerTurn(2);
-		});
-	}
-
-	@Test
 	public void testGameNotEqualIfDifferentWinner() {
 		testHashCodeNotEquals(() -> {
-			this.g1.setWinner(1);
+			this.g1.setWinner(Owner.Player1);
 		});
 		testHashCodeNotEquals(() -> {
-			this.g1.setWinner(2);
+			this.g1.setWinner(Owner.Player2);
 		});
 		testHashCodeNotEquals(() -> {
-			this.g1.setWinner(1);
-			this.g2.setWinner(2);
+			this.g1.setWinner(Owner.Player1);
+			this.g2.setWinner(Owner.Player2);
 		});
 	}
 

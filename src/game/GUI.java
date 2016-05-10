@@ -22,6 +22,7 @@ import javax.swing.JTextField;
 import listeners.LoadGameListener;
 import listeners.NewGameListener;
 import piece.AbstractPiece;
+import piece.Owner;
 
 public class GUI {
 	public static final String SAVE_FOLDER = "save/";
@@ -201,7 +202,7 @@ public class GUI {
 	}
 
 	public void renderInitialBoard() {
-		if (getGame().getWinner() != 0) {
+		if (getGame().getWinner() != Owner.Nobody) {
 			createWinWindow();
 		}
 		BoardState boardState = this.getGame().getBoardState();
@@ -226,8 +227,8 @@ public class GUI {
 			}
 		}
 		moveCountLabel.setText("<html> <b>" + "Moves Left: \n" + getGame().getNumMoves() + "</b></html>");
-		turnCountLabel.setText("<html> <b>" + "Turn: " + getGame().getTurnCounter() + "</b></html>");
-		if (getGame().getPlayerTurn() == 1) {
+		turnCountLabel.setText("<html> <b>" + "Turn: " + getGame().getTurnNumber() + "</b></html>");
+		if (getGame().getPlayerTurn() == Owner.Player1) {
 			turnIndicatorLabel.setText("<html> <b>" + getGame().getP1Name() + "'s turn" + "</b></html>");
 		} else {
 			turnIndicatorLabel.setText("<html> <b>" + getGame().getP2Name() + "'s turn" + "</b></html>");
@@ -264,10 +265,11 @@ public class GUI {
 
 	public void createWinWindow() {
 		String playerName = "";
-		if (this.getGame().getWinner() == 1)
+		if (this.getGame().getWinner() == Owner.Player1) {
 			playerName = getGame().getP1Name();
-		else if (this.getGame().getWinner() == 2)
+		} else {
 			playerName = getGame().getP2Name();
+		}
 
 		JFrame winnerFrame = new JFrame();
 		getActiveFrames().add(winnerFrame);

@@ -1,7 +1,7 @@
 package piece;
 
 public enum Owner {
-	Player1, Player2;
+	Player1, Player2, Nobody;
 	private Owner otherOwner;
 
 	static {

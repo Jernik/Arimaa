@@ -14,6 +14,7 @@ import game.GUI;
 import game.Game;
 import game.ImagePanel;
 import game.TimePanel;
+import piece.Owner;
 
 public class StartGameListener implements ActionListener {
 
@@ -106,7 +107,7 @@ public class StartGameListener implements ActionListener {
 		// Set up Turn Counter label
 		JLabel turnCounterLabel = new JLabel();
 		gui.setTurnCountLabel(turnCounterLabel);
-		turnCounterLabel.setText("<html> <b>" + "Turn: " + game.getTurnCounter() + "</b></html>");
+		turnCounterLabel.setText("<html> <b>" + "Turn: " + game.getTurnNumber() + "</b></html>");
 		turnCounterLabel.setForeground(Color.BLACK);
 		Font turnCounterFont = turnCounterLabel.getFont();
 		turnCounterLabel.setFont(new Font(turnCounterFont.getName(), 4, 18));
@@ -118,7 +119,7 @@ public class StartGameListener implements ActionListener {
 		// Set up Player Turn label
 		JLabel playerTurnLabel = new JLabel();
 		gui.setTurnIndicatorLabel(playerTurnLabel);
-		if (game.getPlayerTurn() == 1) {
+		if (game.getPlayerTurn() == Owner.Player1) {
 			playerTurnLabel.setText("<html> <b>" + game.getP1Name() + "'s turn" + "</b></html>");
 		} else {
 			playerTurnLabel.setText("<html> <b>" + game.getP2Name() + "'s turn" + "</b></html>");
