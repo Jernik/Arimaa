@@ -9,6 +9,9 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
 import board.Coordinate;
+import move_commands.MoveCommand;
+import move_commands.PullMove;
+import move_commands.PullSetup;
 import piece.AbstractPiece;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
