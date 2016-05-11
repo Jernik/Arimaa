@@ -8,13 +8,13 @@ import piece.Owner;
 
 public abstract class MoveCommand implements Serializable {
 	private static final long serialVersionUID = -1176514408247586630L;
-	public BoardState originalBoard;
+	protected BoardState originalBoard;
 	protected BoardState newBoard;
 
 	protected Coordinate originalPosition;
 	protected Coordinate newPosition;
 
-	public Owner turn;
+	protected Owner turn;
 	protected int movesLeft;
 
 	protected MoveCommand(BoardState board, Coordinate originalPosition, Coordinate newPosition, Owner turn,

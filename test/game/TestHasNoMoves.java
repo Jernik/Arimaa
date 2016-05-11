@@ -8,7 +8,9 @@ import static org.junit.Assert.fail;
 import java.util.HashMap;
 
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 
 import ai.Ai;
 import board.BoardState;
@@ -20,6 +22,7 @@ import piece.Dog;
 import piece.Owner;
 import piece.Rabbit;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestHasNoMoves {
 	public static final int ITERATION_SIZE = 1000;
 	private Game freezingGame;
