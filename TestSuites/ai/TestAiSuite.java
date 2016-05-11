@@ -1,12 +1,13 @@
 package ai;
 
 import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-import org.junit.runners.Suite.SuiteClasses;
+import org.junit.runners.model.InitializationError;
 
-@RunWith(Suite.class)
-@SuiteClasses({ TestAi.class, TestGenerateRandomMoveIsUniform.class, TestGenerateRandomMoveIsValid.class,
-		TestGenerateRandomMoveOnlyIfEnoughMoves.class, TestGenerateRandomMovePerformance.class })
-public class TestAiSuite {
+import test_runner.DynamicSuite;
 
+@RunWith(TestAiSuite.class)
+public class TestAiSuite extends DynamicSuite {
+	public TestAiSuite(Class<?> clazz) throws InitializationError {
+		super(clazz, "ai");
+	}
 }

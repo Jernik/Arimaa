@@ -1,11 +1,13 @@
 package gui;
 
 import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-import org.junit.runners.Suite.SuiteClasses;
+import org.junit.runners.model.InitializationError;
 
-@RunWith(Suite.class)
-@SuiteClasses({ TestLoad.class, TestSave.class, TestTimePanel.class })
-public class TestGuiSuite {
+import test_runner.DynamicSuite;
 
+@RunWith(TestGuiSuite.class)
+public class TestGuiSuite extends DynamicSuite {
+	public TestGuiSuite(Class<?> clazz) throws InitializationError {
+		super(clazz, "gui");
+	}
 }

@@ -1,11 +1,13 @@
 package piece;
 
 import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-import org.junit.runners.Suite.SuiteClasses;
+import org.junit.runners.model.InitializationError;
 
-@RunWith(Suite.class)
-@SuiteClasses({ TestPiece.class, TestPieceEquality.class })
-public class TestPieceSuite {
+import test_runner.DynamicSuite;
 
+@RunWith(TestPieceSuite.class)
+public class TestPieceSuite extends DynamicSuite{
+	public TestPieceSuite(Class<?> clazz) throws InitializationError {
+		super(clazz, "piece");
+	}
 }

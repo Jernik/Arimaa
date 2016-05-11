@@ -1,12 +1,13 @@
 package game;
 
 import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-import org.junit.runners.Suite.SuiteClasses;
+import org.junit.runners.model.InitializationError;
 
-@RunWith(Suite.class)
-@SuiteClasses({ TestEndGame.class, TestGame.class, TestGameEquality.class, TestGameHashCodeEquality.class,
-		TestHasPushMove.class, TestHasRegularMove.class, TestUndo.class })
-public class TestGameSuite {
+import test_runner.DynamicSuite;
 
+@RunWith(TestGameSuite.class)
+public class TestGameSuite extends DynamicSuite {
+	public TestGameSuite(Class<?> clazz) throws InitializationError {
+		super(clazz, "game");
+	}
 }

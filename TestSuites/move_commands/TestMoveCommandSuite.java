@@ -1,12 +1,13 @@
 package move_commands;
 
 import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-import org.junit.runners.Suite.SuiteClasses;
+import org.junit.runners.model.InitializationError;
 
-@RunWith(Suite.class)
-@SuiteClasses({ TestMoveCommandEquality.class, TestPullInvalid.class, TestPullValid.class, TestPushInvalid.class,
-		TestPushValid.class, TestRegularInvalid.class, TestRegularValid.class })
-public class TestMoveCommandSuite {
+import test_runner.DynamicSuite;
 
+@RunWith(TestMoveCommandSuite.class)
+public class TestMoveCommandSuite extends DynamicSuite{
+	public TestMoveCommandSuite(Class<?> clazz) throws InitializationError {
+		super(clazz, "move_commands");
+	}
 }
