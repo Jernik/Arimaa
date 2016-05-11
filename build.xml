@@ -4,8 +4,8 @@
   <property name="main.src.dir" value="src" />
   <property name="test.build.dir" value="build/test" />
   <property name="test.src.dir" value="test" />
-  <property name="ant.build.javac.source" value="1.5"/>
-  <property name="ant.build.javac.target" value="1.5"/>
+  <property name="ant.build.javac.source" value="1.8"/>
+  <property name="ant.build.javac.target" value="1.8"/>
 
   <path id="classpath.base" />
 
@@ -20,7 +20,7 @@
 
   <target name="compile">
     <mkdir dir="${main.build.dir}"/>
-    <javac target = srcdir="${main.src.dir}" destdir="${main.build.dir}" includeantruntime="false">
+    <javac srcdir="${main.src.dir}" destdir="${main.build.dir}" includeantruntime="false">
       <classpath refid="classpath.base"/>
     </javac>
   </target>
