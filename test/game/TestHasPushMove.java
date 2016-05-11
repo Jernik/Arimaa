@@ -117,6 +117,7 @@ public class TestHasPushMove {
 
 		exhaustivelyCheckPushMoves(game, new Coordinate(4, 4));
 	}
+
 	@Test
 	public void testHasPushMoveReturnsTrueIfThereIs1MoveLeft() {
 		HashMap<Coordinate, AbstractPiece> p = new HashMap<Coordinate, AbstractPiece>();

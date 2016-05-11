@@ -20,11 +20,11 @@ import piece.Dog;
 import piece.Owner;
 import piece.Rabbit;
 
-public class TestHasMove {
+public class TestHasNoMoves {
 	public static final int ITERATION_SIZE = 1000;
 	private Game freezingGame;
 
-	private void exhaustivelyCheckHasNoMove(Game game, Coordinate coor) {
+	private void exhaustivelyCheckHasNoMoves(Game game, Coordinate coor) {
 		Owner owner = game.getPieceAt(coor).getOwner();
 		assertFalse(game.hasMove(coor));
 		Ai ai = new Ai(owner, game);
@@ -38,7 +38,7 @@ public class TestHasMove {
 		}
 	}
 
-	private void exhaustivelyCheckHasMove(Game game, Coordinate coor) {
+	private void exhaustivelyCheckHasMoves(Game game, Coordinate coor) {
 		Owner owner = game.getPieceAt(coor).getOwner();
 		assertTrue(game.hasMove(coor));
 		Ai ai = new Ai(owner, game);
@@ -75,43 +75,43 @@ public class TestHasMove {
 	}
 
 	@Test
-	public void testHasMoveReturnsTrueIfNotFrozen1() {
-		exhaustivelyCheckHasMove(freezingGame, new Coordinate(0, 0));
+	public void testHasNoMovesReturnsFalseIfNotFrozen1() {
+		exhaustivelyCheckHasMoves(freezingGame, new Coordinate(0, 0));
 	}
 
 	@Test
-	public void testHasMoveReturnsTrueIfNotFrozen2() {
-		exhaustivelyCheckHasMove(freezingGame, new Coordinate(1, 1));
-		exhaustivelyCheckHasMove(freezingGame, new Coordinate(2, 1));
+	public void testHasNoMovesReturnsFalseIfNotFrozen2() {
+		exhaustivelyCheckHasMoves(freezingGame, new Coordinate(1, 1));
+		exhaustivelyCheckHasMoves(freezingGame, new Coordinate(2, 1));
 	}
 
 	@Test
-	public void testHasMoveReturnsTrueIfNotFrozen3() {
-		exhaustivelyCheckHasMove(freezingGame, new Coordinate(2, 3));
+	public void testHasNoMovesReturnsFalseIfNotFrozen3() {
+		exhaustivelyCheckHasMoves(freezingGame, new Coordinate(2, 3));
 	}
 
 	@Test
-	public void testHasMoveReturnsTrueIfNotFrozen4() {
-		exhaustivelyCheckHasMove(freezingGame, new Coordinate(3, 5));
+	public void testHasNoMovesReturnsFalseIfNotFrozen4() {
+		exhaustivelyCheckHasMoves(freezingGame, new Coordinate(3, 5));
 	}
 
 	@Test
-	public void testHasMoveReturnsTrueIfFrozenButThawed() {
-		exhaustivelyCheckHasMove(freezingGame, new Coordinate(5, 5));
+	public void testHasNoMovesReturnsFalseIfFrozenButThawed() {
+		exhaustivelyCheckHasMoves(freezingGame, new Coordinate(5, 5));
 	}
 
 	@Test
-	public void testHasMoveReturnsFalseIfFrozen1() {
-		exhaustivelyCheckHasNoMove(freezingGame, new Coordinate(3, 3));
+	public void testHasNoMovesReturnsTrueIfFrozen1() {
+		exhaustivelyCheckHasNoMoves(freezingGame, new Coordinate(3, 3));
 	}
 
 	@Test
-	public void testHasMoveReturnsFalseIfFrozen2() {
-		exhaustivelyCheckHasNoMove(freezingGame, new Coordinate(4, 5));
+	public void testHasNoMovesReturnsTrueIfFrozen2() {
+		exhaustivelyCheckHasNoMoves(freezingGame, new Coordinate(4, 5));
 	}
 
 	@Test
-	public void testHasMoveReturnsTrueIfOnlyPushAvaliable() {
+	public void testHasNoMovesReturnsFalseIfOnlyPushAvaliable() {
 		HashMap<Coordinate, AbstractPiece> p = new HashMap<Coordinate, AbstractPiece>();
 		p.put(new Coordinate(4, 4), new Dog(Owner.Player1));
 
@@ -132,11 +132,12 @@ public class TestHasMove {
 
 		Game game = new Game(new BoardState(p));
 
-		exhaustivelyCheckHasMove(game, new Coordinate(4, 4));
+		exhaustivelyCheckHasMoves(game, new Coordinate(4, 4));
+		assertFalse(game.hasNoMoves(Owner.Player1));
 	}
 
 	@Test
-	public void testHasMoveReturnsTrueIfOnlyPushAvaliableButWeaker() {
+	public void testHasNoMovesReturnsTrueIfOnlyPushAvaliableButWeaker() {
 		HashMap<Coordinate, AbstractPiece> p = new HashMap<Coordinate, AbstractPiece>();
 		p.put(new Coordinate(4, 4), new Dog(Owner.Player1));
 
@@ -157,11 +158,13 @@ public class TestHasMove {
 
 		Game game = new Game(new BoardState(p));
 
-		exhaustivelyCheckHasNoMove(game, new Coordinate(4, 4));
+		exhaustivelyCheckHasNoMoves(game, new Coordinate(4, 4));
+		exhaustivelyCheckHasNoMoves(game, new Coordinate(4, 3));
+		assertTrue(game.hasNoMoves(Owner.Player1));
 	}
 
 	@Test
-	public void testHasMoveReturnsTrueIfOnlyPushAvaliableButEqualStrength() {
+	public void testHasNoMovesReturnsTrueIfOnlyPushAvaliableButEqualStrength() {
 		HashMap<Coordinate, AbstractPiece> p = new HashMap<Coordinate, AbstractPiece>();
 		p.put(new Coordinate(4, 4), new Dog(Owner.Player1));
 
@@ -182,11 +185,13 @@ public class TestHasMove {
 
 		Game game = new Game(new BoardState(p));
 
-		exhaustivelyCheckHasNoMove(game, new Coordinate(4, 4));
+		exhaustivelyCheckHasNoMoves(game, new Coordinate(4, 4));
+		exhaustivelyCheckHasNoMoves(game, new Coordinate(4, 3));
+		assertTrue(game.hasNoMoves(Owner.Player1));
 	}
 
 	@Test
-	public void testHasMoveReturnsFalseIfOnlyPushAvaliableAndNotEnoughMovesLeft() {
+	public void testHasNoMovesReturnsTrueIfOnlyPushAvaliableAndNotEnoughMovesLeft() {
 		HashMap<Coordinate, AbstractPiece> p = new HashMap<Coordinate, AbstractPiece>();
 		p.put(new Coordinate(4, 4), new Dog(Owner.Player1));
 		p.put(new Coordinate(4, 0), new Dog(Owner.Player1));
@@ -214,7 +219,7 @@ public class TestHasMove {
 		game.move(new RegularMove(game.getBoardState(), new Coordinate(5, 1), new Coordinate(5, 2),
 				game.getPlayerTurn(), game.getNumMoves()));
 
-		exhaustivelyCheckHasNoMove(game, new Coordinate(4, 4));
+		exhaustivelyCheckHasNoMoves(game, new Coordinate(4, 4));
+		assertTrue(game.hasNoMoves(Owner.Player1));
 	}
-
 }
