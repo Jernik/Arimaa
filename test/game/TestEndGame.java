@@ -57,6 +57,152 @@ public class TestEndGame {
 		game2 = new Game(new BoardState(winP2));
 	}
 
+	@Test
+	public void testLoseWithNoMoves1() {
+		HashMap<Coordinate, AbstractPiece> noMovesP1 = new HashMap<Coordinate, AbstractPiece>();
+		noMovesP1.put(new Coordinate(4, 3), new Rabbit(Owner.Player1));
+		noMovesP1.put(new Coordinate(5, 4), new Rabbit(Owner.Player1));
+
+		noMovesP1.put(new Coordinate(3, 4), new Rabbit(Owner.Player2));
+		noMovesP1.put(new Coordinate(6, 4), new Rabbit(Owner.Player2));
+		noMovesP1.put(new Coordinate(4, 5), new Rabbit(Owner.Player2));
+		noMovesP1.put(new Coordinate(5, 5), new Rabbit(Owner.Player2));
+		Game game = new Game(new BoardState(noMovesP1));
+
+		assertTrue(game.move(new RegularMove(game.getBoardState(), new Coordinate(4, 3), new Coordinate(4, 4),
+				game.getPlayerTurn(), game.getNumMoves())));
+
+		assertTrue(game.hasNoMoves(game.getPlayerTurn()));
+		assertEquals(Owner.Player2, game.getWinner());
+	}
+
+	@Test
+	public void testLoseWithNoMovesIfOnlyPushAvaliableButWeaker() {
+		HashMap<Coordinate, AbstractPiece> p = new HashMap<Coordinate, AbstractPiece>();
+		p.put(new Coordinate(4, 3), new Dog(Owner.Player1));
+
+		p.put(new Coordinate(4, 2), new Rabbit(Owner.Player1));
+		p.put(new Coordinate(5, 3), new Camel(Owner.Player2));
+		p.put(new Coordinate(3, 3), new Rabbit(Owner.Player2));
+
+		p.put(new Coordinate(5, 4), new Rabbit(Owner.Player2));
+		p.put(new Coordinate(6, 4), new Rabbit(Owner.Player2));
+
+		p.put(new Coordinate(4, 5), new Rabbit(Owner.Player2));
+		p.put(new Coordinate(5, 5), new Rabbit(Owner.Player2));
+		p.put(new Coordinate(4, 6), new Rabbit(Owner.Player2));
+		p.put(new Coordinate(3, 5), new Rabbit(Owner.Player2));
+
+		p.put(new Coordinate(3, 4), new Camel(Owner.Player2));
+
+		Game game = new Game(new BoardState(p));
+
+		assertTrue(game.move(new RegularMove(game.getBoardState(), new Coordinate(4, 3), new Coordinate(4, 4),
+				game.getPlayerTurn(), game.getNumMoves())));
+		assertTrue(game.move(new RegularMove(game.getBoardState(), new Coordinate(4, 2), new Coordinate(4, 3),
+				game.getPlayerTurn(), game.getNumMoves())));
+
+		assertTrue(game.hasNoMoves(game.getPlayerTurn()));
+		assertEquals(Owner.Player2, game.getWinner());
+	}
+
+	@Test
+	public void testLoseWithNoMovesIfOnlyPushAvaliableButEqualStrength() {
+		HashMap<Coordinate, AbstractPiece> p = new HashMap<Coordinate, AbstractPiece>();
+		p.put(new Coordinate(4, 5), new Dog(Owner.Player2));
+
+		p.put(new Coordinate(4, 3), new Rabbit(Owner.Player1));
+		p.put(new Coordinate(4, 2), new Rabbit(Owner.Player1));
+		p.put(new Coordinate(5, 3), new Camel(Owner.Player1));
+		p.put(new Coordinate(3, 3), new Rabbit(Owner.Player1));
+
+		p.put(new Coordinate(5, 4), new Rabbit(Owner.Player1));
+		p.put(new Coordinate(6, 4), new Rabbit(Owner.Player1));
+
+		p.put(new Coordinate(4, 6), new Rabbit(Owner.Player2));
+		p.put(new Coordinate(5, 5), new Rabbit(Owner.Player1));
+		p.put(new Coordinate(3, 5), new Rabbit(Owner.Player1));
+
+		p.put(new Coordinate(3, 4), new Dog(Owner.Player1));
+
+		Game game = new Game(new BoardState(p));
+		game.incrementTurn();
+
+		assertTrue(game.move(new RegularMove(game.getBoardState(), new Coordinate(4, 5), new Coordinate(4, 4),
+				game.getPlayerTurn(), game.getNumMoves())));
+		assertTrue(game.move(new RegularMove(game.getBoardState(), new Coordinate(4, 6), new Coordinate(4, 5),
+				game.getPlayerTurn(), game.getNumMoves())));
+
+		assertTrue(game.hasNoMoves(Owner.Player2));
+		assertEquals(Owner.Player1, game.getWinner());
+	}
+
+	@Test
+	public void testLoseWithNoMovesIfOnlyPushAvaliableAndNotEnoughMovesLeft() {
+		HashMap<Coordinate, AbstractPiece> p = new HashMap<Coordinate, AbstractPiece>();
+		p.put(new Coordinate(4, 4), new Dog(Owner.Player1));
+		p.put(new Coordinate(4, 0), new Rabbit(Owner.Player1));
+
+		p.put(new Coordinate(4, 3), new Rabbit(Owner.Player2));
+		p.put(new Coordinate(4, 2), new Rabbit(Owner.Player2));
+		p.put(new Coordinate(5, 3), new Camel(Owner.Player2));
+		p.put(new Coordinate(3, 3), new Rabbit(Owner.Player2));
+
+		p.put(new Coordinate(5, 4), new Rabbit(Owner.Player2));
+		p.put(new Coordinate(6, 4), new Rabbit(Owner.Player2));
+
+		p.put(new Coordinate(4, 5), new Rabbit(Owner.Player2));
+		p.put(new Coordinate(5, 5), new Rabbit(Owner.Player2));
+		p.put(new Coordinate(4, 6), new Rabbit(Owner.Player2));
+		p.put(new Coordinate(3, 5), new Rabbit(Owner.Player2));
+
+		p.put(new Coordinate(3, 4), new Rabbit(Owner.Player2));
+
+		Game game = new Game(new BoardState(p));
+		assertTrue(game.move(new RegularMove(game.getBoardState(), new Coordinate(4, 0), new Coordinate(5, 0),
+				game.getPlayerTurn(), game.getNumMoves())));
+		assertEquals(Owner.Nobody, game.getWinner());
+
+		assertTrue(game.move(new RegularMove(game.getBoardState(), new Coordinate(5, 0), new Coordinate(5, 1),
+				game.getPlayerTurn(), game.getNumMoves())));
+		assertEquals(Owner.Nobody, game.getWinner());
+
+		assertTrue(game.move(new RegularMove(game.getBoardState(), new Coordinate(5, 1), new Coordinate(5, 2),
+				game.getPlayerTurn(), game.getNumMoves())));
+
+		assertTrue(game.hasNoMoves(Owner.Player1));
+		assertEquals(Owner.Player2, game.getWinner());
+	}
+	
+	@Test
+	public void testPlayer1WinThroughtRabbitElimination() {
+		HashMap<Coordinate, AbstractPiece> p = new HashMap<Coordinate, AbstractPiece>();
+		p.put(new Coordinate(3, 3), new Rabbit(Owner.Player1));
+		p.put(new Coordinate(3, 5), new Elephant(Owner.Player2));
+
+		Game game = new Game(new BoardState(p));
+		assertEquals(Owner.Nobody, game.getWinner());
+
+		assertTrue(game.move(new RegularMove(game.getBoardState(), new Coordinate(3, 3), new Coordinate(3, 4),
+				game.getPlayerTurn(), game.getNumMoves())));
+		
+		assertEquals(Owner.Player1, game.getWinner());
+	}
+	@Test
+	public void testPlayer2WinThroughtRabbitElimination() {
+		HashMap<Coordinate, AbstractPiece> p = new HashMap<Coordinate, AbstractPiece>();
+		p.put(new Coordinate(3, 3), new Elephant(Owner.Player1));
+		p.put(new Coordinate(3, 5), new Rabbit(Owner.Player2));
+
+		Game game = new Game(new BoardState(p));
+		assertEquals(Owner.Nobody, game.getWinner());
+
+		assertTrue(game.move(new RegularMove(game.getBoardState(), new Coordinate(3, 3), new Coordinate(3, 4),
+				game.getPlayerTurn(), game.getNumMoves())));
+		
+		assertEquals(Owner.Player2, game.getWinner());
+	}
+
 	// move(int, int, int) used to be row,col,dir. dir enum: 0 = up, 1 = right, 2 = down, 3 = left
 	@Test
 	public void testPlayer2Win() {

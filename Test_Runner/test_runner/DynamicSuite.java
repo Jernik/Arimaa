@@ -30,6 +30,7 @@ public class DynamicSuite extends Suite {
 						break;
 					}
 				}
+				reader.close();
 				if (notFound) {
 					continue;
 				}
