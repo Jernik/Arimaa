@@ -1,6 +1,9 @@
 package test_runner;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import org.junit.runners.Suite;
@@ -18,6 +21,21 @@ public class DynamicSuite extends Suite {
 		ArrayList<Class<?>> clazzez = new ArrayList<Class<?>>();
 		System.out.println("testing classes in package: " + packageName + " ");
 		for (File f : dir.listFiles()) {
+			try {
+				BufferedReader reader = new BufferedReader(new FileReader(f));
+				boolean notFound = true;
+				while (reader.ready()) {
+					if (reader.readLine().indexOf("@Test") != -1) {
+						notFound = false;
+						break;
+					}
+				}
+				if (notFound) {
+					continue;
+				}
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
 			String fileName = f.getName().replace(".java", "");
 			Class<?> clazz;
 			try {

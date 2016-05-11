@@ -10,6 +10,10 @@ import org.junit.runners.MethodSorters;
 
 import board.BoardState;
 import board.Coordinate;
+import move_commands.MoveCommand;
+import move_commands.PullMove;
+import move_commands.PullSetup;
+import move_commands.RegularMove;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestPullInvalid extends PullSetup {
