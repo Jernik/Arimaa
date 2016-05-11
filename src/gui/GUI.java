@@ -1,6 +1,7 @@
 package gui;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -214,6 +215,12 @@ public class GUI {
 	}
 
 	public void renderInitialBoard() {
+		for (Component comp : this.gameBoardPanel.getComponents()) {
+			if (comp instanceof ImagePanel) {
+				this.gameBoardPanel.remove(comp);
+			}
+		}
+		this.boardPieces.clear();
 		BoardState boardState = this.getGame().getBoardState();
 		for (Coordinate coor : boardState.getAllCoordinates()) {
 			AbstractPiece piece = boardState.getPieceAt(coor);
@@ -222,6 +229,13 @@ public class GUI {
 			imgPanel.setCoordinate(coor);
 			imgPanel.setVisible(true);
 			this.boardPieces.put(coor, imgPanel);
+		}
+		moveCountLabel.setText("<html> <b>" + "Moves Left: \n" + getGame().getNumMoves() + "</b></html>");
+		turnCountLabel.setText("<html> <b>" + "Turn: " + getGame().getTurnNumber() + "</b></html>");
+		if (getGame().getPlayerTurn() == Owner.Player1) {
+			turnIndicatorLabel.setText("<html> <b>" + getGame().getP1Name() + "'s turn" + "</b></html>");
+		} else {
+			turnIndicatorLabel.setText("<html> <b>" + getGame().getP2Name() + "'s turn" + "</b></html>");
 		}
 	}
 
@@ -277,7 +291,7 @@ public class GUI {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			getGame().undoMove();
-			rerenderBoard();
+			renderInitialBoard();
 		}
 	}
 
