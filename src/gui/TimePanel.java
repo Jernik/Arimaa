@@ -38,7 +38,7 @@ public class TimePanel {
 				}
 				if (s == 0) {
 					game.setWinner(game.getOtherPlayerTurn());
-					gui.renderBoard();// to show winner pane
+					gui.rerenderBoard();// to show winner pane
 				}
 				int displays, m;
 				m = s / 60;

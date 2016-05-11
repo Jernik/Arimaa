@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 
 import javax.swing.ImageIcon;
@@ -26,6 +25,7 @@ import board.Coordinate;
 import game.Game;
 import listeners.LoadGameListener;
 import listeners.NewGameListener;
+import move_commands.CoordinatePair;
 import move_commands.MoveCommand;
 import piece.AbstractPiece;
 import piece.Owner;
@@ -214,35 +214,30 @@ public class GUI {
 	}
 
 	public void renderInitialBoard() {
-		// if (getGame().getWinner() != Owner.Nobody) {
-		// createWinWindow();
-		// }
 		BoardState boardState = this.getGame().getBoardState();
 		for (Coordinate coor : boardState.getAllCoordinates()) {
 			AbstractPiece piece = boardState.getPieceAt(coor);
 			ImagePanel imgPanel = new ImagePanel(piece.getImage());
 			this.gameBoardPanel.add(imgPanel);
-			imgPanel.setRow(coor.getY());
-			imgPanel.setColumn(coor.getX());
-			imgPanel.setLocation(imgPanel.getPixelX(), imgPanel.getPixelY());
+			imgPanel.setCoordinate(coor);
 			imgPanel.setVisible(true);
 			this.boardPieces.put(coor, imgPanel);
 		}
 	}
 
-	public void renderBoard() {
+	public void rerenderBoard() {
 		if (getGame().getWinner() != Owner.Nobody) {
 			createWinWindow();
 		}
 		
 		MoveCommand lastMove = this.game.getLastMove();
-		HashMap<Coordinate, Coordinate> affectedCoors = lastMove.getAffectedCoordinates();
-		for (Coordinate removedCoor : affectedCoors.keySet()) {
-			Coordinate newCoor = affectedCoors.get(removedCoor);
-			ImagePanel panel = this.boardPieces.get(removedCoor);
+		for (CoordinatePair pair : lastMove.getAffectedCoordinates()) {
+			Coordinate oldCoor = pair.getFrom();
+			Coordinate newCoor = pair.getTo();
+			ImagePanel panel = this.boardPieces.get(oldCoor);
 			panel.setCoordinate(newCoor);
 
-			this.boardPieces.remove(removedCoor);
+			this.boardPieces.remove(oldCoor);
 			this.boardPieces.put(newCoor, panel);
 		}
 		for (Coordinate coor : game.getDeadCoors()) {
@@ -250,13 +245,6 @@ public class GUI {
 			this.boardPieces.remove(coor);
 		}
 		game.clearDeadCoors();
-		// for (int i = 0; i < 8; i++) {
-		// for (int k = 0; k < 8; k++) {
-		// if (boardPieces[i][k] != null)
-		// this.gameBoardPanel.remove(this.boardPieces[i][k]);
-		// this.boardPieces[i][k] = null;
-		// }
-		// }
 		moveCountLabel.setText("<html> <b>" + "Moves Left: \n" + getGame().getNumMoves() + "</b></html>");
 		turnCountLabel.setText("<html> <b>" + "Turn: " + getGame().getTurnNumber() + "</b></html>");
 		if (getGame().getPlayerTurn() == Owner.Player1) {
@@ -264,22 +252,6 @@ public class GUI {
 		} else {
 			turnIndicatorLabel.setText("<html> <b>" + getGame().getP2Name() + "'s turn" + "</b></html>");
 		}
-		// renderInitialBoard();
-		System.out.println();
-		ArrayList<Coordinate> list = new ArrayList<Coordinate>();
-		for (Coordinate coor: this.boardPieces.keySet()) {
-			list.add(coor);
-		}
-		list.sort(new Comparator<Coordinate>() {
-			@Override
-			public int compare(Coordinate c1, Coordinate c2) {
-				return Integer.compare(c1.getY() * 10 + c1.getX(), c2.getY() * 10 + c2.getX());
-			}
-		});
-		for (Coordinate coor : list) {
-//			System.out.println(coor);
-		}
-
 	}
 
 	// ACTION LISTENERS
@@ -305,7 +277,7 @@ public class GUI {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			getGame().undoMove();
-			renderBoard();
+			rerenderBoard();
 		}
 	}
 

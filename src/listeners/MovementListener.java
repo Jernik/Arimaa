@@ -69,7 +69,7 @@ public class MovementListener implements MouseListener {
 				RegularMove m = new RegularMove(game.getBoardState(), this.selectedPieceCoord, coor,
 						this.game.getPlayerTurn(), game.getNumMoves());
 				if (game.move(m)) {
-					gui.renderBoard();
+					gui.rerenderBoard();
 				}
 				this.selectedPiece = null;
 				this.secondSelectedPieceCoord = null;
@@ -95,7 +95,7 @@ public class MovementListener implements MouseListener {
 							this.secondSelectedPieceCoord, game.getPlayerTurn(), game.getNumMoves());
 				}
 				if (game.move(move)) {
-					gui.renderBoard();
+					gui.rerenderBoard();
 				}
 
 				this.selectedPiece = null;
