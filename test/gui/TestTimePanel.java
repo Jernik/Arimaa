@@ -18,14 +18,14 @@ public class TestTimePanel {
 
 	@Test
 	public void testInitializes() {
-		TimePanel tp = new TimePanel(new GUI(), new Game(), 15, new JLabel());
+		TimePanel tp = new TimePanel(new GUI(false), new Game(), 15, new JLabel());
 		assertNotNull(tp);
 		tp.stopTimer();
 	}
 	
 	@Test
 	public void testUpdate() {
-		TimePanel tp = new TimePanel(new GUI(), new Game(), 15, new JLabel());
+		TimePanel tp = new TimePanel(new GUI(false), new Game(), 15, new JLabel());
 		//tp.update(5, 0);
 		try {
 			Thread.sleep(50);
@@ -39,7 +39,7 @@ public class TestTimePanel {
 	
 	@Test
 	public void testCancelTimer(){
-		GUI gui=new GUI();
+		GUI gui=new GUI(false);
 		Game game=new Game();
 		TimePanel tp= new TimePanel(gui, game, 1, new JLabel());
 		game.setWinner(Owner.Player1);
@@ -55,7 +55,7 @@ public class TestTimePanel {
 
 	@Test
 	public void testSwitchMove(){
-		GUI gui=new GUI();
+		GUI gui=new GUI(false);
 		Game game=new Game();
 		TimePanel tp= new TimePanel(gui, game, 9, new JLabel());
 

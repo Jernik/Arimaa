@@ -60,6 +60,12 @@ public class GUI {
 		mainMenuFrame.setTitle("Welcome to Arimaa!");
 		mainMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
+	
+	public GUI(boolean shouldInit) {
+		this.p1Name = "Player 1";
+		this.p2Name = "Player 2";
+		this.game = new Game();
+	}
 
 	public static void main(String[] args) {
 		GUI g = new GUI();
