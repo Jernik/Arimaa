@@ -160,11 +160,11 @@ public class Game implements Serializable {
 		checkDeaths(new Coordinate(2, 5));
 		checkDeaths(new Coordinate(5, 2));
 		checkDeaths(new Coordinate(5, 5));
-		checkWin();
 		if (numMoves <= 0) {
 			numMoves = 4;
 			this.incrementTurn();
 		}
+		checkWin();
 	}
 
 	public boolean hasNoMoves(Owner player) {
@@ -315,6 +315,9 @@ public class Game implements Serializable {
 		if (!player2Exists) {
 			winner = Owner.Player1;
 			return;
+		}
+		if (this.hasNoMoves(this.getPlayerTurn())) {
+			winner = this.getOtherPlayerTurn();
 		}
 	}
 
