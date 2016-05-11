@@ -256,6 +256,7 @@ public class GUI {
 		}
 		for (Coordinate coor : game.getDeadCoors()) {
 			this.gameBoardPanel.remove(this.boardPieces.get(coor));
+			this.gameBoardPanel.repaint();
 			this.boardPieces.remove(coor);
 		}
 		game.clearDeadCoors();
