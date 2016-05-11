@@ -1,6 +1,6 @@
 package ai;
 
 @FunctionalInterface
-interface Generater {
+public interface Generater {
 	public Object generate();
 }

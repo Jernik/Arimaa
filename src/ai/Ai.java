@@ -117,6 +117,9 @@ public class Ai {
 		Set<Coordinate> coors = new HashSet<Coordinate>(this.game.getBoardState().getAllCoordinates());
 		// removes all non ai controlled pieces
 		coors.removeIf((Coordinate coor) -> this.game.getPieceAt(coor).getOwner() != this.owner);
+		if (coors.size() == 0) {
+			return new Coordinate(-1, -1);
+		}
 
 		int randomIndex = new Random().nextInt(coors.size());
 		Iterator<Coordinate> iter = coors.iterator();
