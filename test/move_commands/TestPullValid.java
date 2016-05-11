@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.util.HashSet;
+import java.util.HashMap;
 
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -24,26 +24,25 @@ public class TestPullValid extends PullSetup {
 	}
 
 	@Test
-	public void testCanGetAffectedPieces() {
+	public void testCanGetAffectedCoordinates() {
 		Coordinate c1 = new Coordinate(5, 5);
 		Coordinate c2 = new Coordinate(5, 4);
 		Coordinate c3 = new Coordinate(5, 6);
 
-		HashSet<Coordinate> set = new HashSet<Coordinate>();
-		set.add(c1);
-		set.add(c2);
-		set.add(c3);
+		HashMap<Coordinate, Coordinate> map = new HashMap<Coordinate, Coordinate>();
+		map.put(c1, c2);
+		map.put(c3, c1);
 
 		PullMove move = new PullMove(pullingGame.getBoardState(), c1, c2, c3, pullingGame.getPlayerTurn(),
 				pullingGame.getNumMoves());
 
-		assertEquals(set, move.getAffectedCoordinates());
+		assertEquals(map, move.getAffectedCoordinates());
 	}
 
 	@Test
 	public void testGetAffectedPiecesIsEmptyIfInvalid() {
-		PullMove move = new PullMove(pullingGame.getBoardState(), new Coordinate(1, 5), new Coordinate(5, 4), new Coordinate(5, 6), pullingGame.getPlayerTurn(),
-				pullingGame.getNumMoves());
+		PullMove move = new PullMove(pullingGame.getBoardState(), new Coordinate(1, 5), new Coordinate(5, 4),
+				new Coordinate(5, 6), pullingGame.getPlayerTurn(), pullingGame.getNumMoves());
 
 		assertTrue(move.getAffectedCoordinates().isEmpty());
 	}

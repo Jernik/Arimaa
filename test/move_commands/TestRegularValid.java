@@ -5,7 +5,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.HashMap;
-import java.util.HashSet;
 
 import org.junit.Test;
 
@@ -22,21 +21,20 @@ import piece.Rabbit;
 
 public class TestRegularValid extends RegularSetup {
 	@Test
-	public void testCanGetAffectedPieces() {
+	public void testCanGetAffectedCoordinates() {
 		Coordinate c1 = new Coordinate(1, 1);
 		Coordinate c2 = new Coordinate(1, 2);
 
-		HashSet<Coordinate> set = new HashSet<Coordinate>();
-		set.add(c1);
-		set.add(c2);
+		HashMap<Coordinate, Coordinate> map = new HashMap<Coordinate, Coordinate>();
+		map.put(c1, c2);
 
 		MoveCommand move = new RegularMove(g.getBoardState(), c1, c2, g.getPlayerTurn(), g.getNumMoves());
 
-		assertEquals(set, move.getAffectedCoordinates());
+		assertEquals(map, move.getAffectedCoordinates());
 	}
 
 	@Test
-	public void testGetAffectedPiecesIsEmptyIfInvalid() {
+	public void testGetAffectedCoordinatesIsEmptyIfInvalid() {
 		MoveCommand move = new RegularMove(g.getBoardState(), new Coordinate(-1, 6), new Coordinate(1, 5),
 				g.getPlayerTurn(), g.getNumMoves());
 

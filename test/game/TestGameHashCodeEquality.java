@@ -61,6 +61,14 @@ public class TestGameHashCodeEquality {
 	}
 
 	@Test
+	public void testGameNotEqualIfDifferentDeadCoors() {
+		testHashCodeNotEquals(() -> {
+			this.g1.getDeadCoors().add(new Coordinate(1, 0));
+		});
+	}
+
+
+@Test
 	public void testGameNotEqualIfDifferentBoardStates() {
 		testHashCodeNotEquals(() -> {
 			this.g1.getBoardState().movePiece(new Coordinate(0, 2), new Coordinate(0, 3));

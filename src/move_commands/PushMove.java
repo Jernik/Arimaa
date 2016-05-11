@@ -1,6 +1,6 @@
 package move_commands;
 
-import java.util.HashSet;
+import java.util.HashMap;
 
 import board.BoardState;
 import board.Coordinate;
@@ -39,14 +39,15 @@ public class PushMove extends MoveCommand {
 		return NUMBER_OF_MOVES;
 	}
 
-	public HashSet<Coordinate> getAffectedCoordinates() {
-		HashSet<Coordinate> set = super.getAffectedCoordinates();
+	@Override
+	public HashMap<Coordinate, Coordinate> getAffectedCoordinates() {
+		HashMap<Coordinate, Coordinate> map = super.getAffectedCoordinates();
 		if (this.isValidMove()) {
-			set.add(this.pushPiecePosition);
+			map.put(this.newPosition, this.pushPiecePosition);
 		}
-		return set;
+		return map;
 	}
-	
+
 	// you should assume that you are given 3 random coordinates, that might or might not be valid
 	@Override
 	public boolean isValidMove() {

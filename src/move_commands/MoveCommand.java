@@ -1,7 +1,7 @@
 package move_commands;
 
 import java.io.Serializable;
-import java.util.HashSet;
+import java.util.HashMap;
 
 import board.BoardState;
 import board.Coordinate;
@@ -33,6 +33,7 @@ public abstract class MoveCommand implements Serializable {
 	abstract public BoardState execute();
 
 	abstract public boolean isValidMove();
+
 	abstract public int getNumberOfMoves();
 
 	public BoardState getOriginalBoard() {
@@ -54,14 +55,13 @@ public abstract class MoveCommand implements Serializable {
 	public int getMovesLeft() {
 		return this.movesLeft;
 	}
-	
-	public HashSet<Coordinate> getAffectedCoordinates() {
-		HashSet<Coordinate> set = new HashSet<Coordinate>();
+
+	public HashMap<Coordinate, Coordinate> getAffectedCoordinates() {
+		HashMap<Coordinate, Coordinate> map = new HashMap<Coordinate, Coordinate>();
 		if (this.isValidMove()) {
-			set.add(this.originalPosition);
-			set.add(this.newPosition);
+			map.put(this.originalPosition, this.newPosition);
 		}
-		return set;
+		return map;
 	}
 
 	@Override
@@ -77,7 +77,8 @@ public abstract class MoveCommand implements Serializable {
 	protected boolean eq(MoveCommand moveCommand) {
 		return this.originalPosition.equals(moveCommand.getOriginalPosition())
 				&& this.newPosition.equals(moveCommand.getNewPosition()) && this.turn.equals(moveCommand.getTurn())
-				&& this.getNumberOfMoves() == moveCommand.getNumberOfMoves() && this.movesLeft == moveCommand.getMovesLeft()
+				&& this.getNumberOfMoves() == moveCommand.getNumberOfMoves()
+				&& this.movesLeft == moveCommand.getMovesLeft()
 				&& this.originalBoard.equals(moveCommand.getOriginalBoard())
 				&& this.newBoard.equals(moveCommand.newBoard);
 	}
