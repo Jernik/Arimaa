@@ -37,7 +37,7 @@
 
   <target name="build" depends="compile">
     <mkdir dir="${test.build.dir}"/>
-    <javac srcdir="test:testSuites:src:test_runner" destdir="${test.build.dir}" includeantruntime="false" >
+    <javac srcdir="test:TestSuites:src:Test_Runner" destdir="${test.build.dir}" includeantruntime="false" >
 		<classpath refid="classpath.test"/>
 	</javac>
     <echo message="Build done" />
@@ -46,7 +46,7 @@
   <!-- Test and build all files  -->
   <!-- To run this: use "ant" (default) or "ant run" -->
   <target name="run" depends="build">
-    <junit printsummary="on" haltonfailure="no">
+    <junit printsummary="on" haltonfailure="yes">
         <classpath>
           <path refid="classpath.test" />
           <pathelement location="${test.build.dir}"/>
