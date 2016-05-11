@@ -1,7 +1,13 @@
 package gui;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Image;
+
+import javax.swing.ImageIcon;
+import javax.swing.JPanel;
+
+import board.Coordinate;
 
 public class ImagePanel extends JPanel {
 
@@ -31,6 +37,12 @@ public class ImagePanel extends JPanel {
         g.drawImage(img, 0, 0, null);
     }
 
+    public void setCoordinate(Coordinate coor) {
+		this.setRow(coor.getY());
+		this.setColumn(coor.getX());
+		this.setLocation(this.getPixelX(), this.getPixelY());
+    }
+    
     public void setRow(int row) {
         this.row = row;
     }

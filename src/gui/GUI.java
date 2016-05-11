@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -24,6 +26,7 @@ import board.Coordinate;
 import game.Game;
 import listeners.LoadGameListener;
 import listeners.NewGameListener;
+import move_commands.MoveCommand;
 import piece.AbstractPiece;
 import piece.Owner;
 
@@ -38,7 +41,7 @@ public class GUI {
 	private String p2Name;
 
 	private ImagePanel gameBoardPanel;
-	private ImagePanel[][] boardPieces;
+	private HashMap<Coordinate, ImagePanel> boardPieces;
 	private TimePanel timer;
 
 	private JTextField p1TextField;
@@ -53,7 +56,7 @@ public class GUI {
 		this.p1Name = "Player 1";
 		this.p2Name = "Player 2";
 		this.game = new Game();
-		this.boardPieces = new ImagePanel[8][8];
+		this.boardPieces = new HashMap<Coordinate, ImagePanel>();
 		this.activeFrames = new ArrayList<JFrame>();
 		JFrame mainMenuFrame = new JFrame();
 		this.getActiveFrames().add(mainMenuFrame);
@@ -142,7 +145,7 @@ public class GUI {
 		this.gameBoardPanel = gameBoardPanel;
 	}
 
-	public ImagePanel[][] getBoardPieces() {
+	public HashMap<Coordinate, ImagePanel> getBoardPieces() {
 		return boardPieces;
 	}
 
@@ -211,9 +214,9 @@ public class GUI {
 	}
 
 	public void renderInitialBoard() {
-		if (getGame().getWinner() != Owner.Nobody) {
-			createWinWindow();
-		}
+		// if (getGame().getWinner() != Owner.Nobody) {
+		// createWinWindow();
+		// }
 		BoardState boardState = this.getGame().getBoardState();
 		for (Coordinate coor : boardState.getAllCoordinates()) {
 			AbstractPiece piece = boardState.getPieceAt(coor);
@@ -223,18 +226,37 @@ public class GUI {
 			imgPanel.setColumn(coor.getX());
 			imgPanel.setLocation(imgPanel.getPixelX(), imgPanel.getPixelY());
 			imgPanel.setVisible(true);
-			this.boardPieces[coor.getX()][coor.getY()] = imgPanel;
+			this.boardPieces.put(coor, imgPanel);
 		}
 	}
 
 	public void renderBoard() {
-		for (int i = 0; i < 8; i++) {
-			for (int k = 0; k < 8; k++) {
-				if (boardPieces[i][k] != null)
-					this.gameBoardPanel.remove(this.boardPieces[i][k]);
-				this.boardPieces[i][k] = null;
-			}
+		if (getGame().getWinner() != Owner.Nobody) {
+			createWinWindow();
 		}
+		
+		MoveCommand lastMove = this.game.getLastMove();
+		HashMap<Coordinate, Coordinate> affectedCoors = lastMove.getAffectedCoordinates();
+		for (Coordinate removedCoor : affectedCoors.keySet()) {
+			Coordinate newCoor = affectedCoors.get(removedCoor);
+			ImagePanel panel = this.boardPieces.get(removedCoor);
+			panel.setCoordinate(newCoor);
+
+			this.boardPieces.remove(removedCoor);
+			this.boardPieces.put(newCoor, panel);
+		}
+		for (Coordinate coor : game.getDeadCoors()) {
+			this.gameBoardPanel.remove(this.boardPieces.get(coor));
+			this.boardPieces.remove(coor);
+		}
+		game.clearDeadCoors();
+		// for (int i = 0; i < 8; i++) {
+		// for (int k = 0; k < 8; k++) {
+		// if (boardPieces[i][k] != null)
+		// this.gameBoardPanel.remove(this.boardPieces[i][k]);
+		// this.boardPieces[i][k] = null;
+		// }
+		// }
 		moveCountLabel.setText("<html> <b>" + "Moves Left: \n" + getGame().getNumMoves() + "</b></html>");
 		turnCountLabel.setText("<html> <b>" + "Turn: " + getGame().getTurnNumber() + "</b></html>");
 		if (getGame().getPlayerTurn() == Owner.Player1) {
@@ -242,7 +264,22 @@ public class GUI {
 		} else {
 			turnIndicatorLabel.setText("<html> <b>" + getGame().getP2Name() + "'s turn" + "</b></html>");
 		}
-		renderInitialBoard();
+		// renderInitialBoard();
+		System.out.println();
+		ArrayList<Coordinate> list = new ArrayList<Coordinate>();
+		for (Coordinate coor: this.boardPieces.keySet()) {
+			list.add(coor);
+		}
+		list.sort(new Comparator<Coordinate>() {
+			@Override
+			public int compare(Coordinate c1, Coordinate c2) {
+				return Integer.compare(c1.getY() * 10 + c1.getX(), c2.getY() * 10 + c2.getX());
+			}
+		});
+		for (Coordinate coor : list) {
+//			System.out.println(coor);
+		}
+
 	}
 
 	// ACTION LISTENERS
