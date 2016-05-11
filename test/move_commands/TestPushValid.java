@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 
 import org.junit.Test;
 
@@ -29,9 +29,9 @@ public class TestPushValid extends PushSetup {
 		Coordinate c2 = new Coordinate(4, 3);
 		Coordinate c3 = new Coordinate(4, 2);
 
-		HashMap<Coordinate, Coordinate> map = new HashMap<Coordinate, Coordinate>();
-		map.put(c1, c2);
-		map.put(c2, c3);
+		ArrayList<CoordinatePair> map = new ArrayList<CoordinatePair>();
+		map.add(new CoordinatePair(c2, c3));
+		map.add(new CoordinatePair(c1, c2));
 
 		PushMove move = new PushMove(g2.getBoardState(), c1, c2, c3, g2.getPlayerTurn(), g2.getNumMoves());
 

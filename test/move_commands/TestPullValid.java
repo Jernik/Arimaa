@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -29,9 +29,9 @@ public class TestPullValid extends PullSetup {
 		Coordinate c2 = new Coordinate(5, 4);
 		Coordinate c3 = new Coordinate(5, 6);
 
-		HashMap<Coordinate, Coordinate> map = new HashMap<Coordinate, Coordinate>();
-		map.put(c1, c2);
-		map.put(c3, c1);
+		ArrayList<CoordinatePair> map = new ArrayList<CoordinatePair>();
+		map.add(new CoordinatePair(c1, c2));
+		map.add(new CoordinatePair(c3, c1));
 
 		PullMove move = new PullMove(pullingGame.getBoardState(), c1, c2, c3, pullingGame.getPlayerTurn(),
 				pullingGame.getNumMoves());

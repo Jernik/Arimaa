@@ -1,7 +1,7 @@
 package move_commands;
 
 import java.io.Serializable;
-import java.util.HashMap;
+import java.util.ArrayList;
 
 import board.BoardState;
 import board.Coordinate;
@@ -56,12 +56,12 @@ public abstract class MoveCommand implements Serializable {
 		return this.movesLeft;
 	}
 
-	public HashMap<Coordinate, Coordinate> getAffectedCoordinates() {
-		HashMap<Coordinate, Coordinate> map = new HashMap<Coordinate, Coordinate>();
+	public ArrayList<CoordinatePair> getAffectedCoordinates() {
+		ArrayList<CoordinatePair> list = new ArrayList<CoordinatePair>();
 		if (this.isValidMove()) {
-			map.put(this.originalPosition, this.newPosition);
+			list.add(new CoordinatePair(this.originalPosition, this.newPosition));
 		}
-		return map;
+		return list;
 	}
 
 	@Override

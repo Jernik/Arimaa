@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.junit.Test;
@@ -25,8 +26,8 @@ public class TestRegularValid extends RegularSetup {
 		Coordinate c1 = new Coordinate(1, 1);
 		Coordinate c2 = new Coordinate(1, 2);
 
-		HashMap<Coordinate, Coordinate> map = new HashMap<Coordinate, Coordinate>();
-		map.put(c1, c2);
+		ArrayList<CoordinatePair> map = new ArrayList<CoordinatePair>();
+		map.add(new CoordinatePair(c1, c2));
 
 		MoveCommand move = new RegularMove(g.getBoardState(), c1, c2, g.getPlayerTurn(), g.getNumMoves());
 

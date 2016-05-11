@@ -1,6 +1,6 @@
 package move_commands;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 
 import board.BoardState;
 import board.Coordinate;
@@ -40,12 +40,12 @@ public class PushMove extends MoveCommand {
 	}
 
 	@Override
-	public HashMap<Coordinate, Coordinate> getAffectedCoordinates() {
-		HashMap<Coordinate, Coordinate> map = super.getAffectedCoordinates();
+	public ArrayList<CoordinatePair> getAffectedCoordinates() {
+		ArrayList<CoordinatePair> list = super.getAffectedCoordinates();
 		if (this.isValidMove()) {
-			map.put(this.newPosition, this.pushPiecePosition);
+			list.add(0, new CoordinatePair(this.newPosition, this.pushPiecePosition));
 		}
-		return map;
+		return list;
 	}
 
 	// you should assume that you are given 3 random coordinates, that might or might not be valid
