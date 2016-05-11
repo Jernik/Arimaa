@@ -189,10 +189,8 @@ public class Game implements Serializable {
 			return true;
 		}
 		// only need to check push because if you can pull you can do a regular move
-		if (this.numMoves < PushMove.NUMBER_OF_MOVES) {
-			if (hasPushMove(coor)) {
-				return true;
-			}
+		if (hasPushMove(coor)) {
+			return true;
 		}
 		return false;
 	}
@@ -228,8 +226,48 @@ public class Game implements Serializable {
 	}
 
 	public boolean hasPushMove(Coordinate coor) {
-		// assume cant make regular move
-		// TODO Auto-generated method stub
+		if (this.numMoves < PushMove.NUMBER_OF_MOVES) {
+			return false;
+		}
+		if (!coor.isValid()) {
+			return false;
+		}
+		BoardState board = this.getBoardState();
+		AbstractPiece piece = board.getPieceAt(coor);
+		Owner player = piece.getOwner();
+		HashSet<Coordinate> validCoors = new HashSet<Coordinate>();
+		validCoors.add(coor.up());
+		validCoors.add(coor.right());
+		validCoors.add(coor.down());
+		validCoors.add(coor.left());
+
+		for (Coordinate c : validCoors) {
+			if (c.isValid()) {
+				if (!board.isPieceAt(c)) {
+					continue;
+				}
+				AbstractPiece enemyPiece = board.getPieceAt(c);
+				if (enemyPiece.getOwner() == player) {
+					continue;
+				}
+				if (!piece.isStrongerThan(enemyPiece)) {
+					continue;
+				}
+				HashSet<Coordinate> enemyValidCoors = new HashSet<Coordinate>();
+				enemyValidCoors.add(c.up());
+				enemyValidCoors.add(c.right());
+				enemyValidCoors.add(c.down());
+				enemyValidCoors.add(c.left());
+				enemyValidCoors.remove(coor);
+				for (Coordinate enemyCoor : enemyValidCoors) {
+					if (enemyCoor.isValid()) {
+						if (!board.isPieceAt(enemyCoor)) {
+							return true;
+						}
+					}
+				}
+			}
+		}
 		return false;
 	}
 
