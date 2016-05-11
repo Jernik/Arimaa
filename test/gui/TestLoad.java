@@ -23,7 +23,7 @@ import piece.Owner;
 public class TestLoad extends EasyMockSupport {
 	@Test
 	public void testHappyLoad() {
-		GUI gui = new GUI();
+		GUI gui = new GUI(false);
 		gui.saveFile();
 
 		Game before = new Game(gui.getGame());
@@ -33,7 +33,7 @@ public class TestLoad extends EasyMockSupport {
 
 	@Test
 	public void testLoadWithChanges() {
-		GUI gui = new GUI();
+		GUI gui = new GUI(false);
 		gui.saveFile();
 
 		Game before = new Game(gui.getGame());
@@ -49,7 +49,7 @@ public class TestLoad extends EasyMockSupport {
 
 	@Test
 	public void testLoadFileReturnsFalseIfFileDoesntExist() {
-		GUI gui = new GUI();
+		GUI gui = new GUI(false);
 		gui.saveFile();
 
 		Game before = new Game(gui.getGame());
@@ -97,7 +97,7 @@ public class TestLoad extends EasyMockSupport {
 			fail("Couldn't write a serializble file");
 		}
 
-		GUI gui = new GUI();
+		GUI gui = new GUI(false);
 		Ai ai = new Ai(Owner.Player1, gui.getGame());
 		gui.getGame().move(ai.generateMove());
 		Game afterMove = new Game(gui.getGame());

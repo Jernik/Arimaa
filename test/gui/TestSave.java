@@ -36,7 +36,7 @@ public class TestSave extends EasyMockSupport {
 		this.deleteRecursivly(d);
 		assertFalse(d.exists());
 
-		GUI gui = new GUI();
+		GUI gui = new GUI(false);
 		assertTrue(gui.saveFile());
 
 		assertTrue(d.exists());
@@ -47,7 +47,7 @@ public class TestSave extends EasyMockSupport {
 	public void testSaveFileCreatesFileIfNeeded() {
 		try {
 			Files.delete(Paths.get(GUI.SAVE_PATH));
-			GUI gui = new GUI();
+			GUI gui = new GUI(false);
 
 			assertTrue(gui.saveFile());
 			File f = new File(GUI.SAVE_PATH);
@@ -61,7 +61,7 @@ public class TestSave extends EasyMockSupport {
 	@Test
 	public void testSaveFileChangesFile() {
 		try {
-			GUI gui = new GUI();
+			GUI gui = new GUI(false);
 			gui.saveFile();
 			byte[] before = Files.readAllBytes(Paths.get(GUI.SAVE_PATH));
 
