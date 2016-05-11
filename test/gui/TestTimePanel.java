@@ -28,7 +28,7 @@ public class TestTimePanel {
 		TimePanel tp = new TimePanel(new GUI(), new Game(), 15, new JLabel());
 		//tp.update(5, 0);
 		try {
-			Thread.sleep(500);
+			Thread.sleep(50);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -41,10 +41,10 @@ public class TestTimePanel {
 	public void testCancelTimer(){
 		GUI gui=new GUI();
 		Game game=new Game();
-		TimePanel tp= new TimePanel(gui, game, 3, new JLabel());
+		TimePanel tp= new TimePanel(gui, game, 1, new JLabel());
 		game.setWinner(Owner.Player1);
 		try {
-			Thread.sleep(3500);
+			Thread.sleep(1100);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -61,13 +61,7 @@ public class TestTimePanel {
 
 		game.incrementTurn();
 		try {
-			Thread.sleep(100);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
-		}
-		try {
-			Thread.sleep(100);
+			Thread.sleep(10);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			//e.printStackTrace();
