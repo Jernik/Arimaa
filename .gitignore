@@ -12,3 +12,4 @@ Arimaa.iml
 .metadata/*
 /out/*
 /out/
+build/*
