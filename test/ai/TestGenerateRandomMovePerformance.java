@@ -12,7 +12,7 @@ import org.junit.runners.MethodSorters;
 public class TestGenerateRandomMovePerformance extends AiSetup {
 	@BeforeClass
 	public static void setupStressSettings() {
-		ITERATION_SIZE = 100_000;
+		ITERATION_SIZE = 10_000;
 	}
 
 	@AfterClass
