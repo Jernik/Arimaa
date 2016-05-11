@@ -1,6 +1,7 @@
 package move_commands;
 
 import java.io.Serializable;
+import java.util.HashSet;
 
 import board.BoardState;
 import board.Coordinate;
@@ -49,10 +50,18 @@ public abstract class MoveCommand implements Serializable {
 	public Owner getTurn() {
 		return turn;
 	}
-	
 
 	public int getMovesLeft() {
 		return this.movesLeft;
+	}
+	
+	public HashSet<Coordinate> getAffectedCoordinates() {
+		HashSet<Coordinate> set = new HashSet<Coordinate>();
+		if (this.isValidMove()) {
+			set.add(this.originalPosition);
+			set.add(this.newPosition);
+		}
+		return set;
 	}
 
 	@Override

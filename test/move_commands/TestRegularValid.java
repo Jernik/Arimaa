@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.HashMap;
+import java.util.HashSet;
 
 import org.junit.Test;
 
@@ -20,6 +21,28 @@ import piece.Owner;
 import piece.Rabbit;
 
 public class TestRegularValid extends RegularSetup {
+	@Test
+	public void testCanGetAffectedPieces() {
+		Coordinate c1 = new Coordinate(1, 1);
+		Coordinate c2 = new Coordinate(1, 2);
+
+		HashSet<Coordinate> set = new HashSet<Coordinate>();
+		set.add(c1);
+		set.add(c2);
+
+		MoveCommand move = new RegularMove(g.getBoardState(), c1, c2, g.getPlayerTurn(), g.getNumMoves());
+
+		assertEquals(set, move.getAffectedCoordinates());
+	}
+
+	@Test
+	public void testGetAffectedPiecesIsEmptyIfInvalid() {
+		MoveCommand move = new RegularMove(g.getBoardState(), new Coordinate(-1, 6), new Coordinate(1, 5),
+				g.getPlayerTurn(), g.getNumMoves());
+
+		assertTrue(move.getAffectedCoordinates().isEmpty());
+	}
+
 	@Test
 	public void testMoveLegal() {
 		HashMap<Coordinate, AbstractPiece> p1 = new HashMap<Coordinate, AbstractPiece>();
@@ -45,8 +68,8 @@ public class TestRegularValid extends RegularSetup {
 
 	@Test
 	public void testRabbitCanMoveForwards1() {
-		MoveCommand move = new RegularMove(g.getBoardState(), new Coordinate(0, 1), new Coordinate(0, 2), g.getPlayerTurn(),
-				g.getNumMoves());
+		MoveCommand move = new RegularMove(g.getBoardState(), new Coordinate(0, 1), new Coordinate(0, 2),
+				g.getPlayerTurn(), g.getNumMoves());
 
 		assertTrue(move.isValidMove());
 		assertTrue(g.move(move));
@@ -58,8 +81,8 @@ public class TestRegularValid extends RegularSetup {
 	@Test
 	public void testRabbitCanMoveForwards2() {
 		g.incrementTurn();
-		MoveCommand move = new RegularMove(g.getBoardState(), new Coordinate(0, 6), new Coordinate(0, 5), g.getPlayerTurn(),
-				g.getNumMoves());
+		MoveCommand move = new RegularMove(g.getBoardState(), new Coordinate(0, 6), new Coordinate(0, 5),
+				g.getPlayerTurn(), g.getNumMoves());
 
 		assertTrue(move.isValidMove());
 		assertTrue(g.move(move));

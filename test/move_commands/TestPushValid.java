@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.HashSet;
+
 import org.junit.Test;
 
 import board.Coordinate;
@@ -19,6 +21,30 @@ public class TestPushValid extends PushSetup {
 		PushMove move = new PushMove(g2.getBoardState(), new Coordinate(4, 4), new Coordinate(4, 3), coor,
 				g2.getPlayerTurn(), g2.getNumMoves());
 		assertEquals(coor, move.getPushPiecePlace());
+	}
+
+	@Test
+	public void testCanGetAffectedPieces() {
+		Coordinate c1 = new Coordinate(4, 4);
+		Coordinate c2 = new Coordinate(4, 3);
+		Coordinate c3 = new Coordinate(4, 2);
+
+		HashSet<Coordinate> set = new HashSet<Coordinate>();
+		set.add(c1);
+		set.add(c2);
+		set.add(c3);
+
+		PushMove move = new PushMove(g2.getBoardState(), c1, c2, c3, g2.getPlayerTurn(), g2.getNumMoves());
+
+		assertEquals(set, move.getAffectedCoordinates());
+	}
+
+	@Test
+	public void testGetAffectedPiecesIsEmptyIfInvalid() {
+		PushMove move = new PushMove(g2.getBoardState(), new Coordinate(-1, 4), new Coordinate(4, 3),
+				new Coordinate(4, 2), g2.getPlayerTurn(), g2.getNumMoves());
+
+		assertTrue(move.getAffectedCoordinates().isEmpty());
 	}
 
 	@Test
