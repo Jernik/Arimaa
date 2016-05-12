@@ -120,15 +120,6 @@ public class BoardState implements Serializable {
 	}
 
 	@Override
-	public BoardState clone() {
-		HashMap<Coordinate, AbstractPiece> copiedPieces = new HashMap<Coordinate, AbstractPiece>();
-		for (Coordinate key : this.pieces.keySet()) {
-			copiedPieces.put(new Coordinate(key), this.pieces.get(key));
-		}
-		return new BoardState(copiedPieces);
-	}
-
-	@Override
 	public boolean equals(Object o) {
 		if (!(o instanceof BoardState)) {
 			return false;
