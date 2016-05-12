@@ -16,6 +16,7 @@ import java.util.HashMap;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -34,6 +35,8 @@ import piece.Owner;
 public class GUI {
 	public static final String SAVE_FOLDER = "save/";
 	public static final String SAVE_PATH = SAVE_FOLDER + "game.ser";
+	public static final int PLAYER_AI_SLEEP = 500;
+	public static final int AI_ONLY_SLEEP = 200;
 
 	private Game game;
 	private ArrayList<JFrame> activeFrames;
@@ -47,6 +50,8 @@ public class GUI {
 
 	private JTextField p1TextField;
 	private JTextField p2TextField;
+	private JCheckBox p1AiCheckBox;
+	private JCheckBox p2AiCheckBox;
 	private JComboBox<Integer> timerComboBox;
 	private JLabel moveCountLabel;
 	private JLabel turnCountLabel;
@@ -158,6 +163,14 @@ public class GUI {
 		this.timer = timer;
 	}
 
+	public JTextField getP1TextField() {
+		return p1TextField;
+	}
+
+	public void setP1TextField(JTextField p1TextField) {
+		this.p1TextField = p1TextField;
+	}
+
 	public JTextField getP2TextField() {
 		return p2TextField;
 	}
@@ -165,13 +178,21 @@ public class GUI {
 	public void setP2TextField(JTextField p2TextField) {
 		this.p2TextField = p2TextField;
 	}
-
-	public JTextField getP1TextField() {
-		return p1TextField;
+	
+	public JCheckBox getP1AiCheckBox() {
+		return this.p1AiCheckBox;
+	}
+	
+	public void setP1AiCheckBox(JCheckBox checkBox) {
+		this.p1AiCheckBox = checkBox;
 	}
 
-	public void setP1TextField(JTextField p1TextField) {
-		this.p1TextField = p1TextField;
+	public JCheckBox getP2AiCheckBox() {
+		return this.p2AiCheckBox;
+	}
+	
+	public void setP2AiCheckBox(JCheckBox checkBox) {
+		this.p2AiCheckBox = checkBox;
 	}
 
 	public JComboBox<Integer> getTimerComboBox() {
@@ -391,5 +412,9 @@ public class GUI {
 
 	public ObjectInputStream createInputStream(File f) throws IOException {
 		return new ObjectInputStream(new FileInputStream(f));
+	}
+	
+	public int getAiSleepTime() {
+		return this.game.isAiGame() ? AI_ONLY_SLEEP : PLAYER_AI_SLEEP;
 	}
 }

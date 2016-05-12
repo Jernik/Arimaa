@@ -1,6 +1,7 @@
 package ai;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -61,6 +62,56 @@ public class TestAi extends AiSetup {
 		game = new Game();
 		ai = new Ai(Owner.Player1, game);
 		assertEquals(game, ai.getGame());
+	}
+
+	@Test
+	public void testAiEqualsReturnsFalseIfNull() {
+		Game game = new Game();
+		Ai ai = new Ai(Owner.Player1, game);
+
+		assertNotEquals(ai, null);
+	}
+
+	@Test
+	public void testAiEqualsReturnsTrueForReflexive() {
+		Game game = new Game();
+		Ai ai = new Ai(Owner.Player1, game);
+
+		assertEquals(ai, ai);
+		assertEquals(ai.hashCode(), ai.hashCode());
+	}
+
+	@Test
+	public void testAiEqualsReturnsTrueForSymmetric() {
+		Game game = new Game();
+		Ai ai1 = new Ai(Owner.Player1, game);
+		Ai ai2 = new Ai(Owner.Player1, game);
+
+		assertEquals(ai1, ai2);
+		assertEquals(ai2, ai1);
+
+		assertEquals(ai1.hashCode(), ai2.hashCode());
+	}
+
+	@Test
+	public void testAiEqualsReturnsFalseIfDifferentGame() {
+		Ai ai1 = new Ai(Owner.Player1, new Game());
+		Game game = new Game();
+		game.incrementTurn();
+		Ai ai2 = new Ai(Owner.Player1, game);
+
+		assertNotEquals(ai1, ai2);
+		assertNotEquals(ai1.hashCode(), ai2.hashCode());
+	}
+
+	@Test
+	public void testAiEqualsReturnsFalseIfDifferentOwner() {
+		Game game = new Game();
+		Ai ai1 = new Ai(Owner.Player1, game);
+		Ai ai2 = new Ai(Owner.Player2, game);
+
+		assertNotEquals(ai1, ai2);
+		assertNotEquals(ai1.hashCode(), ai2.hashCode());
 	}
 
 	@Test

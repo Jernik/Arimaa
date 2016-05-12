@@ -52,6 +52,10 @@ public class MovementListener implements MouseListener {
 		int sourceX = (int) e.getPoint().getX();
 		int sourceY = (int) e.getPoint().getY();
 
+		if (game.isAiTurn()) {
+			return;
+		}
+		
 		Coordinate coor = new Coordinate((sourceX - 10) / 80, (sourceY - 10) / 80);
 		// Beginning movement, nothing yet selected
 		// Selecting piece to interact with

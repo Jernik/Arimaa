@@ -189,6 +189,41 @@ public class StartGameListener implements ActionListener {
 		undoButton.addActionListener(gui.new UndoListener());
 		undoButton.setVisible(true);
 
+		boolean p1Ai = this.gui.getP1AiCheckBox().isSelected();
+		boolean p2Ai = this.gui.getP2AiCheckBox().isSelected();
+		if (p1Ai) {
+			game.assignAi1();
+		}
+		if (p2Ai) {
+			game.assignAi2();
+		}
+		if (p1Ai || p2Ai) {
+			startAi();
+		}
 		gui.renderInitialBoard();
+	}
+	
+	public void startAi() {
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					Thread.sleep(10);
+				} catch (InterruptedException e1) {
+					e1.printStackTrace();
+				}
+				while(game.getWinner() == Owner.Nobody) {
+					if (game.isAiTurn()) {
+						game.makeAiTurn();
+						gui.rerenderBoard();
+					}
+					try {
+						Thread.sleep(gui.getAiSleepTime());
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}).start();;
 	}
 }

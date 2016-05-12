@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import ai.Ai;
 import board.BoardState;
 import board.Coordinate;
 import move_commands.MoveCommand;
@@ -15,6 +16,9 @@ import piece.Rabbit;
 
 public class Game implements Serializable {
 	private static final long serialVersionUID = -7894027967721918280L;
+
+	private Ai p1Ai;
+	private Ai p2Ai;
 
 	private ArrayList<MoveCommand> moves = new ArrayList<MoveCommand>();
 	private BoardState currentBoard;
@@ -69,6 +73,53 @@ public class Game implements Serializable {
 		this.p2Name = g.getP2Name();
 
 		this.moveTimer = g.getMoveTimer();
+
+		if (g.getP1Ai() != null) {
+			this.assignAi1();
+		}
+		if (g.getP2Ai() != null) {
+			this.assignAi2();
+		}
+
+	}
+
+	public void assignAi1() {
+		this.p1Ai = new Ai(Owner.Player1, this);
+	}
+
+	public void assignAi2() {
+		this.p2Ai = new Ai(Owner.Player2, this);
+	}
+
+	public boolean isAiTurn() {
+		if (this.playerTurn == Owner.Player1) {
+			return this.p1Ai != null;
+		}
+		return this.p2Ai != null;
+	}
+
+	public boolean isAiGame() {
+		return this.p1Ai != null && this.p2Ai != null;
+	}
+
+	public boolean makeAiTurn() {
+		if (this.isAiTurn()) {
+			if (this.playerTurn == Owner.Player1) {
+				this.move(this.p1Ai.generateMove());
+			} else {
+				this.move(this.p2Ai.generateMove());
+			}
+			return true;
+		}
+		return false;
+	}
+
+	public Ai getP1Ai() {
+		return this.p1Ai;
+	}
+
+	public Ai getP2Ai() {
+		return this.p2Ai;
 	}
 
 	public ArrayList<MoveCommand> getMoves() {
