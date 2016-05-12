@@ -1,6 +1,7 @@
 package gui;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,6 +12,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -25,6 +27,8 @@ import board.Coordinate;
 import game.Game;
 import listeners.LoadGameListener;
 import listeners.NewGameListener;
+import move_commands.CoordinatePair;
+import move_commands.MoveCommand;
 import piece.AbstractPiece;
 import piece.Owner;
 
@@ -39,7 +43,7 @@ public class GUI {
 	private String p2Name;
 
 	private ImagePanel gameBoardPanel;
-	private ImagePanel[][] boardPieces;
+	private HashMap<Coordinate, ImagePanel> boardPieces;
 	private TimePanel timer;
 
 	private JTextField p1TextField;
@@ -56,7 +60,7 @@ public class GUI {
 		this.p1Name = "Player 1";
 		this.p2Name = "Player 2";
 		this.game = new Game();
-		this.boardPieces = new ImagePanel[8][8];
+		this.boardPieces = new HashMap<Coordinate, ImagePanel>();
 		this.activeFrames = new ArrayList<JFrame>();
 		JFrame mainMenuFrame = new JFrame();
 		this.getActiveFrames().add(mainMenuFrame);
@@ -145,7 +149,7 @@ public class GUI {
 		this.gameBoardPanel = gameBoardPanel;
 	}
 
-	public ImagePanel[][] getBoardPieces() {
+	public HashMap<Coordinate, ImagePanel> getBoardPieces() {
 		return boardPieces;
 	}
 
@@ -230,29 +234,20 @@ public class GUI {
 	}
 
 	public void renderInitialBoard() {
-		if (getGame().getWinner() != Owner.Nobody) {
-			createWinWindow();
+		for (Component comp : this.gameBoardPanel.getComponents()) {
+			if (comp instanceof ImagePanel) {
+				this.gameBoardPanel.remove(comp);
+			}
 		}
+		this.boardPieces.clear();
 		BoardState boardState = this.getGame().getBoardState();
 		for (Coordinate coor : boardState.getAllCoordinates()) {
 			AbstractPiece piece = boardState.getPieceAt(coor);
 			ImagePanel imgPanel = new ImagePanel(piece.getImage());
 			this.gameBoardPanel.add(imgPanel);
-			imgPanel.setRow(coor.getY());
-			imgPanel.setColumn(coor.getX());
-			imgPanel.setLocation(imgPanel.getPixelX(), imgPanel.getPixelY());
+			imgPanel.setCoordinate(coor);
 			imgPanel.setVisible(true);
-			this.boardPieces[coor.getX()][coor.getY()] = imgPanel;
-		}
-	}
-
-	public void renderBoard() {
-		for (int i = 0; i < 8; i++) {
-			for (int k = 0; k < 8; k++) {
-				if (boardPieces[i][k] != null)
-					this.gameBoardPanel.remove(this.boardPieces[i][k]);
-				this.boardPieces[i][k] = null;
-			}
+			this.boardPieces.put(coor, imgPanel);
 		}
 		moveCountLabel.setText("<html> <b>" + "Moves Left: \n" + getGame().getNumMoves() + "</b></html>");
 		turnCountLabel.setText("<html> <b>" + "Turn: " + getGame().getTurnNumber() + "</b></html>");
@@ -261,7 +256,36 @@ public class GUI {
 		} else {
 			turnIndicatorLabel.setText("<html> <b>" + getGame().getP2Name() + "'s turn" + "</b></html>");
 		}
-		renderInitialBoard();
+	}
+
+	public void rerenderBoard() {
+		if (getGame().getWinner() != Owner.Nobody) {
+			createWinWindow();
+		}
+		
+		MoveCommand lastMove = this.game.getLastMove();
+		for (CoordinatePair pair : lastMove.getAffectedCoordinates()) {
+			Coordinate oldCoor = pair.getFrom();
+			Coordinate newCoor = pair.getTo();
+			ImagePanel panel = this.boardPieces.get(oldCoor);
+			panel.setCoordinate(newCoor);
+
+			this.boardPieces.remove(oldCoor);
+			this.boardPieces.put(newCoor, panel);
+		}
+		for (Coordinate coor : game.getDeadCoors()) {
+			this.gameBoardPanel.remove(this.boardPieces.get(coor));
+			this.gameBoardPanel.repaint();
+			this.boardPieces.remove(coor);
+		}
+		game.clearDeadCoors();
+		moveCountLabel.setText("<html> <b>" + "Moves Left: \n" + getGame().getNumMoves() + "</b></html>");
+		turnCountLabel.setText("<html> <b>" + "Turn: " + getGame().getTurnNumber() + "</b></html>");
+		if (getGame().getPlayerTurn() == Owner.Player1) {
+			turnIndicatorLabel.setText("<html> <b>" + getGame().getP1Name() + "'s turn" + "</b></html>");
+		} else {
+			turnIndicatorLabel.setText("<html> <b>" + getGame().getP2Name() + "'s turn" + "</b></html>");
+		}
 	}
 
 	// ACTION LISTENERS
@@ -287,7 +311,7 @@ public class GUI {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			getGame().undoMove();
-			renderBoard();
+			renderInitialBoard();
 		}
 	}
 

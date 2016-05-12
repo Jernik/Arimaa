@@ -30,6 +30,8 @@ public class Game implements Serializable {
 
 	private int moveTimer;
 
+	private HashSet<Coordinate> deadCoors;
+
 	/**
 	 * Creates a board with a default starting layout
 	 */
@@ -39,6 +41,7 @@ public class Game implements Serializable {
 
 	public Game(BoardState b) {
 		this.moves = new ArrayList<MoveCommand>();
+		this.deadCoors = new HashSet<Coordinate>();
 		this.currentBoard = b;
 		this.turnNumber = 0;
 
@@ -54,6 +57,7 @@ public class Game implements Serializable {
 
 	public Game(Game g) {
 		this.moves = new ArrayList<MoveCommand>(g.getMoves());
+		this.deadCoors = new HashSet<Coordinate>(g.getDeadCoors());
 		this.currentBoard = new BoardState(g.getBoardState());
 		this.turnNumber = g.getTurnNumber();
 
@@ -69,6 +73,21 @@ public class Game implements Serializable {
 
 	public ArrayList<MoveCommand> getMoves() {
 		return this.moves;
+	}
+
+	public MoveCommand getLastMove() {
+		if (this.moves.isEmpty()) {
+			return null;
+		}
+		return this.moves.get(this.moves.size() - 1);
+	}
+
+	public HashSet<Coordinate> getDeadCoors() {
+		return this.deadCoors;
+	}
+
+	public void clearDeadCoors() {
+		this.deadCoors.clear();
 	}
 
 	public BoardState getBoardState() {
@@ -333,6 +352,7 @@ public class Game implements Serializable {
 			return;
 		}
 		// no adjacent friendly pieces, remove this one
+		this.deadCoors.add(toCheck);
 		this.currentBoard.removePiece(toCheck);
 	}
 
@@ -385,8 +405,8 @@ public class Game implements Serializable {
 			return false;
 		}
 		Game g = (Game) o;
-		boolean historyEqual = this.moves.equals(g.getMoves()) && this.currentBoard.equals(g.getBoardState())
-				&& this.turnNumber == g.getTurnNumber();
+		boolean historyEqual = this.moves.equals(g.getMoves()) && this.deadCoors.equals(g.getDeadCoors())
+				&& this.currentBoard.equals(g.getBoardState()) && this.turnNumber == g.getTurnNumber();
 		boolean p1Equal = this.p1Name.equals(g.getP1Name());
 		boolean p2Equal = this.p2Name.equals(g.getP2Name());
 		boolean turnEqual = this.playerTurn == g.getPlayerTurn() && this.numMoves == g.getNumMoves()
@@ -398,9 +418,10 @@ public class Game implements Serializable {
 
 	@Override
 	public int hashCode() {
-		return this.moves.hashCode() + this.currentBoard.hashCode() + getHashCode(this.turnNumber)
-				+ this.p1Name.hashCode() + this.p2Name.hashCode() + this.playerTurn.hashCode()
-				+ getHashCode(this.numMoves) + this.winner.hashCode() + getHashCode(this.moveTimer);
+		return this.moves.hashCode() + this.deadCoors.hashCode() + this.currentBoard.hashCode()
+				+ getHashCode(this.turnNumber) + this.p1Name.hashCode() + this.p2Name.hashCode()
+				+ this.playerTurn.hashCode() + getHashCode(this.numMoves) + this.winner.hashCode()
+				+ getHashCode(this.moveTimer);
 	}
 
 	// this prevents collisions better with serial numbers
