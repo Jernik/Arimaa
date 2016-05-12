@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -45,7 +46,7 @@ public class NewGameListener implements ActionListener {
 		p1NameLabel.setFont(new Font(p1NameFont.getName(), 4, 14));
 		p1NameLabel.setSize(110, 25);
 		panel.add(p1NameLabel);
-		p1NameLabel.setLocation(panel.getWidth() / 2 - p1NameLabel.getWidth(),
+		p1NameLabel.setLocation(2 * panel.getWidth() / 5 - p1NameLabel.getWidth(),
 				panel.getHeight() / 2 - p1NameLabel.getHeight() * 2);
 
 		p1NameLabel.setVisible(true);
@@ -55,9 +56,16 @@ public class NewGameListener implements ActionListener {
 		Font p1FieldFont = p1NameField.getFont();
 		p1NameLabel.setFont(new Font(p1FieldFont.getName(), 4, 14));
 		panel.add(p1NameField);
-		p1NameField.setLocation(panel.getWidth() / 2, panel.getHeight() / 2 - p1NameField.getHeight() * 2);
+		p1NameField.setLocation(2 * panel.getWidth() / 5, panel.getHeight() / 2 - p1NameField.getHeight() * 2);
 		gui.setP1TextField(p1NameField);
 		p1NameField.setVisible(true);
+		
+		JCheckBox p1AiButton = new JCheckBox("Ai?");
+		p1AiButton.setSize(50, 25);
+		panel.add(p1AiButton);
+		p1AiButton.setLocation(panel.getWidth() - 3 * p1AiButton.getWidth() / 2, panel.getHeight() / 2 - p1AiButton.getHeight() * 2);
+		gui.setP1AiCheckBox(p1AiButton);
+		p1AiButton.setVisible(true);
 
 		// Set up Player 2 Name Label and Text Field
 		JLabel p2NameLabel = new JLabel();
@@ -67,7 +75,7 @@ public class NewGameListener implements ActionListener {
 		p2NameLabel.setFont(new Font(p2NameFont.getName(), 4, 14));
 		p2NameLabel.setSize(110, 25);
 		panel.add(p2NameLabel);
-		p2NameLabel.setLocation(panel.getWidth() / 2 - p2NameLabel.getWidth(),
+		p2NameLabel.setLocation(2 * panel.getWidth() / 5 - p2NameLabel.getWidth(),
 				panel.getHeight() / 2 - p2NameLabel.getHeight());
 		p2NameLabel.setVisible(true);
 
@@ -76,9 +84,17 @@ public class NewGameListener implements ActionListener {
 		Font p2FieldFont = p2NameField.getFont();
 		p2NameLabel.setFont(new Font(p2FieldFont.getName(), 4, 14));
 		panel.add(p2NameField);
-		p2NameField.setLocation(panel.getWidth() / 2, panel.getHeight() / 2 - p2NameField.getHeight());
+		p2NameField.setLocation(2 * panel.getWidth() / 5, panel.getHeight() / 2 - p2NameField.getHeight());
 		gui.setP2TextField(p2NameField);
 		p2NameField.setVisible(true);
+
+		JCheckBox p2AiButton = new JCheckBox("Ai?");
+		p2AiButton.setSize(50, 25);
+		panel.add(p2AiButton);
+		p2AiButton.setLocation(panel.getWidth() - 3 * p2AiButton.getWidth() / 2, panel.getHeight() / 2 - p2AiButton.getHeight());
+		gui.setP2AiCheckBox(p2AiButton);
+		p2AiButton.setVisible(true);
+
 
 		// Set up Turn Timer Label and Text Field
 		JLabel turnTimerLabel = new JLabel();
@@ -88,7 +104,7 @@ public class NewGameListener implements ActionListener {
 		turnTimerLabel.setFont(new Font(turnTimerFont.getName(), 4, 14));
 		turnTimerLabel.setSize(110, 25);
 		panel.add(turnTimerLabel);
-		turnTimerLabel.setLocation(panel.getWidth() / 2 - turnTimerLabel.getWidth(), panel.getHeight() / 2);
+		turnTimerLabel.setLocation(2*panel.getWidth() / 5 - turnTimerLabel.getWidth(), panel.getHeight() / 2);
 		turnTimerLabel.setVisible(true);
 
 		Integer[] turnTimerPresets = { 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180 };
@@ -97,7 +113,7 @@ public class NewGameListener implements ActionListener {
 		turnTimerComboBox.setEditable(false);
 		turnTimerComboBox.setSize(110, 25);
 		panel.add(turnTimerComboBox);
-		turnTimerComboBox.setLocation(panel.getWidth() / 2, panel.getHeight() / 2);
+		turnTimerComboBox.setLocation(2*panel.getWidth() / 5, panel.getHeight() / 2);
 		turnTimerComboBox.setVisible(true);
 
 		// Set up Start Game Button
