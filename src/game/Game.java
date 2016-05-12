@@ -73,24 +73,35 @@ public class Game implements Serializable {
 		this.p2Name = g.getP2Name();
 
 		this.moveTimer = g.getMoveTimer();
+
+		if (g.getP1Ai() != null) {
+			this.assignAi1();
+		}
+		if (g.getP2Ai() != null) {
+			this.assignAi2();
+		}
+
 	}
 
-	public void assignAi(boolean p1, boolean p2) {
-		this.p1Ai = p1 ? new Ai(Owner.Player1, this) : null;
-		this.p2Ai = p2 ? new Ai(Owner.Player2, this) : null;
+	public void assignAi1() {
+		this.p1Ai = new Ai(Owner.Player1, this);
 	}
-	
+
+	public void assignAi2() {
+		this.p2Ai = new Ai(Owner.Player2, this);
+	}
+
 	public boolean isAiTurn() {
 		if (this.playerTurn == Owner.Player1) {
 			return this.p1Ai != null;
 		}
 		return this.p2Ai != null;
 	}
-	
+
 	public boolean isAiGame() {
 		return this.p1Ai != null && this.p2Ai != null;
 	}
-	
+
 	public boolean makeAiTurn() {
 		if (this.isAiTurn()) {
 			if (this.playerTurn == Owner.Player1) {
@@ -102,7 +113,7 @@ public class Game implements Serializable {
 		}
 		return false;
 	}
-	
+
 	public Ai getP1Ai() {
 		return this.p1Ai;
 	}

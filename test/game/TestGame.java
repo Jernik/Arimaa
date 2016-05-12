@@ -14,7 +14,6 @@ import java.util.HashSet;
 import org.junit.Before;
 import org.junit.Test;
 
-import ai.Ai;
 import board.BoardState;
 import board.Coordinate;
 import move_commands.MoveCommand;
@@ -59,33 +58,35 @@ public class TestGame {
 		assertFalse(game.getMoves() == this.g.getMoves());
 		assertFalse(game.getBoardState() == this.g.getBoardState());
 
+		this.g1.assignAi1();
 		game = new Game(this.g1);
 		assertFalse(game == this.g1);
 		assertEquals(this.g1, game);
 		assertFalse(game.getMoves() == this.g1.getMoves());
 		assertFalse(game.getBoardState() == this.g1.getBoardState());
+		assertEquals(this.g1.getP1Ai(), game.getP1Ai());
 
 		game = new Game();
-		Ai ai1 = new Ai(Owner.Player1, game);
-		Ai ai2 = new Ai(Owner.Player2, game);
-		// play 4 moves
-		for (int i = 0; i < 4; i++) {
-			for (int k = 0; k < 4; k++) {
-				game.move(ai1.generateMove());
-			}
-			for (int k = 0; k < 4; k++) {
-				game.move(ai2.generateMove());
-			}
+		game.assignAi1();
+		game.assignAi2();
+
+		for (int i = 0; i < 8; i++) {
+			game.makeAiTurn();
 		}
+
 		Game gameCopy = new Game(game);
 		assertFalse(gameCopy == game);
 		assertEquals(game, gameCopy);
 		assertFalse(game.getMoves() == gameCopy.getMoves());
 		assertFalse(game.getBoardState() == gameCopy.getBoardState());
+		assertEquals(game.getP1Ai(), gameCopy.getP1Ai());
+		assertEquals(game.getP2Ai(), gameCopy.getP2Ai());
 
-		game.move(ai1.generateMove());
+		game.makeAiTurn();
 		assertNotEquals(game.getMoves(), gameCopy.getMoves());
 		assertNotEquals(game.getBoardState(), gameCopy.getBoardState());
+		assertNotEquals(game.getP1Ai(), gameCopy.getP1Ai());
+		assertNotEquals(game.getP2Ai(), gameCopy.getP2Ai());
 	}
 
 	@Test
@@ -99,25 +100,25 @@ public class TestGame {
 	@Test
 	public void testAssignAi() {
 		Game game = new Game();
-		game.assignAi(true, true);
+		game.assignAi1();
+		game.assignAi2();
 
 		assertNotNull(game.getP1Ai());
 		assertNotNull(game.getP2Ai());
 
 		game = new Game();
-		game.assignAi(false, true);
+		game.assignAi2();
 
 		assertNull(game.getP1Ai());
 		assertNotNull(game.getP2Ai());
 
 		game = new Game();
-		game.assignAi(false, false);
 
 		assertNull(game.getP1Ai());
 		assertNull(game.getP2Ai());
 
 		game = new Game();
-		game.assignAi(true, false);
+		game.assignAi1();
 
 		assertNotNull(game.getP1Ai());
 		assertNull(game.getP2Ai());
@@ -126,28 +127,28 @@ public class TestGame {
 	@Test
 	public void testIsAiTurn() {
 		Game game = new Game();
-		game.assignAi(true, true);
+		game.assignAi1();
+		game.assignAi2();
 		assertTrue(game.isAiTurn());
 
 		game.incrementTurn();
 		assertTrue(game.isAiTurn());
 
 		game = new Game();
-		game.assignAi(false, true);
+		game.assignAi2();
 		assertFalse(game.isAiTurn());
 
 		game.incrementTurn();
 		assertTrue(game.isAiTurn());
 
 		game = new Game();
-		game.assignAi(true, false);
+		game.assignAi1();
 		assertTrue(game.isAiTurn());
 
 		game.incrementTurn();
 		assertFalse(game.isAiTurn());
 
 		game = new Game();
-		game.assignAi(false, false);
 		assertFalse(game.isAiTurn());
 
 		game.incrementTurn();
@@ -157,64 +158,64 @@ public class TestGame {
 	@Test
 	public void isAiGame() {
 		Game game = new Game();
-		game.assignAi(true, true);
+		game.assignAi1();
+		game.assignAi2();
 		assertTrue(game.isAiGame());
 
 		game = new Game();
-		game.assignAi(false, true);
+		game.assignAi2();
 		assertFalse(game.isAiGame());
 
 		game = new Game();
-		game.assignAi(true, false);
+		game.assignAi1();
 		assertFalse(game.isAiGame());
 
 		game = new Game();
-		game.assignAi(false, false);
 		assertFalse(game.isAiGame());
 	}
 
 	@Test
 	public void testMakeAiTurn() {
 		Game game = new Game();
-		game.assignAi(true, true);
+		game.assignAi1();
+		game.assignAi2();
 		assertTrue(game.makeAiTurn());
 		assertFalse(game.getMoves().isEmpty());
 
 		game = new Game();
-		game.assignAi(true, false);
+		game.assignAi1();
 		assertTrue(game.makeAiTurn());
 		assertFalse(game.getMoves().isEmpty());
 
 		game = new Game();
-		game.assignAi(false, true);
+		game.assignAi2();
 		assertFalse(game.makeAiTurn());
 		assertTrue(game.getMoves().isEmpty());
 
 		game = new Game();
-		game.assignAi(false, false);
 		assertFalse(game.makeAiTurn());
 		assertTrue(game.getMoves().isEmpty());
 
 		game = new Game();
-		game.assignAi(true, true);
+		game.assignAi1();
+		game.assignAi2();
 		game.incrementTurn();
 		assertTrue(game.makeAiTurn());
 		assertFalse(game.getMoves().isEmpty());
 
 		game = new Game();
-		game.assignAi(true, false);
+		game.assignAi1();
 		game.incrementTurn();
 		assertFalse(game.makeAiTurn());
 		assertTrue(game.getMoves().isEmpty());
 
 		game = new Game();
-		game.assignAi(false, true);
+		game.assignAi2();
 		game.incrementTurn();
 		assertTrue(game.makeAiTurn());
 		assertFalse(game.getMoves().isEmpty());
 
 		game = new Game();
-		game.assignAi(false, false);
 		game.incrementTurn();
 		assertFalse(game.makeAiTurn());
 		assertTrue(game.getMoves().isEmpty());

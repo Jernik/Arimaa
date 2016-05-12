@@ -191,8 +191,12 @@ public class StartGameListener implements ActionListener {
 
 		boolean p1Ai = this.gui.getP1AiCheckBox().isSelected();
 		boolean p2Ai = this.gui.getP2AiCheckBox().isSelected();
-		game.assignAi(p1Ai, p2Ai);
-		System.out.println(game.isAiTurn());
+		if (p1Ai) {
+			game.assignAi1();
+		}
+		if (p2Ai) {
+			game.assignAi2();
+		}
 		if (p1Ai || p2Ai) {
 			startAi();
 		}

@@ -143,4 +143,16 @@ public class Ai {
 				Arrays.asList(new Coordinate[] { coor.down(), coor.up(), coor.left(), coor.right() }));
 		return adjecantCoors.get(new Random().nextInt(adjecantCoors.size()));
 	}
+
+	public boolean equals(Object o) {
+		if (!(o instanceof Ai)) {
+			return false;
+		}
+		Ai ai = (Ai) o;
+		return this.game.equals(ai.getGame()) && this.owner == ai.getOwner();
+	}
+
+	public int hashCode() {
+		return this.game.hashCode() + this.owner.hashCode();
+	}
 }
