@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 import board.BoardState;
 import board.Coordinate;
+import game.Game;
 import piece.AbstractPiece;
-import piece.Owner;
 
 /**
  * Created by millerlj on 4/27/2016.
@@ -15,9 +15,8 @@ public class PullMove extends MoveCommand {
 	public static final int NUMBER_OF_MOVES = 2;
 	private Coordinate pullPiecePosition;
 
-	public PullMove(BoardState board, Coordinate originalPosition, Coordinate newPosition, Coordinate pullPiecePosition,
-			Owner turn, int movesLeft) {
-		super(board, originalPosition, newPosition, turn, movesLeft);
+	public PullMove(Game game, Coordinate originalPosition, Coordinate newPosition, Coordinate pullPiecePosition) {
+		super(game, originalPosition, newPosition);
 		this.pullPiecePosition = pullPiecePosition;
 	}
 

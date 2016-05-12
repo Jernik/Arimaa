@@ -1,6 +1,7 @@
 package ai;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -54,25 +55,26 @@ public class AiSetup {
 		pieces.put(new Coordinate(6, 6), new Elephant(Owner.Player2));
 		pieces.put(new Coordinate(7, 7), new Horse(Owner.Player2));
 		this.normalAi = new Ai(Owner.Player2, new Game(new BoardState(pieces)));
+		this.normalAi.getGame().incrementTurn();
 
 		HashMap<Coordinate, AbstractPiece> catLoverPieces = new HashMap<Coordinate, AbstractPiece>();
-		catLoverPieces.put(new Coordinate(4, 2), new Rabbit(Owner.Player1));
-		catLoverPieces.put(new Coordinate(0, 1), new Dog(Owner.Player1));
-		catLoverPieces.put(new Coordinate(2, 4), new Rabbit(Owner.Player1));
-		catLoverPieces.put(new Coordinate(1, 1), new Dog(Owner.Player1));
+		catLoverPieces.put(new Coordinate(4, 2), new Rabbit(Owner.Player2));
+		catLoverPieces.put(new Coordinate(0, 1), new Dog(Owner.Player2));
+		catLoverPieces.put(new Coordinate(2, 4), new Rabbit(Owner.Player2));
+		catLoverPieces.put(new Coordinate(1, 1), new Dog(Owner.Player2));
 
-		catLoverPieces.put(new Coordinate(6, 7), new Cat(Owner.Player2));
-		catLoverPieces.put(new Coordinate(2, 2), new Cat(Owner.Player2));
-		catLoverPieces.put(new Coordinate(2, 3), new Cat(Owner.Player2));
-		catLoverPieces.put(new Coordinate(3, 2), new Cat(Owner.Player2));
-		catLoverPieces.put(new Coordinate(3, 3), new Cat(Owner.Player2));
+		catLoverPieces.put(new Coordinate(6, 7), new Cat(Owner.Player1));
+		catLoverPieces.put(new Coordinate(2, 2), new Cat(Owner.Player1));
+		catLoverPieces.put(new Coordinate(2, 3), new Cat(Owner.Player1));
+		catLoverPieces.put(new Coordinate(3, 2), new Cat(Owner.Player1));
+		catLoverPieces.put(new Coordinate(3, 3), new Cat(Owner.Player1));
 
-		catLoverPieces.put(new Coordinate(7, 7), new Rabbit(Owner.Player2));
-		catLoverPieces.put(new Coordinate(3, 6), new Rabbit(Owner.Player2));
-		catLoverPieces.put(new Coordinate(3, 4), new Camel(Owner.Player2));
-		catLoverPieces.put(new Coordinate(4, 4), new Elephant(Owner.Player2));
-		catLoverPieces.put(new Coordinate(1, 2), new Horse(Owner.Player2));
-		this.catLoverAi = new Ai(Owner.Player2, new Game(new BoardState(catLoverPieces)));
+		catLoverPieces.put(new Coordinate(7, 7), new Rabbit(Owner.Player1));
+		catLoverPieces.put(new Coordinate(3, 6), new Rabbit(Owner.Player1));
+		catLoverPieces.put(new Coordinate(3, 4), new Camel(Owner.Player1));
+		catLoverPieces.put(new Coordinate(4, 4), new Elephant(Owner.Player1));
+		catLoverPieces.put(new Coordinate(1, 2), new Horse(Owner.Player1));
+		this.catLoverAi = new Ai(Owner.Player1, new Game(new BoardState(catLoverPieces)));
 
 		HashMap<Coordinate, AbstractPiece> notManyMovesPieces = new HashMap<Coordinate, AbstractPiece>();
 		notManyMovesPieces.put(new Coordinate(0, 0), new Cat(Owner.Player1));
@@ -107,8 +109,9 @@ public class AiSetup {
 		notManyMovesPieces.put(new Coordinate(5, 4), new Rabbit(Owner.Player2));
 		notManyMovesPieces.put(new Coordinate(7, 4), new Rabbit(Owner.Player2));
 		this.notManyMovesAi = new Ai(Owner.Player2, new Game(new BoardState(notManyMovesPieces)));
+		this.notManyMovesAi.getGame().incrementTurn();
 
-		this.startingAi = new Ai(Owner.Player2, new Game());
+		this.startingAi = new Ai(Owner.Player1, new Game());
 	}
 
 	public void randomStressTest(Generater method) {

@@ -178,11 +178,11 @@ public class GUI {
 	public void setP2TextField(JTextField p2TextField) {
 		this.p2TextField = p2TextField;
 	}
-	
+
 	public JCheckBox getP1AiCheckBox() {
 		return this.p1AiCheckBox;
 	}
-	
+
 	public void setP1AiCheckBox(JCheckBox checkBox) {
 		this.p1AiCheckBox = checkBox;
 	}
@@ -190,7 +190,7 @@ public class GUI {
 	public JCheckBox getP2AiCheckBox() {
 		return this.p2AiCheckBox;
 	}
-	
+
 	public void setP2AiCheckBox(JCheckBox checkBox) {
 		this.p2AiCheckBox = checkBox;
 	}
@@ -264,7 +264,7 @@ public class GUI {
 		if (getGame().getWinner() != Owner.Nobody) {
 			createWinWindow();
 		}
-		
+
 		MoveCommand lastMove = this.game.getLastMove();
 		for (CoordinatePair pair : lastMove.getAffectedCoordinates()) {
 			Coordinate oldCoor = pair.getFrom();
@@ -413,7 +413,7 @@ public class GUI {
 	public ObjectInputStream createInputStream(File f) throws IOException {
 		return new ObjectInputStream(new FileInputStream(f));
 	}
-	
+
 	public int getAiSleepTime() {
 		return this.game.isAiGame() ? AI_ONLY_SLEEP : PLAYER_AI_SLEEP;
 	}

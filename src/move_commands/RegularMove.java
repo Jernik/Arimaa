@@ -2,6 +2,7 @@ package move_commands;
 
 import board.BoardState;
 import board.Coordinate;
+import game.Game;
 import piece.AbstractPiece;
 import piece.Owner;
 import piece.Rabbit;
@@ -10,9 +11,8 @@ public class RegularMove extends MoveCommand {
 	private static final long serialVersionUID = 4434841689278271636L;
 	public static final int NUMBER_OF_MOVES = 1;
 
-	public RegularMove(BoardState board, Coordinate originalPosition, Coordinate newPosition, Owner turn,
-			int movesLeft) {
-		super(board, originalPosition, newPosition, turn, movesLeft);
+	public RegularMove(Game game, Coordinate originalPosition, Coordinate newPosition) {
+		super(game, originalPosition, newPosition);
 	}
 
 	@Override

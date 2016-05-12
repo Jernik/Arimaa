@@ -69,8 +69,7 @@ public class TestEndGame {
 		noMovesP1.put(new Coordinate(5, 5), new Rabbit(Owner.Player2));
 		Game game = new Game(new BoardState(noMovesP1));
 
-		assertTrue(game.move(new RegularMove(game.getBoardState(), new Coordinate(4, 3), new Coordinate(4, 4),
-				game.getPlayerTurn(), game.getNumMoves())));
+		assertTrue(game.move(new RegularMove(game, new Coordinate(4, 3), new Coordinate(4, 4))));
 
 		assertTrue(game.hasNoMoves(game.getPlayerTurn()));
 		assertEquals(Owner.Player2, game.getWinner());
@@ -97,10 +96,8 @@ public class TestEndGame {
 
 		Game game = new Game(new BoardState(p));
 
-		assertTrue(game.move(new RegularMove(game.getBoardState(), new Coordinate(4, 3), new Coordinate(4, 4),
-				game.getPlayerTurn(), game.getNumMoves())));
-		assertTrue(game.move(new RegularMove(game.getBoardState(), new Coordinate(4, 2), new Coordinate(4, 3),
-				game.getPlayerTurn(), game.getNumMoves())));
+		assertTrue(game.move(new RegularMove(game, new Coordinate(4, 3), new Coordinate(4, 4))));
+		assertTrue(game.move(new RegularMove(game, new Coordinate(4, 2), new Coordinate(4, 3))));
 
 		assertTrue(game.hasNoMoves(game.getPlayerTurn()));
 		assertEquals(Owner.Player2, game.getWinner());
@@ -128,10 +125,8 @@ public class TestEndGame {
 		Game game = new Game(new BoardState(p));
 		game.incrementTurn();
 
-		assertTrue(game.move(new RegularMove(game.getBoardState(), new Coordinate(4, 5), new Coordinate(4, 4),
-				game.getPlayerTurn(), game.getNumMoves())));
-		assertTrue(game.move(new RegularMove(game.getBoardState(), new Coordinate(4, 6), new Coordinate(4, 5),
-				game.getPlayerTurn(), game.getNumMoves())));
+		assertTrue(game.move(new RegularMove(game, new Coordinate(4, 5), new Coordinate(4, 4))));
+		assertTrue(game.move(new RegularMove(game, new Coordinate(4, 6), new Coordinate(4, 5))));
 
 		assertTrue(game.hasNoMoves(Owner.Player2));
 		assertEquals(Owner.Player1, game.getWinner());
@@ -159,21 +154,18 @@ public class TestEndGame {
 		p.put(new Coordinate(3, 4), new Rabbit(Owner.Player2));
 
 		Game game = new Game(new BoardState(p));
-		assertTrue(game.move(new RegularMove(game.getBoardState(), new Coordinate(4, 0), new Coordinate(5, 0),
-				game.getPlayerTurn(), game.getNumMoves())));
+		assertTrue(game.move(new RegularMove(game, new Coordinate(4, 0), new Coordinate(5, 0))));
 		assertEquals(Owner.Nobody, game.getWinner());
 
-		assertTrue(game.move(new RegularMove(game.getBoardState(), new Coordinate(5, 0), new Coordinate(5, 1),
-				game.getPlayerTurn(), game.getNumMoves())));
+		assertTrue(game.move(new RegularMove(game, new Coordinate(5, 0), new Coordinate(5, 1))));
 		assertEquals(Owner.Nobody, game.getWinner());
 
-		assertTrue(game.move(new RegularMove(game.getBoardState(), new Coordinate(5, 1), new Coordinate(5, 2),
-				game.getPlayerTurn(), game.getNumMoves())));
+		assertTrue(game.move(new RegularMove(game, new Coordinate(5, 1), new Coordinate(5, 2))));
 
 		assertTrue(game.hasNoMoves(Owner.Player1));
 		assertEquals(Owner.Player2, game.getWinner());
 	}
-	
+
 	@Test
 	public void testPlayer1WinThroughtRabbitElimination() {
 		HashMap<Coordinate, AbstractPiece> p = new HashMap<Coordinate, AbstractPiece>();
@@ -183,11 +175,11 @@ public class TestEndGame {
 		Game game = new Game(new BoardState(p));
 		assertEquals(Owner.Nobody, game.getWinner());
 
-		assertTrue(game.move(new RegularMove(game.getBoardState(), new Coordinate(3, 3), new Coordinate(3, 4),
-				game.getPlayerTurn(), game.getNumMoves())));
-		
+		assertTrue(game.move(new RegularMove(game, new Coordinate(3, 3), new Coordinate(3, 4))));
+
 		assertEquals(Owner.Player1, game.getWinner());
 	}
+
 	@Test
 	public void testPlayer2WinThroughtRabbitElimination() {
 		HashMap<Coordinate, AbstractPiece> p = new HashMap<Coordinate, AbstractPiece>();
@@ -197,9 +189,8 @@ public class TestEndGame {
 		Game game = new Game(new BoardState(p));
 		assertEquals(Owner.Nobody, game.getWinner());
 
-		assertTrue(game.move(new RegularMove(game.getBoardState(), new Coordinate(3, 3), new Coordinate(3, 4),
-				game.getPlayerTurn(), game.getNumMoves())));
-		
+		assertTrue(game.move(new RegularMove(game, new Coordinate(3, 3), new Coordinate(3, 4))));
+
 		assertEquals(Owner.Player2, game.getWinner());
 	}
 
@@ -209,8 +200,7 @@ public class TestEndGame {
 		game.incrementTurn();
 		Coordinate start = new Coordinate(1, 1);
 		Coordinate end = start.up();
-		Owner owner = game.getPlayerTurn();
-		MoveCommand move = new RegularMove(game.getBoardState(), start, end, owner, game.getNumMoves());
+		MoveCommand move = new RegularMove(game, start, end);
 		assertTrue(game.move(move));
 		assertEquals(Owner.Player2, game.getWinner());
 	}
@@ -219,8 +209,7 @@ public class TestEndGame {
 	public void testPlayer1Win() {
 		Coordinate start = new Coordinate(1, 6);
 		Coordinate end = start.down();
-		Owner owner = game.getPlayerTurn();
-		MoveCommand move = new RegularMove(game.getBoardState(), start, end, owner, game.getNumMoves());
+		MoveCommand move = new RegularMove(game, start, end);
 		assertTrue(game.move(move));
 		assertEquals(Owner.Player1, game.getWinner());
 	}
@@ -229,8 +218,7 @@ public class TestEndGame {
 	public void testWinWhenP1HasNoRabbits() {
 		Coordinate start = new Coordinate(1, 1);
 		Coordinate end = start.down();
-		Owner owner = game2.getPlayerTurn();
-		MoveCommand move = new RegularMove(game2.getBoardState(), start, end, owner, game2.getNumMoves());
+		MoveCommand move = new RegularMove(game2, start, end);
 		game2.move(move);
 		assertEquals(Owner.Player2, game2.getWinner());
 	}
@@ -239,8 +227,7 @@ public class TestEndGame {
 	public void testCheckFriendlyAdjacentDownCase() {
 		Coordinate start = new Coordinate(5, 1);
 		Coordinate end = start.right();
-		Owner owner = game2.getPlayerTurn();
-		MoveCommand move = new RegularMove(game2.getBoardState(), start, end, owner, game2.getNumMoves());
+		MoveCommand move = new RegularMove(game2, start, end);
 		assertTrue(game2.move(move));
 	}
 
@@ -249,43 +236,35 @@ public class TestEndGame {
 		Game g = new Game();
 		Coordinate start = new Coordinate(0, 1);
 		Coordinate end = start.down();
-		Owner owner = g.getPlayerTurn();
-		MoveCommand move = new RegularMove(g.getBoardState(), start, end, owner, g.getNumMoves());
+		MoveCommand move = new RegularMove(g, start, end);
 		assertTrue(g.move(move));
 		start = new Coordinate(0, 2);
 		end = start.down();
-		owner = g.getPlayerTurn();
-		move = new RegularMove(g.getBoardState(), start, end, owner, g.getNumMoves());
+		move = new RegularMove(g, start, end);
 		assertTrue(g.move(move));
 		start = new Coordinate(0, 3);
 		end = start.down();
-		owner = g.getPlayerTurn();
-		move = new RegularMove(g.getBoardState(), start, end, owner, g.getNumMoves());
+		move = new RegularMove(g, start, end);
 		assertTrue(g.move(move));
 		start = new Coordinate(0, 4);
 		end = start.down();
-		owner = g.getPlayerTurn();
-		move = new RegularMove(g.getBoardState(), start, end, owner, g.getNumMoves());
+		move = new RegularMove(g, start, end);
 		assertTrue(g.move(move));
 		start = new Coordinate(1, 6);
 		end = start.up();
-		owner = g.getPlayerTurn();
-		move = new RegularMove(g.getBoardState(), start, end, owner, g.getNumMoves());
+		move = new RegularMove(g, start, end);
 		assertTrue(g.move(move));
 		start = new Coordinate(1, 5);
 		end = start.up();
-		owner = g.getPlayerTurn();
-		move = new RegularMove(g.getBoardState(), start, end, owner, g.getNumMoves());
+		move = new RegularMove(g, start, end);
 		assertTrue(g.move(move));
 		start = new Coordinate(1, 4);
 		end = start.up();
-		owner = g.getPlayerTurn();
-		move = new RegularMove(g.getBoardState(), start, end, owner, g.getNumMoves());
+		move = new RegularMove(g, start, end);
 		assertTrue(g.move(move));
 		start = new Coordinate(1, 3);
 		end = start.up();
-		owner = g.getPlayerTurn();
-		move = new RegularMove(g.getBoardState(), start, end, owner, g.getNumMoves());
+		move = new RegularMove(g, start, end);
 		assertTrue(g.move(move));
 	}
 }

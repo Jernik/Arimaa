@@ -65,8 +65,7 @@ public class Ai {
 				// you can't swap
 				pushPiecePlace = this.generateRandomDirection(randomDirection);
 			}
-			MoveCommand pushMove = new PushMove(this.game.getBoardState(), pieceCoor, randomDirection, pushPiecePlace,
-					this.owner, this.game.getNumMoves());
+			MoveCommand pushMove = new PushMove(this.game, pieceCoor, randomDirection, pushPiecePlace);
 			if (pushMove.isValidMove()) {
 				return pushMove;
 			}
@@ -84,8 +83,7 @@ public class Ai {
 				// you can't swap
 				pullPiecePlace = this.generateRandomDirection(randomDirection);
 			}
-			MoveCommand pullMove = new PullMove(this.game.getBoardState(), pieceCoor, randomDirection, pullPiecePlace,
-					this.owner, this.game.getNumMoves());
+			MoveCommand pullMove = new PullMove(this.game, pieceCoor, randomDirection, pullPiecePlace);
 			if (pullMove.isValidMove()) {
 				return pullMove;
 			}
@@ -93,8 +91,7 @@ public class Ai {
 			return this.generateMove();
 		}
 		// use regular method
-		MoveCommand regularMove = new RegularMove(this.game.getBoardState(), pieceCoor, randomDirection, this.owner,
-				this.game.getNumMoves());
+		MoveCommand regularMove = new RegularMove(this.game, pieceCoor, randomDirection);
 		if (regularMove.isValidMove()) {
 			return regularMove;
 		}
