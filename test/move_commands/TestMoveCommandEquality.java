@@ -30,11 +30,11 @@ public class TestMoveCommandEquality {
 		this.board.movePiece(new Coordinate(3, 6), new Coordinate(3, 4));
 		this.board.movePiece(new Coordinate(2, 6), new Coordinate(2, 3));
 
-		this.regularMove = new RegularMove(this.board.clone(), new Coordinate(3, 3), new Coordinate(4, 3), this.owner,
+		this.regularMove = new RegularMove(new BoardState(this.board), new Coordinate(3, 3), new Coordinate(4, 3), this.owner,
 				NUMBER_OF_MOVES);
-		this.pullMove = new PullMove(this.board.clone(), new Coordinate(3, 3), new Coordinate(4, 3),
+		this.pullMove = new PullMove(new BoardState(this.board), new Coordinate(3, 3), new Coordinate(4, 3),
 				new Coordinate(3, 4), this.owner, NUMBER_OF_MOVES);
-		this.pushMove = new PushMove(this.board.clone(), new Coordinate(3, 3), new Coordinate(3, 4),
+		this.pushMove = new PushMove(new BoardState(this.board), new Coordinate(3, 3), new Coordinate(3, 4),
 				new Coordinate(4, 4), this.owner, NUMBER_OF_MOVES);
 	}
 
