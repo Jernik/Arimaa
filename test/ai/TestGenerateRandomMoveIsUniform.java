@@ -10,7 +10,7 @@ public class TestGenerateRandomMoveIsUniform extends AiSetup {
 	@BeforeClass
 	public static void setupStressSettings() {
 		RANDOM_MARGIN = 0.005;
-		ITERATION_SIZE = 1;//00_000;
+		ITERATION_SIZE = 100_000;
 	}
 
 	@Test
