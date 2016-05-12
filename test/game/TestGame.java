@@ -97,6 +97,130 @@ public class TestGame {
 	}
 
 	@Test
+	public void testAssignAi() {
+		Game game = new Game();
+		game.assignAi(true, true);
+
+		assertNotNull(game.getP1Ai());
+		assertNotNull(game.getP2Ai());
+
+		game = new Game();
+		game.assignAi(false, true);
+
+		assertNull(game.getP1Ai());
+		assertNotNull(game.getP2Ai());
+
+		game = new Game();
+		game.assignAi(false, false);
+
+		assertNull(game.getP1Ai());
+		assertNull(game.getP2Ai());
+
+		game = new Game();
+		game.assignAi(true, false);
+
+		assertNotNull(game.getP1Ai());
+		assertNull(game.getP2Ai());
+	}
+
+	@Test
+	public void testIsAiTurn() {
+		Game game = new Game();
+		game.assignAi(true, true);
+		assertTrue(game.isAiTurn());
+
+		game.incrementTurn();
+		assertTrue(game.isAiTurn());
+
+		game = new Game();
+		game.assignAi(false, true);
+		assertFalse(game.isAiTurn());
+
+		game.incrementTurn();
+		assertTrue(game.isAiTurn());
+
+		game = new Game();
+		game.assignAi(true, false);
+		assertTrue(game.isAiTurn());
+
+		game.incrementTurn();
+		assertFalse(game.isAiTurn());
+
+		game = new Game();
+		game.assignAi(false, false);
+		assertFalse(game.isAiTurn());
+
+		game.incrementTurn();
+		assertFalse(game.isAiTurn());
+	}
+
+	@Test
+	public void isAiGame() {
+		Game game = new Game();
+		game.assignAi(true, true);
+		assertTrue(game.isAiGame());
+
+		game = new Game();
+		game.assignAi(false, true);
+		assertFalse(game.isAiGame());
+
+		game = new Game();
+		game.assignAi(true, false);
+		assertFalse(game.isAiGame());
+
+		game = new Game();
+		game.assignAi(false, false);
+		assertFalse(game.isAiGame());
+	}
+
+	@Test
+	public void testMakeAiTurn() {
+		Game game = new Game();
+		game.assignAi(true, true);
+		assertTrue(game.makeAiTurn());
+		assertFalse(game.getMoves().isEmpty());
+
+		game = new Game();
+		game.assignAi(true, false);
+		assertTrue(game.makeAiTurn());
+		assertFalse(game.getMoves().isEmpty());
+
+		game = new Game();
+		game.assignAi(false, true);
+		assertFalse(game.makeAiTurn());
+		assertTrue(game.getMoves().isEmpty());
+
+		game = new Game();
+		game.assignAi(false, false);
+		assertFalse(game.makeAiTurn());
+		assertTrue(game.getMoves().isEmpty());
+
+		game = new Game();
+		game.assignAi(true, true);
+		game.incrementTurn();
+		assertTrue(game.makeAiTurn());
+		assertFalse(game.getMoves().isEmpty());
+
+		game = new Game();
+		game.assignAi(true, false);
+		game.incrementTurn();
+		assertFalse(game.makeAiTurn());
+		assertTrue(game.getMoves().isEmpty());
+
+		game = new Game();
+		game.assignAi(false, true);
+		game.incrementTurn();
+		assertTrue(game.makeAiTurn());
+		assertFalse(game.getMoves().isEmpty());
+
+		game = new Game();
+		game.assignAi(false, false);
+		game.incrementTurn();
+		assertFalse(game.makeAiTurn());
+		assertTrue(game.getMoves().isEmpty());
+	}
+
+	@Test
 	public void testGetMoves() {
 		Game game = new Game();
 		assertTrue(game.getMoves().isEmpty());

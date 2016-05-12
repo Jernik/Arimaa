@@ -35,6 +35,8 @@ import piece.Owner;
 public class GUI {
 	public static final String SAVE_FOLDER = "save/";
 	public static final String SAVE_PATH = SAVE_FOLDER + "game.ser";
+	public static final int PLAYER_AI_SLEEP = 500;
+	public static final int AI_ONLY_SLEEP = 100;
 
 	private Game game;
 	private ArrayList<JFrame> activeFrames;
@@ -410,5 +412,9 @@ public class GUI {
 
 	public ObjectInputStream createInputStream(File f) throws IOException {
 		return new ObjectInputStream(new FileInputStream(f));
+	}
+	
+	public int getAiSleepTime() {
+		return this.game.isAiGame() ? AI_ONLY_SLEEP : PLAYER_AI_SLEEP;
 	}
 }
