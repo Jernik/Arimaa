@@ -3,7 +3,6 @@ package ai;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import java.util.HashMap;
 
@@ -12,6 +11,7 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
+import board.BoardState;
 import board.Coordinate;
 import game.Game;
 import piece.AbstractPiece;
@@ -187,15 +187,9 @@ public class TestAi extends AiSetup {
 	@Test
 	public void testGenerateMoveDoesNotMutateBoardState() {
 		for (int i = 0; i < ITERATION_SIZE; i++) {
+			BoardState board = new BoardState(this.normalAi.getGame().getBoardState());
 			this.normalAi.generateMove();
-			Game game = this.normalAi.getGame();
-			boolean hasOwner1 = false;
-			for (Coordinate coor : game.getBoardState().getAllCoordinates()) {
-				if (game.getPieceAt(coor).getOwner() == Owner.Player1) {
-					hasOwner1 = true;
-				}
-			}
-			assertTrue(hasOwner1);
+			assertEquals(board, this.normalAi.getGame().getBoardState());
 		}
 	}
 }

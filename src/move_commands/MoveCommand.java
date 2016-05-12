@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import board.BoardState;
 import board.Coordinate;
+import game.Game;
 import piece.Owner;
 
 public abstract class MoveCommand implements Serializable {
@@ -18,16 +19,15 @@ public abstract class MoveCommand implements Serializable {
 	protected Owner turn;
 	protected int movesLeft;
 
-	protected MoveCommand(BoardState board, Coordinate originalPosition, Coordinate newPosition, Owner turn,
-			int movesLeft) {
-		this.originalBoard = new BoardState(board);
-		this.newBoard = board;
+	protected MoveCommand(Game game, Coordinate originalPosition, Coordinate newPosition) {
+		this.originalBoard = new BoardState(game.getBoardState());
+		this.newBoard = game.getBoardState();
 
 		this.originalPosition = originalPosition;
 		this.newPosition = newPosition;
 
-		this.turn = turn;
-		this.movesLeft = movesLeft;
+		this.turn = game.getPlayerTurn();
+		this.movesLeft = game.getNumMoves();
 	}
 
 	abstract public BoardState execute();
@@ -76,7 +76,8 @@ public abstract class MoveCommand implements Serializable {
 
 	protected boolean eq(MoveCommand moveCommand) {
 		return this.originalPosition.equals(moveCommand.getOriginalPosition())
-				&& this.newPosition.equals(moveCommand.getNewPosition()) && this.turn.equals(moveCommand.getTurn())
+				&& this.newPosition.equals(moveCommand.getNewPosition()) 
+				&& this.turn.equals(moveCommand.getTurn())
 				&& this.getNumberOfMoves() == moveCommand.getNumberOfMoves()
 				&& this.movesLeft == moveCommand.getMovesLeft()
 				&& this.originalBoard.equals(moveCommand.getOriginalBoard())

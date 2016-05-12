@@ -202,7 +202,7 @@ public class StartGameListener implements ActionListener {
 		}
 		gui.renderInitialBoard();
 	}
-	
+
 	public void startAi() {
 		new Thread(new Runnable() {
 			@Override
@@ -212,7 +212,7 @@ public class StartGameListener implements ActionListener {
 				} catch (InterruptedException e1) {
 					e1.printStackTrace();
 				}
-				while(game.getWinner() == Owner.Nobody) {
+				while (game.getWinner() == Owner.Nobody) {
 					if (game.isAiTurn()) {
 						game.makeAiTurn();
 						gui.rerenderBoard();
@@ -224,6 +224,7 @@ public class StartGameListener implements ActionListener {
 					}
 				}
 			}
-		}).start();;
+		}).start();
+		;
 	}
 }

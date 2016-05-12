@@ -24,9 +24,7 @@ public class TestUndo {
 		Game standardStart = new Game();
 		Coordinate start = new Coordinate(0, 1);
 		Coordinate end = start.down();
-		Owner owner = standardStart.getPlayerTurn();
-		MoveCommand move = new RegularMove(standardStart.getBoardState(), start, end, owner,
-				standardStart.getNumMoves());
+		MoveCommand move = new RegularMove(standardStart, start, end);
 		standardStart.move(move);
 		assertEquals(new Rabbit(Owner.Player1), standardStart.getPieceAt(end));
 		standardStart.undoMove();
@@ -37,12 +35,11 @@ public class TestUndo {
 	public void testUndoTwoMoves() {
 		Coordinate start = new Coordinate(0, 1);
 		Coordinate end = start.down();
-		Owner owner = g.getPlayerTurn();
-		MoveCommand move = new RegularMove(g.getBoardState(), start, end, owner, g.getNumMoves());
+		MoveCommand move = new RegularMove(g, start, end);
 		g.move(move);
 		start = new Coordinate(0, 2);
 		end = start.down();
-		move = new RegularMove(g.getBoardState(), start, end, owner, g.getNumMoves());
+		move = new RegularMove(g, start, end);
 		g.move(move);
 		assertEquals(new Rabbit(Owner.Player1), g.getPieceAt(end));
 		g.undoMove();
@@ -53,16 +50,15 @@ public class TestUndo {
 	public void testUndoThreeMoves() {
 		Coordinate start = new Coordinate(0, 1);
 		Coordinate end = start.down();
-		Owner owner = g.getPlayerTurn();
-		MoveCommand move = new RegularMove(g.getBoardState(), start, end, owner, g.getNumMoves());
+		MoveCommand move = new RegularMove(g, start, end);
 		g.move(move);
 		start = new Coordinate(0, 2);
 		end = start.down();
-		move = new RegularMove(g.getBoardState(), start, end, owner, g.getNumMoves());
+		move = new RegularMove(g, start, end);
 		g.move(move);
 		start = new Coordinate(0, 3);
 		end = start.down();
-		move = new RegularMove(g.getBoardState(), start, end, owner, g.getNumMoves());
+		move = new RegularMove(g, start, end);
 		g.move(move);
 		assertEquals(new Rabbit(Owner.Player1), g.getPieceAt(end));
 		g.undoMove();
@@ -73,20 +69,19 @@ public class TestUndo {
 	public void testThatUndoCantCrossTurns() {
 		Coordinate start = new Coordinate(0, 1);
 		Coordinate end = start.down();
-		Owner owner = g.getPlayerTurn();
-		MoveCommand move = new RegularMove(g.getBoardState(), start, end, owner, g.getNumMoves());
+		MoveCommand move = new RegularMove(g, start, end);
 		g.move(move);
 		start = new Coordinate(0, 2);
 		end = start.down();
-		move = new RegularMove(g.getBoardState(), start, end, owner, g.getNumMoves());
+		move = new RegularMove(g, start, end);
 		g.move(move);
 		start = new Coordinate(0, 3);
 		end = start.down();
-		move = new RegularMove(g.getBoardState(), start, end, owner, g.getNumMoves());
+		move = new RegularMove(g, start, end);
 		g.move(move);
 		start = new Coordinate(0, 4);
 		end = start.down();
-		move = new RegularMove(g.getBoardState(), start, end, owner, g.getNumMoves());
+		move = new RegularMove(g, start, end);
 		g.move(move);
 		g.undoMove();
 		assertEquals(new Rabbit(Owner.Player1), g.getPieceAt(new Coordinate(0, 5)));
@@ -96,8 +91,7 @@ public class TestUndo {
 	public void testThatUndoGrantsMoves() {
 		Coordinate start = new Coordinate(0, 1);
 		Coordinate end = start.down();
-		Owner owner = g.getPlayerTurn();
-		MoveCommand move = new RegularMove(g.getBoardState(), start, end, owner, g.getNumMoves());
+		MoveCommand move = new RegularMove(g, start, end);
 		g.move(move);
 		g.undoMove();
 		assertEquals(4, g.getNumMoves());

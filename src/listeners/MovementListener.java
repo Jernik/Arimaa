@@ -55,7 +55,7 @@ public class MovementListener implements MouseListener {
 		if (game.isAiTurn()) {
 			return;
 		}
-		
+
 		Coordinate coor = new Coordinate((sourceX - 10) / 80, (sourceY - 10) / 80);
 		// Beginning movement, nothing yet selected
 		// Selecting piece to interact with
@@ -70,8 +70,7 @@ public class MovementListener implements MouseListener {
 			// AKA move
 			else if (isSelectedPieceAndEmptySpaceClicked(coor)) {
 				// Using move to check for valid move
-				RegularMove m = new RegularMove(game.getBoardState(), this.selectedPieceCoord, coor,
-						this.game.getPlayerTurn(), game.getNumMoves());
+				RegularMove m = new RegularMove(game, this.selectedPieceCoord, coor);
 				if (game.move(m)) {
 					gui.rerenderBoard();
 				}
@@ -92,11 +91,9 @@ public class MovementListener implements MouseListener {
 			} else if (twoPieceSelectedAndEmptySpaceClicked(coor)) {
 				MoveCommand move = null;
 				if (this.secondSelectedPieceCoord.isOrthogonallyAdjacentTo(coor)) {
-					move = new PushMove(game.getBoardState(), this.selectedPieceCoord, this.secondSelectedPieceCoord,
-							coor, game.getPlayerTurn(), game.getNumMoves());
+					move = new PushMove(game, this.selectedPieceCoord, this.secondSelectedPieceCoord, coor);
 				} else {
-					move = new PullMove(game.getBoardState(), this.selectedPieceCoord, coor,
-							this.secondSelectedPieceCoord, game.getPlayerTurn(), game.getNumMoves());
+					move = new PullMove(game, this.selectedPieceCoord, coor, this.secondSelectedPieceCoord);
 				}
 				if (game.move(move)) {
 					gui.rerenderBoard();
