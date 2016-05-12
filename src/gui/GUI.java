@@ -36,7 +36,7 @@ public class GUI {
 	public static final String SAVE_FOLDER = "save/";
 	public static final String SAVE_PATH = SAVE_FOLDER + "game.ser";
 	public static final int PLAYER_AI_SLEEP = 500;
-	public static final int AI_ONLY_SLEEP = 100;
+	public static final int AI_ONLY_SLEEP = 200;
 
 	private Game game;
 	private ArrayList<JFrame> activeFrames;
