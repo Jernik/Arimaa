@@ -61,6 +61,13 @@ public class TestGameEquality {
 	}
 
 	@Test
+	public void testGameNotEqualIfDifferentDeadCoors() {
+		testNotEquals(() -> {
+			this.g1.getDeadCoors().add(new Coordinate(1, 0));
+		});
+	}
+
+	@Test
 	public void testGameNotEqualIfDifferentBoardStates() {
 		testNotEquals(() -> {
 			this.g1.getBoardState().movePiece(new Coordinate(0, 2), new Coordinate(0, 3));

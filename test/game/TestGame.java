@@ -7,7 +7,9 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -95,6 +97,69 @@ public class TestGame {
 	}
 
 	@Test
+	public void testGetMoves() {
+		Game game = new Game();
+		assertTrue(game.getMoves().isEmpty());
+
+		ArrayList<MoveCommand> list = new ArrayList<MoveCommand>();
+		RegularMove move = new RegularMove(game.getBoardState(), new Coordinate(1, 1), new Coordinate(1, 2),
+				game.getPlayerTurn(), game.getNumMoves());
+		list.add(move);
+
+		game.move(move);
+		assertEquals(list, game.getMoves());
+
+		move = new RegularMove(game.getBoardState(), new Coordinate(1, 2), new Coordinate(1, 3), game.getPlayerTurn(),
+				game.getNumMoves());
+		list.add(move);
+
+		game.move(move);
+		assertEquals(list, game.getMoves());
+	}
+
+	@Test
+	public void testGetLastMove() {
+		Game game = new Game();
+
+		assertNull(game.getLastMove());
+
+		RegularMove move = new RegularMove(game.getBoardState(), new Coordinate(1, 1), new Coordinate(1, 2),
+				game.getPlayerTurn(), game.getNumMoves());
+
+		game.move(move);
+		assertEquals(move, game.getLastMove());
+
+		move = new RegularMove(game.getBoardState(), new Coordinate(1, 2), new Coordinate(1, 3), game.getPlayerTurn(),
+				game.getNumMoves());
+
+		game.move(move);
+		assertEquals(move, game.getLastMove());
+	}
+
+	@Test
+	public void testDeadCoorsAreRemoved() {
+		Game game = new Game();
+		HashSet<Coordinate> deadCoors = new HashSet<Coordinate>();
+
+		RegularMove move = new RegularMove(game.getBoardState(), new Coordinate(2, 1), new Coordinate(2, 2),
+				game.getPlayerTurn(), game.getNumMoves());
+		game.move(move);
+		deadCoors.add(new Coordinate(2, 2));
+
+		assertEquals(deadCoors, game.getDeadCoors());
+
+		move = new RegularMove(game.getBoardState(), new Coordinate(5, 1), new Coordinate(5, 2), game.getPlayerTurn(),
+				game.getNumMoves());
+		game.move(move);
+		deadCoors.add(new Coordinate(5, 2));
+
+		assertEquals(deadCoors, game.getDeadCoors());
+
+		game.clearDeadCoors();
+		assertTrue(game.getDeadCoors().isEmpty());
+	}
+
+	@Test
 	public void testGetBoardState() {
 		HashMap<Coordinate, AbstractPiece> p1 = new HashMap<Coordinate, AbstractPiece>();
 		p1.put(new Coordinate(6, 7), new Cat(Owner.Player1));
@@ -106,24 +171,24 @@ public class TestGame {
 		Game game = new Game(b);
 		assertEquals(b, game.getBoardState());
 	}
-	
+
 	@Test
 	public void testTurnNumberStartsAt0() {
 		assertEquals(0, g.getTurnNumber());
 	}
-	
+
 	@Test
 	public void testTurnNumberIncrements() {
 		assertEquals(Owner.Player1, g.getPlayerTurn());
-		
+
 		g.incrementTurn();
 		assertEquals(Owner.Player2, g.getPlayerTurn());
 		assertEquals(1, g.getTurnNumber());
-		
+
 		g.incrementTurn();
 		assertEquals(Owner.Player1, g.getPlayerTurn());
 		assertEquals(2, g.getTurnNumber());
-		
+
 		g.incrementTurn();
 		assertEquals(Owner.Player2, g.getPlayerTurn());
 		assertEquals(3, g.getTurnNumber());
@@ -134,44 +199,44 @@ public class TestGame {
 		g.setTurnNumber(5);
 		assertEquals(5, g.getTurnNumber());
 	}
-	
+
 	@Test
 	public void testPlayer1GoesFirst() {
 		assertEquals(Owner.Player1, g.getPlayerTurn());
 	}
-	
+
 	@Test
 	public void testGetOtherOwner() {
 		assertEquals(Owner.Player1, g.getPlayerTurn());
 		assertEquals(Owner.Player2, g.getOtherPlayerTurn());
-		
+
 		g.incrementTurn();
 		assertEquals(Owner.Player2, g.getPlayerTurn());
 		assertEquals(Owner.Player1, g.getOtherPlayerTurn());
 	}
-		
+
 	@Test
 	public void testGetWinner() {
 		assertEquals(Owner.Nobody, g.getWinner());
 	}
-	
+
 	@Test
 	public void testSetWinner() {
 		Owner winner = Owner.Player1;
 		g.setWinner(winner);
 		assertEquals(winner, g.getWinner());
 	}
-	
+
 	@Test
 	public void testStartWith4Moves() {
 		assertEquals(4, g.getNumMoves());
 	}
-	
+
 	@Test
 	public void testDefaultPlayer1Name() {
 		assertEquals("Player1", g.getP1Name());
 	}
-	
+
 	@Test
 	public void testChangePlayer1Name() {
 		String newName = "new name";
@@ -183,19 +248,19 @@ public class TestGame {
 	public void testDefaultPlayer2Name() {
 		assertEquals("Player2", g.getP2Name());
 	}
-	
+
 	@Test
 	public void testChangePlayer2Name() {
 		String newName = "new name";
 		g.setP2Name(newName);
 		assertEquals(newName, g.getP2Name());
 	}
-	
+
 	@Test
 	public void testGetMoveTimer() {
 		assertEquals(0, g.getMoveTimer());
 	}
-	
+
 	@Test
 	public void testSetMoveTimer() {
 		int newTime = 30;
@@ -211,7 +276,7 @@ public class TestGame {
 
 	@Test
 	public void testGetPieceNotExists() {
-		assertFalse(g1.isPieceAt(new Coordinate(0,0)));
+		assertFalse(g1.isPieceAt(new Coordinate(0, 0)));
 		assertNull(g1.getPieceAt(new Coordinate(0, 0)));
 	}
 
@@ -239,6 +304,9 @@ public class TestGame {
 		assertTrue(game.move(move));
 		// g.currentBoard.printBoard();
 		assertFalse(game.isPieceAt(new Coordinate(2, 2)));
+		HashSet<Coordinate> set = new HashSet<Coordinate>();
+		set.add(new Coordinate(2, 2));
+		assertEquals(set, game.getDeadCoors());
 	}
 
 	@Test
@@ -262,12 +330,18 @@ public class TestGame {
 		Owner owner = game.getPlayerTurn();
 		MoveCommand move = new RegularMove(game.getBoardState(), start, end, owner, game.getNumMoves());
 		game.move(move);
-		assertEquals(game.getPieceAt(new Coordinate(2, 5)), game.getPieceAt(new Coordinate(2, 5)));
+		assertTrue(game.isPieceAt(end));
+		assertTrue(game.getDeadCoors().isEmpty());
+
 		start = new Coordinate(5, 1);
 		end = start.up();
 		owner = game.getPlayerTurn();
 		move = new RegularMove(game.getBoardState(), start, end, owner, game.getNumMoves());
 		game.move(move);
-		assertFalse(game.isPieceAt(new Coordinate(5, 1)));
+		assertFalse(game.isPieceAt(new Coordinate(5, 2)));
+
+		HashSet<Coordinate> set = new HashSet<Coordinate>();
+		set.add(new Coordinate(5, 2));
+		assertEquals(set, game.getDeadCoors());
 	}
 }

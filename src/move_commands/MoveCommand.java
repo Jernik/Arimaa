@@ -1,6 +1,7 @@
 package move_commands;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import board.BoardState;
 import board.Coordinate;
@@ -32,6 +33,7 @@ public abstract class MoveCommand implements Serializable {
 	abstract public BoardState execute();
 
 	abstract public boolean isValidMove();
+
 	abstract public int getNumberOfMoves();
 
 	public BoardState getOriginalBoard() {
@@ -49,10 +51,17 @@ public abstract class MoveCommand implements Serializable {
 	public Owner getTurn() {
 		return turn;
 	}
-	
 
 	public int getMovesLeft() {
 		return this.movesLeft;
+	}
+
+	public ArrayList<CoordinatePair> getAffectedCoordinates() {
+		ArrayList<CoordinatePair> list = new ArrayList<CoordinatePair>();
+		if (this.isValidMove()) {
+			list.add(new CoordinatePair(this.originalPosition, this.newPosition));
+		}
+		return list;
 	}
 
 	@Override
@@ -68,7 +77,8 @@ public abstract class MoveCommand implements Serializable {
 	protected boolean eq(MoveCommand moveCommand) {
 		return this.originalPosition.equals(moveCommand.getOriginalPosition())
 				&& this.newPosition.equals(moveCommand.getNewPosition()) && this.turn.equals(moveCommand.getTurn())
-				&& this.getNumberOfMoves() == moveCommand.getNumberOfMoves() && this.movesLeft == moveCommand.getMovesLeft()
+				&& this.getNumberOfMoves() == moveCommand.getNumberOfMoves()
+				&& this.movesLeft == moveCommand.getMovesLeft()
 				&& this.originalBoard.equals(moveCommand.getOriginalBoard())
 				&& this.newBoard.equals(moveCommand.newBoard);
 	}

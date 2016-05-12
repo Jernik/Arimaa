@@ -4,14 +4,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
+
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
 import board.Coordinate;
-import move_commands.MoveCommand;
-import move_commands.PullMove;
-import move_commands.PullSetup;
 import piece.AbstractPiece;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -22,6 +21,30 @@ public class TestPullValid extends PullSetup {
 		PullMove move = new PullMove(pullingGame.getBoardState(), new Coordinate(5, 5), new Coordinate(5, 4), coor,
 				pullingGame.getPlayerTurn(), pullingGame.getNumMoves());
 		assertEquals(coor, move.getPullPiecePlace());
+	}
+
+	@Test
+	public void testCanGetAffectedCoordinates() {
+		Coordinate c1 = new Coordinate(5, 5);
+		Coordinate c2 = new Coordinate(5, 4);
+		Coordinate c3 = new Coordinate(5, 6);
+
+		ArrayList<CoordinatePair> map = new ArrayList<CoordinatePair>();
+		map.add(new CoordinatePair(c1, c2));
+		map.add(new CoordinatePair(c3, c1));
+
+		PullMove move = new PullMove(pullingGame.getBoardState(), c1, c2, c3, pullingGame.getPlayerTurn(),
+				pullingGame.getNumMoves());
+
+		assertEquals(map, move.getAffectedCoordinates());
+	}
+
+	@Test
+	public void testGetAffectedPiecesIsEmptyIfInvalid() {
+		PullMove move = new PullMove(pullingGame.getBoardState(), new Coordinate(1, 5), new Coordinate(5, 4),
+				new Coordinate(5, 6), pullingGame.getPlayerTurn(), pullingGame.getNumMoves());
+
+		assertTrue(move.getAffectedCoordinates().isEmpty());
 	}
 
 	@Test

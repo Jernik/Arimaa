@@ -1,5 +1,7 @@
 package move_commands;
 
+import java.util.ArrayList;
+
 import board.BoardState;
 import board.Coordinate;
 import piece.AbstractPiece;
@@ -32,9 +34,18 @@ public class PullMove extends MoveCommand {
 	public Coordinate getPullPiecePlace() {
 		return this.pullPiecePosition;
 	}
-	
+
 	public int getNumberOfMoves() {
 		return NUMBER_OF_MOVES;
+	}
+
+	@Override
+	public ArrayList<CoordinatePair> getAffectedCoordinates() {
+		ArrayList<CoordinatePair> list = super.getAffectedCoordinates();
+		if (this.isValidMove()) {
+			list.add(new CoordinatePair(this.pullPiecePosition, this.originalPosition));
+		}
+		return list;
 	}
 
 	// you should assume that you are given 3 random coordinates, that might or might not be valid
