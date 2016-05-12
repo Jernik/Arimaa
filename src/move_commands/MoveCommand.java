@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import board.BoardState;
 import board.Coordinate;
+import game.Game;
 import piece.Owner;
 
 public abstract class MoveCommand implements Serializable {
@@ -18,16 +19,15 @@ public abstract class MoveCommand implements Serializable {
 	protected Owner turn;
 	protected int movesLeft;
 
-	protected MoveCommand(BoardState board, Coordinate originalPosition, Coordinate newPosition, Owner turn,
-			int movesLeft) {
-		this.originalBoard = new BoardState(board);
-		this.newBoard = board;
+	protected MoveCommand(Game game, Coordinate originalPosition, Coordinate newPosition, Owner turn) {
+		this.originalBoard = new BoardState(game.getBoardState());
+		this.newBoard = game.getBoardState();
 
 		this.originalPosition = originalPosition;
 		this.newPosition = newPosition;
 
 		this.turn = turn;
-		this.movesLeft = movesLeft;
+		this.movesLeft = game.getNumMoves();
 	}
 
 	abstract public BoardState execute();

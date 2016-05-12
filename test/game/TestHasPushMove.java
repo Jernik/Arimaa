@@ -97,8 +97,7 @@ public class TestHasPushMove {
 		p.put(new Coordinate(4, 3), new Rabbit(Owner.Player2));
 
 		Game game = new Game(new BoardState(p));
-		game.move(new RegularMove(game.getBoardState(), new Coordinate(5, 4), new Coordinate(4, 4),
-				game.getPlayerTurn(), game.getNumMoves()));
+		game.move(new RegularMove(game, new Coordinate(5, 4), new Coordinate(4, 4), game.getPlayerTurn()));
 
 		exhaustivelyCheckPushMoves(game, new Coordinate(4, 4));
 	}
@@ -110,10 +109,8 @@ public class TestHasPushMove {
 		p.put(new Coordinate(4, 3), new Rabbit(Owner.Player2));
 
 		Game game = new Game(new BoardState(p));
-		game.move(new RegularMove(game.getBoardState(), new Coordinate(4, 4), new Coordinate(5, 4),
-				game.getPlayerTurn(), game.getNumMoves()));
-		game.move(new RegularMove(game.getBoardState(), new Coordinate(5, 4), new Coordinate(4, 4),
-				game.getPlayerTurn(), game.getNumMoves()));
+		game.move(new RegularMove(game, new Coordinate(4, 4), new Coordinate(5, 4), game.getPlayerTurn()));
+		game.move(new RegularMove(game, new Coordinate(5, 4), new Coordinate(4, 4), game.getPlayerTurn()));
 
 		exhaustivelyCheckPushMoves(game, new Coordinate(4, 4));
 	}
@@ -125,12 +122,9 @@ public class TestHasPushMove {
 		p.put(new Coordinate(4, 3), new Rabbit(Owner.Player2));
 
 		Game game = new Game(new BoardState(p));
-		game.move(new RegularMove(game.getBoardState(), new Coordinate(5, 4), new Coordinate(4, 4),
-				game.getPlayerTurn(), game.getNumMoves()));
-		game.move(new RegularMove(game.getBoardState(), new Coordinate(4, 4), new Coordinate(5, 4),
-				game.getPlayerTurn(), game.getNumMoves()));
-		game.move(new RegularMove(game.getBoardState(), new Coordinate(5, 4), new Coordinate(4, 4),
-				game.getPlayerTurn(), game.getNumMoves()));
+		game.move(new RegularMove(game, new Coordinate(5, 4), new Coordinate(4, 4), game.getPlayerTurn()));
+		game.move(new RegularMove(game, new Coordinate(4, 4), new Coordinate(5, 4), game.getPlayerTurn()));
+		game.move(new RegularMove(game, new Coordinate(5, 4), new Coordinate(4, 4), game.getPlayerTurn()));
 
 		exhaustivelyCheckNoPushMoves(game, new Coordinate(4, 4));
 	}

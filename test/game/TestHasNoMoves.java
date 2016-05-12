@@ -215,12 +215,9 @@ public class TestHasNoMoves {
 		p.put(new Coordinate(3, 4), new Rabbit(Owner.Player2));
 
 		Game game = new Game(new BoardState(p));
-		game.move(new RegularMove(game.getBoardState(), new Coordinate(4, 0), new Coordinate(5, 0),
-				game.getPlayerTurn(), game.getNumMoves()));
-		game.move(new RegularMove(game.getBoardState(), new Coordinate(5, 0), new Coordinate(5, 1),
-				game.getPlayerTurn(), game.getNumMoves()));
-		game.move(new RegularMove(game.getBoardState(), new Coordinate(5, 1), new Coordinate(5, 2),
-				game.getPlayerTurn(), game.getNumMoves()));
+		game.move(new RegularMove(game, new Coordinate(4, 0), new Coordinate(5, 0), game.getPlayerTurn()));
+		game.move(new RegularMove(game, new Coordinate(5, 0), new Coordinate(5, 1), game.getPlayerTurn()));
+		game.move(new RegularMove(game, new Coordinate(5, 1), new Coordinate(5, 2), game.getPlayerTurn()));
 
 		exhaustivelyCheckHasNoMoves(game, new Coordinate(4, 4));
 		assertTrue(game.hasNoMoves(Owner.Player1));

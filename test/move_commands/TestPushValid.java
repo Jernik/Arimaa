@@ -18,8 +18,7 @@ public class TestPushValid extends PushSetup {
 	@Test
 	public void testPushCanGetPushPiece() {
 		Coordinate coor = new Coordinate(4, 2);
-		PushMove move = new PushMove(g2.getBoardState(), new Coordinate(4, 4), new Coordinate(4, 3), coor,
-				g2.getPlayerTurn(), g2.getNumMoves());
+		PushMove move = new PushMove(g2, new Coordinate(4, 4), new Coordinate(4, 3), coor, g2.getPlayerTurn());
 		assertEquals(coor, move.getPushPiecePlace());
 	}
 
@@ -33,15 +32,15 @@ public class TestPushValid extends PushSetup {
 		map.add(new CoordinatePair(c2, c3));
 		map.add(new CoordinatePair(c1, c2));
 
-		PushMove move = new PushMove(g2.getBoardState(), c1, c2, c3, g2.getPlayerTurn(), g2.getNumMoves());
+		PushMove move = new PushMove(g2, c1, c2, c3, g2.getPlayerTurn());
 
 		assertEquals(map, move.getAffectedCoordinates());
 	}
 
 	@Test
 	public void testGetAffectedPiecesIsEmptyIfInvalid() {
-		PushMove move = new PushMove(g2.getBoardState(), new Coordinate(-1, 4), new Coordinate(4, 3),
-				new Coordinate(4, 2), g2.getPlayerTurn(), g2.getNumMoves());
+		PushMove move = new PushMove(g2, new Coordinate(-1, 4), new Coordinate(4, 3), new Coordinate(4, 2),
+				g2.getPlayerTurn());
 
 		assertTrue(move.getAffectedCoordinates().isEmpty());
 	}
@@ -51,8 +50,8 @@ public class TestPushValid extends PushSetup {
 		AbstractPiece p1 = g2.getPieceAt(new Coordinate(4, 4));
 		AbstractPiece p2 = g2.getPieceAt(new Coordinate(4, 3));
 
-		MoveCommand move = new PushMove(g2.getBoardState(), new Coordinate(4, 4), new Coordinate(4, 3),
-				new Coordinate(4, 2), g2.getPlayerTurn(), g2.getNumMoves());
+		MoveCommand move = new PushMove(g2, new Coordinate(4, 4), new Coordinate(4, 3), new Coordinate(4, 2),
+				g2.getPlayerTurn());
 		assertTrue(move.isValidMove());
 		assertTrue(g2.move(move));
 
@@ -66,8 +65,8 @@ public class TestPushValid extends PushSetup {
 		AbstractPiece p1 = g2.getPieceAt(new Coordinate(4, 4));
 		AbstractPiece p2 = g2.getPieceAt(new Coordinate(4, 5));
 
-		MoveCommand move = new PushMove(g2.getBoardState(), new Coordinate(4, 4), new Coordinate(4, 5),
-				new Coordinate(4, 6), g2.getPlayerTurn(), g2.getNumMoves());
+		MoveCommand move = new PushMove(g2, new Coordinate(4, 4), new Coordinate(4, 5), new Coordinate(4, 6),
+				g2.getPlayerTurn());
 		assertTrue(move.isValidMove());
 		assertTrue(g2.move(move));
 
@@ -81,8 +80,8 @@ public class TestPushValid extends PushSetup {
 		AbstractPiece p1 = g2.getPieceAt(new Coordinate(4, 4));
 		AbstractPiece p2 = g2.getPieceAt(new Coordinate(5, 4));
 
-		MoveCommand move = new PushMove(g2.getBoardState(), new Coordinate(4, 4), new Coordinate(5, 4),
-				new Coordinate(6, 4), g2.getPlayerTurn(), g2.getNumMoves());
+		MoveCommand move = new PushMove(g2, new Coordinate(4, 4), new Coordinate(5, 4), new Coordinate(6, 4),
+				g2.getPlayerTurn());
 		assertTrue(move.isValidMove());
 		assertTrue(g2.move(move));
 
@@ -96,8 +95,8 @@ public class TestPushValid extends PushSetup {
 		AbstractPiece p1 = g2.getPieceAt(new Coordinate(6, 7));
 		AbstractPiece p2 = g2.getPieceAt(new Coordinate(5, 7));
 
-		MoveCommand move = new PushMove(g2.getBoardState(), new Coordinate(6, 7), new Coordinate(5, 7),
-				new Coordinate(4, 7), g2.getPlayerTurn(), g2.getNumMoves());
+		MoveCommand move = new PushMove(g2, new Coordinate(6, 7), new Coordinate(5, 7), new Coordinate(4, 7),
+				g2.getPlayerTurn());
 		assertTrue(move.isValidMove());
 		assertTrue(g2.move(move));
 
@@ -108,8 +107,8 @@ public class TestPushValid extends PushSetup {
 
 	@Test
 	public void testPushWithDifferentDirections() {
-		MoveCommand move = new PushMove(pushingGame.getBoardState(), new Coordinate(5, 4), new Coordinate(6, 4),
-				new Coordinate(6, 3), pushingGame.getPlayerTurn(), pushingGame.getNumMoves());
+		MoveCommand move = new PushMove(pushingGame, new Coordinate(5, 4), new Coordinate(6, 4), new Coordinate(6, 3),
+				pushingGame.getPlayerTurn());
 		assertTrue(move.isValidMove());
 		assertTrue(pushingGame.move(move));
 
@@ -125,8 +124,8 @@ public class TestPushValid extends PushSetup {
 		AbstractPiece p2 = pushingGame.getPieceAt(new Coordinate(6, 5));
 		pushingGame.getBoardState().movePiece(new Coordinate(4, 4), new Coordinate(4, 5));
 
-		MoveCommand move = new PushMove(pushingGame.getBoardState(), new Coordinate(5, 5), new Coordinate(6, 5),
-				new Coordinate(7, 5), pushingGame.getPlayerTurn(), pushingGame.getNumMoves());
+		MoveCommand move = new PushMove(pushingGame, new Coordinate(5, 5), new Coordinate(6, 5), new Coordinate(7, 5),
+				pushingGame.getPlayerTurn());
 
 		assertTrue(move.isValidMove());
 		assertTrue(pushingGame.move(move));
