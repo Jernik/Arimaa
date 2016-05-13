@@ -377,7 +377,7 @@ public class TestGame {
 
 	@Test
 	public void testGetMoveTimer() {
-		assertEquals(0, g.getMoveTimer());
+		assertEquals(30, g.getMoveTimer());
 	}
 
 	@Test
