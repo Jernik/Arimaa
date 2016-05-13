@@ -9,6 +9,10 @@ public class Elephant extends AbstractPiece {
 
 	public Elephant(Owner owner) {
 		super(null, owner, 5);
+	}
+
+	@Override
+	public void generateImage() {
 		String color = owner.equals(Owner.Player1) ? "White" : "Black";
 		this.setImage(new ImageIcon(GUI.class.getClassLoader().getResource(color + " elephant.png")));
 	}

@@ -7,9 +7,9 @@ import javax.swing.ImageIcon;
 
 public abstract class AbstractPiece implements Serializable {
 	private static final long serialVersionUID = 1115622952453934265L;
-	private ImageIcon image;
-	private Owner owner;
-	private int rank;
+	protected ImageIcon image;
+	protected Owner owner;
+	protected int rank;
 
 	public AbstractPiece(ImageIcon image, Owner owner, int rank) {
 		this.image = image;
@@ -18,8 +18,13 @@ public abstract class AbstractPiece implements Serializable {
 	}
 
 	public Image getImage() {
+		if (this.image == null) {
+			this.generateImage();
+		}
 		return image.getImage();
 	}
+	
+	abstract public void generateImage();
 
 	public void setImage(ImageIcon image) {
 		this.image = image;
@@ -47,7 +52,8 @@ public abstract class AbstractPiece implements Serializable {
 	}
 
 	public int hashCode() {
-		return this.getClass().hashCode() + this.image.getImage().hashCode() + this.owner.hashCode()
+		
+		return this.getClass().hashCode() + this.owner.hashCode()
 				+ Integer.hashCode(this.rank);
 	}
 

@@ -9,6 +9,10 @@ public class Horse extends AbstractPiece {
 
 	public Horse(Owner owner) {
 		super(null, owner, 3);
+	}
+
+	@Override
+	public void generateImage() {
 		String color = owner.equals(Owner.Player1) ? "White" : "Black";
 		this.setImage(new ImageIcon(GUI.class.getClassLoader().getResource(color + " horse.png")));
 	}
