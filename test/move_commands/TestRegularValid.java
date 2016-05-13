@@ -29,15 +29,14 @@ public class TestRegularValid extends RegularSetup {
 		ArrayList<CoordinatePair> map = new ArrayList<CoordinatePair>();
 		map.add(new CoordinatePair(c1, c2));
 
-		MoveCommand move = new RegularMove(g.getBoardState(), c1, c2, g.getPlayerTurn(), g.getNumMoves());
+		MoveCommand move = new RegularMove(g, c1, c2, g.getPlayerTurn());
 
 		assertEquals(map, move.getAffectedCoordinates());
 	}
 
 	@Test
 	public void testGetAffectedCoordinatesIsEmptyIfInvalid() {
-		MoveCommand move = new RegularMove(g.getBoardState(), new Coordinate(-1, 6), new Coordinate(1, 5),
-				g.getPlayerTurn(), g.getNumMoves());
+		MoveCommand move = new RegularMove(g, new Coordinate(-1, 6), new Coordinate(1, 5), g.getPlayerTurn());
 
 		assertTrue(move.getAffectedCoordinates().isEmpty());
 	}
@@ -58,7 +57,7 @@ public class TestRegularValid extends RegularSetup {
 		Coordinate start = new Coordinate(7, 7);
 		Coordinate end = new Coordinate(7, 6);
 		Owner owner = g1.getPlayerTurn();
-		MoveCommand move = new RegularMove(g1.getBoardState(), start, end, owner, g1.getNumMoves());
+		MoveCommand move = new RegularMove(g1, start, end, owner);
 
 		assertTrue(g1.move(move));
 		assertEquals(new Cat(Owner.Player1), g1.getPieceAt(new Coordinate(6, 7)));
@@ -67,8 +66,7 @@ public class TestRegularValid extends RegularSetup {
 
 	@Test
 	public void testRabbitCanMoveForwards1() {
-		MoveCommand move = new RegularMove(g.getBoardState(), new Coordinate(0, 1), new Coordinate(0, 2),
-				g.getPlayerTurn(), g.getNumMoves());
+		MoveCommand move = new RegularMove(g, new Coordinate(0, 1), new Coordinate(0, 2), g.getPlayerTurn());
 
 		assertTrue(move.isValidMove());
 		assertTrue(g.move(move));
@@ -80,8 +78,7 @@ public class TestRegularValid extends RegularSetup {
 	@Test
 	public void testRabbitCanMoveForwards2() {
 		g.incrementTurn();
-		MoveCommand move = new RegularMove(g.getBoardState(), new Coordinate(0, 6), new Coordinate(0, 5),
-				g.getPlayerTurn(), g.getNumMoves());
+		MoveCommand move = new RegularMove(g, new Coordinate(0, 6), new Coordinate(0, 5), g.getPlayerTurn());
 
 		assertTrue(move.isValidMove());
 		assertTrue(g.move(move));
@@ -92,8 +89,8 @@ public class TestRegularValid extends RegularSetup {
 
 	@Test
 	public void testCanMoveIfFrozenByStrongerOpposingPieceButThawedByFriendlyPiece() {
-		MoveCommand move = new RegularMove(freezingGame.getBoardState(), new Coordinate(4, 3), new Coordinate(3, 3),
-				freezingGame.getPlayerTurn(), freezingGame.getNumMoves());
+		MoveCommand move = new RegularMove(freezingGame, new Coordinate(4, 3), new Coordinate(3, 3),
+				freezingGame.getPlayerTurn());
 
 		assertTrue(move.isValidMove());
 		assertTrue(freezingGame.move(move));

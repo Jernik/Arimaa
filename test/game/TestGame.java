@@ -227,15 +227,13 @@ public class TestGame {
 		assertTrue(game.getMoves().isEmpty());
 
 		ArrayList<MoveCommand> list = new ArrayList<MoveCommand>();
-		RegularMove move = new RegularMove(game.getBoardState(), new Coordinate(1, 1), new Coordinate(1, 2),
-				game.getPlayerTurn(), game.getNumMoves());
+		RegularMove move = new RegularMove(game, new Coordinate(1, 1), new Coordinate(1, 2), game.getPlayerTurn());
 		list.add(move);
 
 		game.move(move);
 		assertEquals(list, game.getMoves());
 
-		move = new RegularMove(game.getBoardState(), new Coordinate(1, 2), new Coordinate(1, 3), game.getPlayerTurn(),
-				game.getNumMoves());
+		move = new RegularMove(game, new Coordinate(1, 2), new Coordinate(1, 3), game.getPlayerTurn());
 		list.add(move);
 
 		game.move(move);
@@ -248,14 +246,12 @@ public class TestGame {
 
 		assertNull(game.getLastMove());
 
-		RegularMove move = new RegularMove(game.getBoardState(), new Coordinate(1, 1), new Coordinate(1, 2),
-				game.getPlayerTurn(), game.getNumMoves());
+		RegularMove move = new RegularMove(game, new Coordinate(1, 1), new Coordinate(1, 2), game.getPlayerTurn());
 
 		game.move(move);
 		assertEquals(move, game.getLastMove());
 
-		move = new RegularMove(game.getBoardState(), new Coordinate(1, 2), new Coordinate(1, 3), game.getPlayerTurn(),
-				game.getNumMoves());
+		move = new RegularMove(game, new Coordinate(1, 2), new Coordinate(1, 3), game.getPlayerTurn());
 
 		game.move(move);
 		assertEquals(move, game.getLastMove());
@@ -266,15 +262,13 @@ public class TestGame {
 		Game game = new Game();
 		HashSet<Coordinate> deadCoors = new HashSet<Coordinate>();
 
-		RegularMove move = new RegularMove(game.getBoardState(), new Coordinate(2, 1), new Coordinate(2, 2),
-				game.getPlayerTurn(), game.getNumMoves());
+		RegularMove move = new RegularMove(game, new Coordinate(2, 1), new Coordinate(2, 2), game.getPlayerTurn());
 		game.move(move);
 		deadCoors.add(new Coordinate(2, 2));
 
 		assertEquals(deadCoors, game.getDeadCoors());
 
-		move = new RegularMove(game.getBoardState(), new Coordinate(5, 1), new Coordinate(5, 2), game.getPlayerTurn(),
-				game.getNumMoves());
+		move = new RegularMove(game, new Coordinate(5, 1), new Coordinate(5, 2), game.getPlayerTurn());
 		game.move(move);
 		deadCoors.add(new Coordinate(5, 2));
 
@@ -425,7 +419,7 @@ public class TestGame {
 		Coordinate start = new Coordinate(3, 6);
 		Coordinate end = start.up();
 		Owner owner = game.getPlayerTurn();
-		MoveCommand move = new RegularMove(game.getBoardState(), start, end, owner, game.getNumMoves());
+		MoveCommand move = new RegularMove(game, start, end, owner);
 		assertTrue(game.move(move));
 		// g.currentBoard.printBoard();
 		assertFalse(game.isPieceAt(new Coordinate(2, 2)));
@@ -453,7 +447,7 @@ public class TestGame {
 		Coordinate start = new Coordinate(2, 2);
 		Coordinate end = start.up();
 		Owner owner = game.getPlayerTurn();
-		MoveCommand move = new RegularMove(game.getBoardState(), start, end, owner, game.getNumMoves());
+		MoveCommand move = new RegularMove(game, start, end, owner);
 		game.move(move);
 		assertTrue(game.isPieceAt(end));
 		assertTrue(game.getDeadCoors().isEmpty());
@@ -461,7 +455,7 @@ public class TestGame {
 		start = new Coordinate(5, 1);
 		end = start.up();
 		owner = game.getPlayerTurn();
-		move = new RegularMove(game.getBoardState(), start, end, owner, game.getNumMoves());
+		move = new RegularMove(game, start, end, owner);
 		game.move(move);
 		assertFalse(game.isPieceAt(new Coordinate(5, 2)));
 

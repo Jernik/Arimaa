@@ -32,38 +32,29 @@ public class TestGenerateRandomMoveOnlyIfEnoughMoves extends AiSetup {
 	@Test
 	public void testNormalNoPushOrPullIf1MoveLeft() {
 		Game game = this.normalAi.getGame();
-		game.move(new RegularMove(game.getBoardState(), new Coordinate(1, 1), new Coordinate(1, 2), game.getPlayerTurn(),
-				game.getNumMoves()));
-		game.move(new RegularMove(game.getBoardState(), new Coordinate(1, 2), new Coordinate(1, 1), game.getPlayerTurn(),
-				game.getNumMoves()));
-		game.move(new RegularMove(game.getBoardState(), new Coordinate(1, 1), new Coordinate(1, 2), game.getPlayerTurn(),
-				game.getNumMoves()));
+		game.move(new RegularMove(game, new Coordinate(1, 1), new Coordinate(1, 2), game.getPlayerTurn()));
+		game.move(new RegularMove(game, new Coordinate(1, 2), new Coordinate(1, 1), game.getPlayerTurn()));
+		game.move(new RegularMove(game, new Coordinate(1, 1), new Coordinate(1, 2), game.getPlayerTurn()));
 		testOnlyRegularMoves(this.normalAi);
 	}
 
 	@Test
 	public void testKatLoverNoPushOrPullIf1MoveLeft() {
 		Game game = this.catLoverAi.getGame();
-		game.move(new RegularMove(game.getBoardState(), new Coordinate(0, 1), new Coordinate(0, 0), game.getPlayerTurn(),
-				game.getNumMoves()));
-		game.move(new RegularMove(game.getBoardState(), new Coordinate(0, 0), new Coordinate(0, 1), game.getPlayerTurn(),
-				game.getNumMoves()));
-		game.move(new RegularMove(game.getBoardState(), new Coordinate(0, 1), new Coordinate(0, 0), game.getPlayerTurn(),
-				game.getNumMoves()));
+		game.move(new RegularMove(game, new Coordinate(0, 1), new Coordinate(0, 0), game.getPlayerTurn()));
+		game.move(new RegularMove(game, new Coordinate(0, 0), new Coordinate(0, 1), game.getPlayerTurn()));
+		game.move(new RegularMove(game, new Coordinate(0, 1), new Coordinate(0, 0), game.getPlayerTurn()));
 		testOnlyRegularMoves(this.catLoverAi);
 	}
 
 	@Test
 	public void testNotManyMovesNoPushOrPullIf1MoveLeft() {
 		Game game = this.notManyMovesAi.getGame();
-		game.move(new RegularMove(game.getBoardState(), new Coordinate(1, 1), new Coordinate(1, 2), game.getPlayerTurn(),
-				game.getNumMoves()));
+		game.move(new RegularMove(game, new Coordinate(1, 1), new Coordinate(1, 2), game.getPlayerTurn()));
 		game.getBoardState().movePiece(new Coordinate(1, 2), new Coordinate(1, 1));
-		game.move(new RegularMove(game.getBoardState(), new Coordinate(1, 1), new Coordinate(1, 2), game.getPlayerTurn(),
-				game.getNumMoves()));
+		game.move(new RegularMove(game, new Coordinate(1, 1), new Coordinate(1, 2), game.getPlayerTurn()));
 		game.getBoardState().movePiece(new Coordinate(1, 2), new Coordinate(1, 1));
-		game.move(new RegularMove(game.getBoardState(), new Coordinate(1, 1), new Coordinate(1, 2), game.getPlayerTurn(),
-				game.getNumMoves()));
+		game.move(new RegularMove(game, new Coordinate(1, 1), new Coordinate(1, 2), game.getPlayerTurn()));
 		game.getBoardState().movePiece(new Coordinate(1, 2), new Coordinate(1, 1));
 		testOnlyRegularMoves(this.notManyMovesAi);
 	}
@@ -71,12 +62,9 @@ public class TestGenerateRandomMoveOnlyIfEnoughMoves extends AiSetup {
 	@Test
 	public void testStartingNoPushOrPullIf1MoveLeft() {
 		Game game = this.startingAi.getGame();
-		game.move(new RegularMove(game.getBoardState(), new Coordinate(1, 1), new Coordinate(1, 2), game.getPlayerTurn(),
-				game.getNumMoves()));
-		game.move(new RegularMove(game.getBoardState(), new Coordinate(1, 2), new Coordinate(1, 3), game.getPlayerTurn(),
-				game.getNumMoves()));
-		game.move(new RegularMove(game.getBoardState(), new Coordinate(1, 3), new Coordinate(1, 4), game.getPlayerTurn(),
-				game.getNumMoves()));
+		game.move(new RegularMove(game, new Coordinate(1, 1), new Coordinate(1, 2), game.getPlayerTurn()));
+		game.move(new RegularMove(game, new Coordinate(1, 2), new Coordinate(1, 3), game.getPlayerTurn()));
+		game.move(new RegularMove(game, new Coordinate(1, 3), new Coordinate(1, 4), game.getPlayerTurn()));
 		game.getBoardState().movePiece(new Coordinate(1, 4), new Coordinate(1, 1));
 		testOnlyRegularMoves(this.startingAi);
 	}

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import board.BoardState;
 import board.Coordinate;
+import game.Game;
 import piece.AbstractPiece;
 import piece.Owner;
 
@@ -15,9 +16,9 @@ public class PushMove extends MoveCommand {
 	public static final int NUMBER_OF_MOVES = 2;
 	private Coordinate pushPiecePosition;
 
-	public PushMove(BoardState board, Coordinate originalPosition, Coordinate newPosition, Coordinate pushPiecePosition,
-			Owner turn, int movesLeft) {
-		super(board, originalPosition, newPosition, turn, movesLeft);
+	public PushMove(Game game, Coordinate originalPosition, Coordinate newPosition, Coordinate pushPiecePosition,
+			Owner turn) {
+		super(game, originalPosition, newPosition, turn);
 		this.pushPiecePosition = pushPiecePosition;
 	}
 
