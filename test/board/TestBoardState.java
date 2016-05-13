@@ -217,29 +217,6 @@ public class TestBoardState {
 	}
 
 	@Test
-	public void testClone() {
-		HashMap<Coordinate, AbstractPiece> pieces = new HashMap<Coordinate, AbstractPiece>();
-		AbstractPiece p1 = new Cat(Owner.Player1);
-		AbstractPiece p2 = new Camel(Owner.Player1);
-		AbstractPiece p3 = new Horse(Owner.Player2);
-		AbstractPiece p4 = new Dog(Owner.Player2);
-
-		pieces.put(new Coordinate(0, 0), p1);
-		pieces.put(new Coordinate(1, 1), p2);
-		pieces.put(new Coordinate(2, 2), p3);
-		pieces.put(new Coordinate(3, 3), p4);
-
-		BoardState b = new BoardState(pieces);
-		BoardState cloned = b.clone();
-		assertEquals(b, cloned);
-		b.movePiece(new Coordinate(0, 0), new Coordinate(1, 0));
-
-		assertEquals(p1, cloned.getPieceAt(new Coordinate(0, 0)));
-		assertFalse(b.isPieceAt(new Coordinate(0, 0)));
-		assertEquals(p1, b.getPieceAt(new Coordinate(1, 0)));
-	}
-
-	@Test
 	public void testEquals() {
 		HashMap<Coordinate, AbstractPiece> pieces1 = new HashMap<Coordinate, AbstractPiece>();
 		AbstractPiece p11 = new Cat(Owner.Player1);
