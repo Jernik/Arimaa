@@ -5,6 +5,7 @@ package gui;
 
 import java.util.Timer;
 import java.util.TimerTask;
+
 import javax.swing.JLabel;
 
 import game.Game;
@@ -36,7 +37,7 @@ public class TimePanel {
 					s = startTime;
 					playerTurn = game.getPlayerTurn();
 				}
-				if (s == 0) {
+				if (s <= 0) {
 					game.setWinner(game.getOtherPlayerTurn());
 					gui.rerenderBoard();// to show winner pane
 				}

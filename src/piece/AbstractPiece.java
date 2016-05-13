@@ -47,7 +47,8 @@ public abstract class AbstractPiece implements Serializable {
 	}
 
 	public int hashCode() {
-		return this.getClass().hashCode() + this.image.getImage().hashCode() + this.owner.hashCode() + Integer.hashCode(this.rank);
+		return this.getClass().hashCode() + this.image.getImage().hashCode() + this.owner.hashCode()
+				+ Integer.hashCode(this.rank);
 	}
 
 	public boolean isStrongerThan(AbstractPiece p2) {

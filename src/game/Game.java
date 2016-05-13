@@ -32,7 +32,7 @@ public class Game implements Serializable {
 	private String p1Name = "Player1";
 	private String p2Name = "Player2";
 
-	private int moveTimer;
+	private Integer moveTimer;
 
 	private HashSet<Coordinate> deadCoors;
 
@@ -55,8 +55,7 @@ public class Game implements Serializable {
 
 		this.p1Name = "Player1";
 		this.p2Name = "Player2";
-
-		this.moveTimer = 0;
+		this.moveTimer = 30;
 	}
 
 	public Game(Game g) {
