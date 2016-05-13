@@ -50,7 +50,8 @@ public class StartGameListener implements ActionListener {
 		gameFrame.setTitle("Let's Play!");
 		gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		ImagePanel panel = new ImagePanel(new ImageIcon("resources/board.jpg").getImage());
+		ImagePanel panel = new ImagePanel(
+				new ImageIcon(GUI.class.getClassLoader().getResource("board.jpg")).getImage());
 		gui.getActiveFrames().get(0).getContentPane().add(panel);
 		gui.getActiveFrames().get(0).pack();
 		panel.setVisible(true);
@@ -170,6 +171,7 @@ public class StartGameListener implements ActionListener {
 		TimePanel timePanel = new TimePanel(gui, game, (int) gui.getTimerComboBox().getSelectedItem(),
 				gui.getTimerLabel());
 		gui.setTimer(timePanel);
+		System.out.println(game.getMoveTimer());
 
 		// Set up Save Game Button
 		JButton saveGameButton = new JButton();
@@ -202,7 +204,7 @@ public class StartGameListener implements ActionListener {
 		}
 		gui.renderInitialBoard();
 	}
-	
+
 	public void startAi() {
 		new Thread(new Runnable() {
 			@Override
@@ -212,7 +214,7 @@ public class StartGameListener implements ActionListener {
 				} catch (InterruptedException e1) {
 					e1.printStackTrace();
 				}
-				while(game.getWinner() == Owner.Nobody) {
+				while (game.getWinner() == Owner.Nobody) {
 					if (game.isAiTurn()) {
 						game.makeAiTurn();
 						gui.rerenderBoard();
@@ -224,6 +226,7 @@ public class StartGameListener implements ActionListener {
 					}
 				}
 			}
-		}).start();;
+		}).start();
+		;
 	}
 }

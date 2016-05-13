@@ -57,7 +57,8 @@ public class LoadGameListener implements ActionListener {
 			gameFrame.setTitle("Let's Play!");
 			gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-			ImagePanel panel = new ImagePanel(new ImageIcon("resources/board.jpg").getImage());
+			ImagePanel panel = new ImagePanel(
+					new ImageIcon(GUI.class.getClassLoader().getResource("board.jpg")).getImage());
 			gui.getActiveFrames().get(0).getContentPane().add(panel);
 			gui.getActiveFrames().get(0).pack();
 			panel.setVisible(true);

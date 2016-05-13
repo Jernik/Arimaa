@@ -80,7 +80,8 @@ public class GUI {
 		GUI g = new GUI();
 
 		// Add MAIN MENU panel with appropriate background image
-		ImagePanel panel = new ImagePanel(new ImageIcon("resources/BoardStoneBig.jpg").getImage());
+		ImagePanel panel = new ImagePanel(
+				new ImageIcon(GUI.class.getClassLoader().getResource("BoardStoneBig.jpg")).getImage());
 		g.getActiveFrames().get(0).getContentPane().add(panel);
 		g.getActiveFrames().get(0).pack();
 		panel.setVisible(true);
@@ -178,11 +179,11 @@ public class GUI {
 	public void setP2TextField(JTextField p2TextField) {
 		this.p2TextField = p2TextField;
 	}
-	
+
 	public JCheckBox getP1AiCheckBox() {
 		return this.p1AiCheckBox;
 	}
-	
+
 	public void setP1AiCheckBox(JCheckBox checkBox) {
 		this.p1AiCheckBox = checkBox;
 	}
@@ -190,7 +191,7 @@ public class GUI {
 	public JCheckBox getP2AiCheckBox() {
 		return this.p2AiCheckBox;
 	}
-	
+
 	public void setP2AiCheckBox(JCheckBox checkBox) {
 		this.p2AiCheckBox = checkBox;
 	}
@@ -264,7 +265,7 @@ public class GUI {
 		if (getGame().getWinner() != Owner.Nobody) {
 			createWinWindow();
 		}
-		
+
 		MoveCommand lastMove = this.game.getLastMove();
 		for (CoordinatePair pair : lastMove.getAffectedCoordinates()) {
 			Coordinate oldCoor = pair.getFrom();
@@ -332,7 +333,8 @@ public class GUI {
 		winnerFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		winnerFrame.setVisible(true);
 
-		ImagePanel panel = new ImagePanel(new ImageIcon("resources/BoardStoneBigCropped.jpg").getImage());
+		ImagePanel panel = new ImagePanel(
+				new ImageIcon(GUI.class.getClassLoader().getResource("BoardStoneBigCropped.jpg")).getImage());
 		winnerFrame.getContentPane().add(panel);
 		winnerFrame.pack();
 		panel.setVisible(true);
@@ -413,7 +415,7 @@ public class GUI {
 	public ObjectInputStream createInputStream(File f) throws IOException {
 		return new ObjectInputStream(new FileInputStream(f));
 	}
-	
+
 	public int getAiSleepTime() {
 		return this.game.isAiGame() ? AI_ONLY_SLEEP : PLAYER_AI_SLEEP;
 	}

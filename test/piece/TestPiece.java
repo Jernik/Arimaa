@@ -12,6 +12,8 @@ import javax.swing.ImageIcon;
 
 import org.junit.Test;
 
+import gui.GUI;
+
 public class TestPiece {
 	@Test
 	public void testThatPieceInitializes() {
@@ -27,7 +29,7 @@ public class TestPiece {
 
 	@Test
 	public void testThatImageCanBeGotten() {
-		Image img = new ImageIcon("resources/White camel.png").getImage();
+		Image img = new ImageIcon(GUI.class.getClassLoader().getResource("White camel.png")).getImage();
 		AbstractPiece p = new Camel(Owner.Player1);
 		assertEquals(img, p.getImage());
 	}

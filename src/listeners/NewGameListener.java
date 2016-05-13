@@ -31,7 +31,8 @@ public class NewGameListener implements ActionListener {
 		settingsFrame.setLocation(650 / 2 - 324 / 2 + 5, 650 / 2 - 324 / 2 + 44);
 		settingsFrame.setVisible(true);
 
-		ImagePanel panel = new ImagePanel(new ImageIcon("resources/BoardStoneBigCropped.jpg").getImage());
+		ImagePanel panel = new ImagePanel(
+				new ImageIcon(GUI.class.getClassLoader().getResource("BoardStoneBigCropped.jpg")).getImage());
 		settingsFrame.getContentPane().add(panel);
 		settingsFrame.pack();
 		panel.setVisible(true);
@@ -59,11 +60,12 @@ public class NewGameListener implements ActionListener {
 		p1NameField.setLocation(2 * panel.getWidth() / 5, panel.getHeight() / 2 - p1NameField.getHeight() * 2);
 		gui.setP1TextField(p1NameField);
 		p1NameField.setVisible(true);
-		
+
 		JCheckBox p1AiButton = new JCheckBox("Ai?");
 		p1AiButton.setSize(50, 25);
 		panel.add(p1AiButton);
-		p1AiButton.setLocation(panel.getWidth() - 3 * p1AiButton.getWidth() / 2, panel.getHeight() / 2 - p1AiButton.getHeight() * 2);
+		p1AiButton.setLocation(panel.getWidth() - 3 * p1AiButton.getWidth() / 2,
+				panel.getHeight() / 2 - p1AiButton.getHeight() * 2);
 		gui.setP1AiCheckBox(p1AiButton);
 		p1AiButton.setVisible(true);
 
@@ -91,10 +93,10 @@ public class NewGameListener implements ActionListener {
 		JCheckBox p2AiButton = new JCheckBox("Ai?");
 		p2AiButton.setSize(50, 25);
 		panel.add(p2AiButton);
-		p2AiButton.setLocation(panel.getWidth() - 3 * p2AiButton.getWidth() / 2, panel.getHeight() / 2 - p2AiButton.getHeight());
+		p2AiButton.setLocation(panel.getWidth() - 3 * p2AiButton.getWidth() / 2,
+				panel.getHeight() / 2 - p2AiButton.getHeight());
 		gui.setP2AiCheckBox(p2AiButton);
 		p2AiButton.setVisible(true);
-
 
 		// Set up Turn Timer Label and Text Field
 		JLabel turnTimerLabel = new JLabel();
@@ -104,7 +106,7 @@ public class NewGameListener implements ActionListener {
 		turnTimerLabel.setFont(new Font(turnTimerFont.getName(), 4, 14));
 		turnTimerLabel.setSize(110, 25);
 		panel.add(turnTimerLabel);
-		turnTimerLabel.setLocation(2*panel.getWidth() / 5 - turnTimerLabel.getWidth(), panel.getHeight() / 2);
+		turnTimerLabel.setLocation(2 * panel.getWidth() / 5 - turnTimerLabel.getWidth(), panel.getHeight() / 2);
 		turnTimerLabel.setVisible(true);
 
 		Integer[] turnTimerPresets = { 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180 };
@@ -113,7 +115,7 @@ public class NewGameListener implements ActionListener {
 		turnTimerComboBox.setEditable(false);
 		turnTimerComboBox.setSize(110, 25);
 		panel.add(turnTimerComboBox);
-		turnTimerComboBox.setLocation(2*panel.getWidth() / 5, panel.getHeight() / 2);
+		turnTimerComboBox.setLocation(2 * panel.getWidth() / 5, panel.getHeight() / 2);
 		turnTimerComboBox.setVisible(true);
 
 		// Set up Start Game Button
