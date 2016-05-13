@@ -6,8 +6,6 @@
   <property name="test.src.dir" value="test" />
   <property name="testSuites.src.dir" value="TestSuites" />
   <property name="testSuites.build.dir" value="build/TestSuites" />
-  <property name="resources.src.dir" value="resources" />
-  <property name="resources.build.dir" value="build/resources" />
   <property name="ant.build.javac.source" value="1.8"/>
   <property name="ant.build.javac.target" value="1.8"/>
   
@@ -51,11 +49,12 @@
     <junit printsummary="on" haltonfailure="yes">
         <classpath>
           <path refid="classpath.test" />
-          <pathelement location="${resources.build.dir}"/>
+          <pathelement location="${test.build.dir}"/>
 		  <pathelement location="${testSuites.build.dir}"/>
         </classpath>
         <formatter type="brief" usefile="false" />
         <batchtest>
+            <fileset dir="${test.src.dir}" includes="**/*Test*.java" />
             <fileset dir="${testSuites.src.dir}" includes="**/*Test*.java" />
         </batchtest>
     </junit>
